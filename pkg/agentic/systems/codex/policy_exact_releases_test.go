@@ -183,6 +183,22 @@ func TestCodex0165Classification(t *testing.T) {
 func checkCodexExactClassification(t *testing.T, release string) {
 	t.Helper()
 	t.Parallel()
+	remoteEnv := struct {
+		name          string
+		args          []string
+		form          agentic.NonInteractiveForm
+		indeterminate bool
+	}{"remote-env", []string{"--remote-auth-token-env", "CODEX_REMOTE_TOKEN", "exec"}, "", true}
+	remoteEnvInline := struct {
+		name          string
+		args          []string
+		form          agentic.NonInteractiveForm
+		indeterminate bool
+	}{"remote-env-inline", []string{"--remote-auth-token-env=CODEX_REMOTE_TOKEN", "exec"}, "", true}
+	if release == "0.167.0" {
+		remoteEnv.form, remoteEnv.indeterminate = agentic.NonInteractiveFormExec, false
+		remoteEnvInline.form, remoteEnvInline.indeterminate = agentic.NonInteractiveFormExec, false
+	}
 	for _, c := range []struct {
 		name          string
 		args          []string
@@ -195,7 +211,8 @@ func checkCodexExactClassification(t *testing.T, release string) {
 		{"model-value", []string{"--model", "exec"}, agentic.NonInteractiveFormNone, false},
 		{"prompt", []string{"--", "exec"}, agentic.NonInteractiveFormNone, false},
 		{"old-remote", []string{"--remote-auth-token", "exec"}, "", true},
-		{"remote-env", []string{"--remote-auth-token-env", "exec"}, "", true},
+		remoteEnv,
+		remoteEnvInline,
 		{"image", []string{"--image", "one.png", "exec"}, "", true},
 		{"worktree", []string{"--worktree", "exec"}, "", true},
 		{"no-daemon", []string{"--no-daemon", "exec"}, "", true},

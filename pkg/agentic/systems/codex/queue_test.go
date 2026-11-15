@@ -16,6 +16,8 @@ func TestQueueInheritsThreadSelectors(t *testing.T) {
 			for _, native := range [][]string{
 				{"queue", "--thread", "fixture-thread", "--message", "fixture message"},
 				{"--strict-config", "-C", "/fixture", "queue", "--thread=fixture-thread", "--message=fixture message", "--resume"},
+				{"--remote-auth-token-env", "CODEX_REMOTE_TOKEN", "--remote", "ws://example.invalid", "queue", "--thread", "fixture-thread", "--message", "fixture message"},
+				{"--remote-auth-token-env=CODEX_REMOTE_TOKEN", "--remote=ws://example.invalid", "queue", "--thread=fixture-thread", "--message=fixture message"},
 			} {
 				req := interactiveRequest("/fixture")
 				req.ToolRelease = "0.167.0"
@@ -47,6 +49,7 @@ func TestQueueTextDoesNotSuppressLaunchSelectors(t *testing.T) {
 		{"-C", "queue"},
 		{"--config", "queue", "resume"},
 		{"--config=queue", "resume"},
+		{"--remote-auth-token-env", "queue", "resume"},
 		{"--unknown-option", "queue"},
 	} {
 		req := interactiveRequest("/fixture")
@@ -70,6 +73,31 @@ func TestQueueTextDoesNotSuppressLaunchSelectors(t *testing.T) {
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("%q: argv = %q; want %q", native, got, want)
 		}
+	}
+}
+
+// The root token-env option is qualified for the pinned 0.167.0 grammar only.
+func TestQueueRootRemoteAuthTokenEnvIsReleaseQualified(t *testing.T) {
+	for _, release := range []string{"0.165.0", "0.167.1"} {
+		t.Run(release, func(t *testing.T) {
+			req := interactiveRequest("/fixture")
+			req.ToolRelease = release
+			req.PermissionMode = agentic.PermissionModeNative
+			req.NativeArgs = []string{
+				"--remote-auth-token-env", "CODEX_REMOTE_TOKEN",
+				"--remote", "ws://example.invalid",
+				"queue", "--thread", "fixture-thread", "--message", "fixture message",
+			}
+			got, err := Args(req, agentic.LaunchModeInteractive)
+			if err != nil {
+				t.Fatal(err)
+			}
+			want := []string{"-m", parityModel, "-c", `model_reasoning_effort="high"`}
+			want = append(want, req.NativeArgs...)
+			if !reflect.DeepEqual(got, want) {
+				t.Fatalf("unqualified release %s argv = %q; want launch selectors followed by the unchanged native suffix %q", release, got, want)
+			}
+		})
 	}
 }
 

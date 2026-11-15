@@ -158,9 +158,7 @@ func codexRootCommand(suffix []string, toolRelease string) (command, unknownFlag
 			return el, ""
 		}
 		name, _, hasValue := nativeargs.SplitFlagValue(el)
-		// Only the historical 0.153.2 row qualified this old scalar option.
-		// All qualified V3 releases reject it; never infer a command behind it.
-		if codexRootOptionTakesValue(name) && (toolRelease == "0.153.2" || name != "--remote-auth-token") {
+		if codexRootOptionTakesValueForRelease(name, toolRelease) {
 			if !hasValue {
 				if i+1 >= len(suffix) || nativeargs.IsSeparator(suffix[i+1]) {
 					return "", ""
@@ -186,6 +184,21 @@ func codexRootOptionTakesValue(name string) bool {
 		return true
 	default:
 		return false
+	}
+}
+
+// These auth option arities are release-qualified in the root command parser.
+// Resume parsing uses the separate static helper and its pinned subcommand table.
+func codexRootOptionTakesValueForRelease(name, toolRelease string) bool {
+	switch name {
+	case "--remote-auth-token":
+		// Only the historical 0.153.2 root grammar qualified the scalar form.
+		return toolRelease == "0.153.2"
+	case "--remote-auth-token-env":
+		// The environment-variable form is root-qualified at 0.167.0 only.
+		return toolRelease == "0.167.0"
+	default:
+		return codexRootOptionTakesValue(name)
 	}
 }
 

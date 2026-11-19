@@ -133,6 +133,9 @@ func TestBuildPlanRefusesInvalidInputsWithoutMutation(t *testing.T) {
 		{"missing model", agentic.LaunchModeExec, func(r *agentic.LaunchRequest) { r.Model.ID = "" }, agentic.ErrModelMissing},
 		{"whitespace-only model", agentic.LaunchModeExec, func(r *agentic.LaunchRequest) { r.Model.ID = " " }, agentic.ErrModelMissing},
 		{"empty prompt", agentic.LaunchModeExec, func(r *agentic.LaunchRequest) { r.Prompt = nil }, ErrPromptInvalid},
+		{"whitespace-only prompt", agentic.LaunchModeExec, func(r *agentic.LaunchRequest) { r.Prompt = []byte(" \t\n") }, ErrPromptInvalid},
+		{"invalid UTF-8 prompt", agentic.LaunchModeExec, func(r *agentic.LaunchRequest) { r.Prompt = []byte{0xff} }, ErrPromptInvalid},
+		{"NUL prompt", agentic.LaunchModeExec, func(r *agentic.LaunchRequest) { r.Prompt = []byte{'a', 0, 'b'} }, ErrPromptInvalid},
 		{"unreadable prompt file", agentic.LaunchModeExec, func(r *agentic.LaunchRequest) { r.PromptPath = filepath.Join(workDir, "missing-prompt.md") }, nil},
 		{"missing binary", agentic.LaunchModeExec, func(r *agentic.LaunchRequest) { r.Env = []string{"PATH=" + emptyDir} }, nil},
 		{"bare session selector", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"--session"} }, agentic.ErrSessionResumeInvalid},
@@ -148,13 +151,19 @@ func TestBuildPlanRefusesInvalidInputsWithoutMutation(t *testing.T) {
 		{"unknown permission mode", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.PermissionMode = "never" }, agentic.ErrPermissionModeUnknown},
 		{"unverified yolo release", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.PermissionMode = agentic.PermissionModeYolo; r.ToolRelease = "2.6.4" }, agentic.ErrPermissionModeUnverifiedRelease},
 		{"unrepresented auto posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"--auto"} }, agentic.ErrPermissionModeUnsupported},
-		{"raw yolo under native posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"-y"} }, agentic.ErrNativePolicyConflict},
+		{"canonical yolo under native posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"--yolo"} }, agentic.ErrNativePolicyConflict},
+		{"short yolo under native posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"-y"} }, agentic.ErrNativePolicyConflict},
 		{"hidden yolo alias under native posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"--yes"} }, agentic.ErrNativePolicyConflict},
 		{"hidden auto-approve alias under native posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"--auto-approve"} }, agentic.ErrNativePolicyConflict},
 		{"duplicate yolo under yolo posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) {
 			r.PermissionMode = agentic.PermissionModeYolo
 			r.ToolRelease = "2.6.3"
 			r.NativeArgs = []string{"--yolo"}
+		}, agentic.ErrPermissionModeDuplicate},
+		{"duplicate short yolo alias", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) {
+			r.PermissionMode = agentic.PermissionModeYolo
+			r.ToolRelease = "2.6.3"
+			r.NativeArgs = []string{"-y"}
 		}, agentic.ErrPermissionModeDuplicate},
 		{"duplicate hidden yolo alias", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) {
 			r.PermissionMode = agentic.PermissionModeYolo

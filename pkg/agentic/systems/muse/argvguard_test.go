@@ -30,10 +30,10 @@ import (
 //     code by accident, and a guard with false positives is a guard somebody
 //     deletes.
 //
-// "--yolo" is Muse's approval flag. Codex also accepts that spelling as an
-// alias for its bypass flag; its code references are the centralized Codex
-// grammar constant and two read-only native-argument classifiers. Those exact
-// sites are allowlisted below and remain covered by Codex's argv guard.
+// "--yolo" is Muse's approval flag. Codex accepts that spelling as a native
+// alias, and Kimi Code uses it for its typed permission mapping. Their exact
+// constants, mapping functions, and read-only argument classifiers are
+// allowlisted below; each remains covered by its own argv guard.
 //
 // "--reasoning-effort" passes the same test and is muse's alone for the same
 // reason exact matching gives: codex carries effort as the config override
@@ -55,6 +55,8 @@ const museArgsFile = "pkg/agentic/systems/muse/args.go"
 const codexArgsFile = "pkg/agentic/systems/codex/args.go"
 const codexPolicyFile = "pkg/agentic/systems/codex/policy.go"
 const codexContextFile = "pkg/agentic/systems/codex/context.go"
+const kimiArgsFile = "pkg/agentic/systems/kimi/args.go"
+const kimiPolicyFile = "pkg/agentic/systems/kimi/policy.go"
 
 // museArgvConstructionAllowlist names the only sites permitted to spell a
 // signature literal, each with the reason it is not an additional argv
@@ -82,6 +84,9 @@ var museArgvConstructionAllowlist = map[string]string{
 	argvguard.AllowlistKey(codexPolicyFile, "scanNativePolicy"):                                   "Codex V3 compares the provider-owned yolo alias only to refuse an unqualified caller policy form; it constructs no argv",
 	argvguard.AllowlistKey(codexPolicyFile, "codexRootOptionIsBoolean"):                           "the Codex classifier recognizes the overlapping native alias while reading caller args; it emits no argv",
 	argvguard.AllowlistKey(codexContextFile, "isCodexPermissionSelector"):                         "the typed-context conflict classifier recognizes the overlapping native alias while reading caller args; it emits no argv",
+	argvguard.AllowlistKey(kimiArgsFile, "yoloFlag"):                                              "the shared Kimi yolo spelling used by the builder and duplicate-policy scanner",
+	argvguard.AllowlistKey(kimiArgsFile, "validateInteractiveArgs"):                               "the Kimi duplicate-policy scanner reads caller arguments and emits no argv",
+	argvguard.AllowlistKey(kimiPolicyFile, "permissionMapping"):                                   "returns Kimi's release-pinned flag mapping but does not construct argv",
 }
 
 // moduleGoSources reads every non-test Go file this module's build compiles,
@@ -162,13 +167,13 @@ func TestTheMuseArgvGuardFiresOnTheRealConstructionSite(t *testing.T) {
 // TestTheMuseGuardDoesNotFireOnTheOtherPlugins is the cross-plugin
 // false-positive bound, measured against real neighbouring code.
 //
-// Codex is the intentional overlap: its native CLI alias has the same spelling
-// as Muse's flag, so only the alias definition and two exact, parser-only sites
-// listed in the allowlist above are accepted. Other plugins still have to avoid
-// the signature, including qwen's separate "yolo" value spelling.
+// Codex and Kimi are the intentional overlaps: their native flag spelling
+// matches Muse's flag, so only their centralized definitions, mapping or
+// parser-only sites listed in the allowlist above are accepted. Other plugins
+// still have to avoid the signature, including qwen's separate "yolo" value.
 func TestTheMuseGuardDoesNotFireOnTheOtherPlugins(t *testing.T) {
 	sources := moduleGoSources(t)
-	for _, plugin := range []string{"codex", "claude", "qwen", "gemini", "agy"} {
+	for _, plugin := range []string{"codex", "kimi", "claude", "qwen", "gemini", "agy"} {
 		prefix := "pkg/agentic/systems/" + plugin + "/"
 		subject := map[string]string{}
 		for name, src := range sources {

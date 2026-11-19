@@ -14,6 +14,7 @@ import (
 	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/claude"
 	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/codex"
 	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/gemini"
+	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/kimi"
 	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/muse"
 	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/pi"
 	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/pinative"
@@ -23,16 +24,16 @@ import (
 // TestBuildPlanRefusesNetworkScopeForEverySystemWithoutAVerifiedAdapter is the
 // round-1 V1 gate over the REAL registry: every registered plugin refuses
 // THIS carrier — a well-formed scope bearing a codex tuple — with typed
-// network_scope_unsupported. Seven systems declare nothing at all;
-// claude-code declares exactly its own verified claude-code tuple, which this
-// carrier does not bear, so the gate fires there too.
+// network_scope_unsupported. Six systems declare no network tuple; the other
+// three declare exact tuples that do not match this carrier's codex 0.153.2
+// identity, so the gate fires on every system.
 //
 // The table is the registry, not a hand-picked list: it ranges over
-// Default.IDs(), so a ninth plugin is covered the moment it registers — and
+// Default.IDs(), so every registered plugin is covered — and
 // refuses by default, because the zero Capabilities declaration admits
 // nothing. The dry-run mode is the shared grammar every system declares, and
 // the one request shape passes every contract gate before the admission gate
-// on all eight systems (pi's pre-plan preparation needs the provider/model
+// on all nine systems (pi's pre-plan preparation needs the provider/model
 // identity and profile; no other system reads them). A mutant that admits one
 // undeclared plugin — exempting any single id from the gate — fails exactly
 // that subtest.
@@ -48,7 +49,7 @@ func TestBuildPlanRefusesNetworkScopeForEverySystemWithoutAVerifiedAdapter(t *te
 	// accident of an empty table.
 	want := []agentic.SystemID{
 		"antigravity", "claude-code", "codex", "gemini-cli",
-		"muse", "pi", "pi-native", "qwen-code",
+		"kimi", "muse", "pi", "pi-native", "qwen-code",
 	}
 	if !reflect.DeepEqual(ids, want) {
 		t.Fatalf("Default.IDs() = %v, want %v; a registration changed without updating the admission table", ids, want)

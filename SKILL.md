@@ -3,7 +3,7 @@ name: agents-management
 description: >
   Spawning and managing heterogeneous agentic systems and the model vendors
   behind them, through the agents-management Go module and CLI. Use for
-  agentic-system plugins (claude-code, codex, qwen-code, gemini-cli,
+  agentic-system plugins (claude-code, codex, kimi, qwen-code, gemini-cli,
   antigravity, muse), vendor plugins (anthropic, openai, alibaba, google),
   runtime declarations, per-model reasoning-effort vocabularies, capability
   ranking, general plugin graphs, inference engines, multi-node launch plans
@@ -52,10 +52,20 @@ A legacy **runtime** remains a declared system/vendor pair under a stable id.
 
 | Compatibility kind | Package | Plugins |
 | --- | --- | --- |
-| agentic systems | `pkg/agentic` | `claude-code`, `codex`, `qwen-code`, `gemini-cli`, `antigravity`, `muse`, `pi` |
+| agentic systems | `pkg/agentic` | `claude-code`, `codex`, `kimi`, `qwen-code`, `gemini-cli`, `antigravity`, `muse`, `pi` |
 | model vendors | `pkg/vendorplugin` | `anthropic`, `openai`, `alibaba`, `google`, conditional `local-models` |
 | inference engines | `pkg/inferenceengine` | first extensible kind; concrete engines are consumer-selected |
 | runtimes (declarations) | `pkg/vendorplugin` | `claude`, `codex`, `qwen`, `gemini`, `agy`, `muse` — frozen |
+
+The `kimi` plugin targets Kimi Code CLI 2.6.3. It supports interactive and
+`--prompt` launches, caller-selected model aliases and working directories,
+interactive resume by `--continue` or an identified session, native permission
+mode, release-pinned `--yolo`, and other interactive native arguments passed
+through verbatim. Model and prompt flags use the typed launch fields. It does
+not validate aliases from Kimi's configuration, expose `--auto`, transport
+effort/goals/budgets/service tiers, or provide per-launch MCP composition. See
+[Kimi Code CLI support](docs/kimi-code-cli.md) for the exact argument and
+release limits.
 
 Existing vendors retain their vendor→system edges, and a vendor naming an
 unregistered system is refused with BOTH ids. That is compatibility semantics,

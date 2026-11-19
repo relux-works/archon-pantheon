@@ -65,6 +65,7 @@ func TestNormalizeSystemIDAcceptsTheDeclaredSpellings(t *testing.T) {
 	cases := map[string]SystemID{
 		"claude-code":   "claude-code",
 		"codex":         "codex",
+		"kimi":          "kimi",
 		"qwen-code":     "qwen-code",
 		"gemini-cli":    "gemini-cli",
 		"antigravity":   "antigravity",

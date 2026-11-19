@@ -79,6 +79,7 @@ plugin per system:
 | --- | --- |
 | `claude-code` | Claude Code CLI |
 | `codex` | Codex CLI |
+| `kimi` | Kimi Code CLI |
 | `qwen-code` | Qwen Code CLI |
 | `gemini-cli` | Gemini CLI |
 | `antigravity` | Antigravity CLI |

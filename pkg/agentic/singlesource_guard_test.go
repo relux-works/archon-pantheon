@@ -331,6 +331,7 @@ func withoutAllowedSites(violations []bindingViolation) []bindingViolation {
 var knownPluginIDs = map[string]bool{
 	"claude-code": true,
 	"codex":       true,
+	"kimi":        true,
 	"qwen-code":   true,
 	"gemini-cli":  true,
 	"antigravity": true,
@@ -1284,6 +1285,7 @@ func TestSingleSourceGuardScansTheWholeModule(t *testing.T) {
 		"pkg/agentic/systems/claude/claude.go",
 		"pkg/agentic/systems/qwen/qwen.go",
 		"pkg/agentic/systems/gemini/gemini.go",
+		"pkg/agentic/systems/kimi/kimi.go",
 		"pkg/agentic/systems/muse/muse.go",
 		"pkg/agentic/systems/agy/agy.go",
 		"pkg/vendorplugin/registry.go",

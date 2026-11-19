@@ -9,6 +9,14 @@ import (
 	"github.com/relux-works/skill-agents-management/pkg/agentic"
 )
 
+func requireCodexGatewayReason(t *testing.T, err error, want agentic.CodexGatewayRefusalCode) {
+	t.Helper()
+	var refusal *agentic.CodexGatewayRefusalError
+	if !errors.Is(err, agentic.ErrCodexGatewayRefused) || !errors.As(err, &refusal) || refusal.ReasonCode() != want {
+		t.Fatalf("gateway refusal = %v, want check class %q", err, want)
+	}
+}
+
 // Gateway compatibility observes traffic after launch; release metadata never gates policy admission or binding rendering.
 func TestGatewayReleaseIsInformational(t *testing.T) {
 	for _, release := range []string{"0.164.0", "0.167.0", "9.999.0", "", "0.164.0+build"} {
@@ -38,11 +46,13 @@ func TestGatewayReleaseIsInformational(t *testing.T) {
 
 // Native equality is an independent gate: two individually supported native suffixes cannot be substituted for each other.
 func TestGatewayNativeInputEquality(t *testing.T) {
-	p := gatewayPlan(t, []string{"--no-alt-screen"})
-	if _, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{}); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-		t.Fatalf("different supported native suffix admitted: %v", err)
-	}
-	if _, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{NativeArgs: []string{"--no-alt-screen"}}); err != nil {
+	r := managedPrimaryRequest(t)
+	r.NativeArgs = []string{"--no-alt-screen"}
+	p := requireManagedPlan(t, r)
+	g := (&System{}).CodexGatewayBasis(r, agentic.LaunchModeInteractive)
+	err := g.Admit(agentic.CodexGatewayInputs{}, p.Env)
+	requireCodexGatewayReason(t, err, agentic.CodexGatewayNativeArgumentsNotAdmitted)
+	if err := g.Admit(agentic.CodexGatewayInputs{NativeArgs: r.NativeArgs}, p.Env); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -66,9 +76,12 @@ func TestGatewayParentEnvironmentAndRepeatedSuffix(t *testing.T) {
 				r.NativeArgs = []string{"--no-alt-screen", "--no-alt-screen"}
 			}
 			p := requireManagedPlan(t, r)
-			if _, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{NativeArgs: r.NativeArgs}); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-				t.Fatalf("forbidden parent/native input admitted: %v", err)
+			_, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{NativeArgs: r.NativeArgs})
+			want := agentic.CodexGatewayProviderOverride
+			if kind == "repeat" {
+				want = agentic.CodexGatewayNativeArgumentsNotAdmitted
 			}
+			requireCodexGatewayReason(t, err, want)
 		})
 	}
 }
@@ -99,13 +112,11 @@ func TestGatewayOtherRoutes(t *testing.T) {
 				r.Network.Patch.Unset = []string{"HTTP_PROXY"}
 			}
 			g = (&System{}).CodexGatewayBasis(r, agentic.LaunchModeInteractive)
-			if err := g.Admit(agentic.CodexGatewayInputs{}, p.Env); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-				t.Fatalf("other route admitted: %v", err)
-			}
+			err := g.Admit(agentic.CodexGatewayInputs{}, p.Env)
+			requireCodexGatewayReason(t, err, agentic.CodexGatewayOtherRouteSelected)
 			if kind != "gateway" {
-				if _, err := g.Render(b, p.Argv); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-					t.Fatalf("other route rendered: %v", err)
-				}
+				_, err := g.Render(b, p.Argv)
+				requireCodexGatewayReason(t, err, agentic.CodexGatewayBindingNotCanonical)
 			}
 		})
 	}

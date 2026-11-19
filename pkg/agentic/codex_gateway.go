@@ -18,6 +18,66 @@ import (
 // credential values. No refused operation returns a newly executable plan.
 var ErrCodexGatewayRefused = errors.New("agentic: Codex gateway binding refused")
 
+// CodexGatewayRefusalCode is a bounded check-class label for a refused
+// gateway launch. Codes never carry input values, paths, or credentials.
+type CodexGatewayRefusalCode string
+
+const (
+	CodexGatewayBasisInvalid               CodexGatewayRefusalCode = "gateway_basis_invalid"
+	CodexGatewayInputNotAdmitted           CodexGatewayRefusalCode = "gateway_input_not_admitted"
+	CodexGatewayEnvironmentNotAdmitted     CodexGatewayRefusalCode = "gateway_environment_not_admitted"
+	CodexGatewayBindingNotCanonical        CodexGatewayRefusalCode = "gateway_binding_not_canonical"
+	CodexGatewayPlanIdentityChanged        CodexGatewayRefusalCode = "gateway_plan_identity_changed"
+	CodexGatewayExecutableIdentityFailed   CodexGatewayRefusalCode = "gateway_executable_identity_failed"
+	CodexGatewayInteractiveModeRequired    CodexGatewayRefusalCode = "gateway_interactive_mode_required"
+	CodexGatewayOtherRouteSelected         CodexGatewayRefusalCode = "gateway_other_route_selected"
+	CodexGatewayNativeArgumentsNotAdmitted CodexGatewayRefusalCode = "gateway_native_arguments_not_admitted"
+	CodexGatewayEnvironmentMalformed       CodexGatewayRefusalCode = "gateway_environment_malformed"
+	CodexGatewayEnvironmentDuplicate       CodexGatewayRefusalCode = "gateway_environment_duplicate_name"
+	CodexGatewayDirectProxyPresent         CodexGatewayRefusalCode = "gateway_direct_proxy_selector_present"
+	CodexGatewayTokenOverride              CodexGatewayRefusalCode = "gateway_token_environment_override"
+	CodexGatewayProviderOverride           CodexGatewayRefusalCode = "gateway_provider_route_override"
+	CodexGatewayCredentialNameNotAdmitted  CodexGatewayRefusalCode = "gateway_credential_name_not_admitted"
+	CodexGatewayInjectedTokenMissing       CodexGatewayRefusalCode = "gateway_injected_token_missing"
+	CodexGatewayEntryNotInteractive        CodexGatewayRefusalCode = "gateway_entrypoint_not_interactive"
+	CodexGatewayOperationCancelled         CodexGatewayRefusalCode = "gateway_operation_cancelled"
+)
+
+// CodexGatewayRefusalError preserves errors.Is(err, ErrCodexGatewayRefused)
+// while exposing one stable, non-sensitive check class to diagnostics.
+type CodexGatewayRefusalError struct{ code CodexGatewayRefusalCode }
+
+func (e *CodexGatewayRefusalError) Error() string {
+	if e == nil || e.code == "" {
+		return ErrCodexGatewayRefused.Error()
+	}
+	return ErrCodexGatewayRefused.Error() + " reason=" + string(e.code)
+}
+
+func (e *CodexGatewayRefusalError) Unwrap() error { return ErrCodexGatewayRefused }
+
+func (e *CodexGatewayRefusalError) ReasonCode() CodexGatewayRefusalCode {
+	if e == nil {
+		return ""
+	}
+	return e.code
+}
+
+// RefuseCodexGateway constructs a bounded refusal for a named check class.
+func RefuseCodexGateway(code CodexGatewayRefusalCode) error {
+	switch code {
+	case CodexGatewayBasisInvalid, CodexGatewayInputNotAdmitted, CodexGatewayEnvironmentNotAdmitted,
+		CodexGatewayBindingNotCanonical, CodexGatewayPlanIdentityChanged, CodexGatewayExecutableIdentityFailed,
+		CodexGatewayInteractiveModeRequired, CodexGatewayOtherRouteSelected, CodexGatewayNativeArgumentsNotAdmitted,
+		CodexGatewayEnvironmentMalformed, CodexGatewayEnvironmentDuplicate, CodexGatewayDirectProxyPresent,
+		CodexGatewayTokenOverride, CodexGatewayProviderOverride, CodexGatewayCredentialNameNotAdmitted,
+		CodexGatewayInjectedTokenMissing, CodexGatewayEntryNotInteractive, CodexGatewayOperationCancelled:
+	default:
+		code = CodexGatewayInputNotAdmitted
+	}
+	return &CodexGatewayRefusalError{code: code}
+}
+
 // GatewayAdmissionBasisV1 has no public constructor or writable fields. Only
 // the module's current-policy admission boundary can issue a nonzero basis.
 type GatewayAdmissionBasisV1 = gatewaybasis.Basis
@@ -60,7 +120,10 @@ type GatewayCandidateV1 struct {
 
 func SnapshotGatewayCandidate(built PlanWithEnvironment) (GatewayCandidateV1, error) {
 	p := built.Plan
-	if p.codexGatewayPolicy == nil || p.baseProcess == nil || p.codexGatewayVerifier != nil || p.codexGatewayIdentity != gatewayIdentityOf(p) || len(p.Nodes) != 0 || p.Stdin.Attached || len(p.Stdin.Bytes) != 0 || !filepath.IsAbs(p.Binary) {
+	if p.codexGatewayIdentity != gatewayIdentityOf(p) {
+		return GatewayCandidateV1{}, RefuseCodexGateway(CodexGatewayPlanIdentityChanged)
+	}
+	if p.codexGatewayPolicy == nil || p.baseProcess == nil || p.codexGatewayVerifier != nil || len(p.Nodes) != 0 || p.Stdin.Attached || len(p.Stdin.Bytes) != 0 || !filepath.IsAbs(p.Binary) {
 		return GatewayCandidateV1{}, ErrCodexGatewayRefused
 	}
 	if err := p.baseProcess.verify(p); err != nil {
@@ -145,7 +208,7 @@ func AdmitCodexGateway(basis *GatewayAdmissionBasisV1, built PlanWithEnvironment
 		}
 		for _, layer := range [][]string{in.FragmentEnv, in.PromptEnv} {
 			if _, err := validateFinalizeEnvOverlay(layer, "gateway"); err != nil {
-				return ErrCodexGatewayRefused
+				return RefuseCodexGateway(CodexGatewayEnvironmentNotAdmitted)
 			}
 			for _, entry := range layer {
 				n, v, _ := strings.Cut(entry, "=")
@@ -208,7 +271,7 @@ func (a *CodexGatewayAdmission) Finalize(b RuntimeGatewayBindingV1) (PlanWithEnv
 			return err
 		}
 		if b.AttemptID != a.basis.ID() || b.ToolRelease != c.built.Plan.ToolRelease || b.ExecutableSHA256 != c.original.ExecutableSHA256 {
-			return ErrCodexGatewayRefused
+			return RefuseCodexGateway(CodexGatewayBindingNotCanonical)
 		}
 		if err := verifyGatewayExecutable(b); err != nil {
 			return err
@@ -296,7 +359,7 @@ func (p Plan) VerifyCodexGatewayProcess(binary string, argv, env []string) error
 	slices.Sort(actual)
 	slices.Sort(expected)
 	if !slices.Equal(actual, expected) {
-		return ErrCodexGatewayRefused
+		return RefuseCodexGateway(CodexGatewayEnvironmentNotAdmitted)
 	}
 
 	return nil

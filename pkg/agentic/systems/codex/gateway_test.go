@@ -94,9 +94,8 @@ func TestGatewayBindingRefusals(t *testing.T) {
 			}
 			b := gatewayBinding(t, p)
 			change(&b)
-			if _, err := gatewayFinalizeFixture(a, b); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-				t.Fatalf("wanted typed refusal, got %v", err)
-			}
+			_, _, err = a.Finalize(b)
+			requireCodexGatewayReason(t, err, agentic.CodexGatewayBindingNotCanonical)
 		})
 	}
 }
@@ -105,27 +104,36 @@ func TestGatewayBindingRefusals(t *testing.T) {
 func TestGatewayAdmissionRefusals(t *testing.T) {
 	for _, native := range [][]string{{"app-server"}, {"--remote", "ws://127.0.0.1:1234"}, {"resume", "--last"}, {"-c", `model_provider="other"`}, {"--profile=alternate"}, {"--config", `"model_providers"."curator-gateway".base_url="http://127.0.0.1:1"`}} {
 		p := gatewayPlan(t, native)
-		if _, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{NativeArgs: native}); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-			t.Fatalf("native selector accepted: %q %v", native, err)
-		}
+		_, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{NativeArgs: native})
+		requireCodexGatewayReason(t, err, agentic.CodexGatewayNativeArgumentsNotAdmitted)
 	}
-	for _, overlay := range [][]string{{"OPENAI_BASE_URL=http://127.0.0.1:1"}, {"openai_base_url=http://127.0.0.1:1"}, {GatewayTokenEnv + "=synthetic"}, {"codex_home=/tmp/alias"}, {"X=one", "X=two"}} {
+	for _, tc := range []struct {
+		name, want agentic.CodexGatewayRefusalCode
+		overlay    []string
+	}{
+		{"route", agentic.CodexGatewayProviderOverride, []string{"OPENAI_BASE_URL=http://127.0.0.1:1"}},
+		{"route-alias", agentic.CodexGatewayProviderOverride, []string{"openai_base_url=http://127.0.0.1:1"}},
+		{"token", agentic.CodexGatewayTokenOverride, []string{GatewayTokenEnv + "=synthetic"}},
+		{"environment-alias", agentic.CodexGatewayProviderOverride, []string{"codex_home=/tmp/alias"}},
+		{"duplicate", agentic.CodexGatewayEnvironmentNotAdmitted, []string{"X=one", "X=two"}},
+	} {
 		p := gatewayPlan(t, nil)
-		if _, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{PromptEnv: overlay}); err == nil {
-			t.Fatal("overlay accepted")
-		}
+		_, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{PromptEnv: tc.overlay})
+		requireCodexGatewayReason(t, err, tc.want)
 	}
 	for _, names := range [][]string{{GatewayTokenEnv}, {strings.ToLower(GatewayTokenEnv)}, {"OPENAI_BASE_URL"}, {"CODEX_REMOTE_URL"}} {
 		p := gatewayPlan(t, nil)
-		if _, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{LookupNames: names}); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-			t.Fatal("reserved MCP lookup admitted", err)
+		_, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{LookupNames: names})
+		want := agentic.CodexGatewayProviderOverride
+		if strings.Contains(strings.ToUpper(names[0]), "GATEWAY_TOKEN") {
+			want = agentic.CodexGatewayTokenOverride
 		}
+		requireCodexGatewayReason(t, err, want)
 	}
 	p := gatewayPlan(t, nil)
 	p.ModelIdentity.Launched = "changed"
-	if _, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{}); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-		t.Fatal("model mutation accepted", err)
-	}
+	_, err := agentic.SnapshotGatewayCandidate(agentic.PlanWithEnvironment{Plan: p})
+	requireCodexGatewayReason(t, err, agentic.CodexGatewayPlanIdentityChanged)
 }
 
 // The final checker rejects late argv, token alias/duplicate/missing, original
@@ -199,13 +207,12 @@ func TestGatewayRendererRefusesMismatch(t *testing.T) {
 	if _, err := g.Render(b, p.Argv); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := g.Render(b, append(slices.Clone(p.Argv), "different")); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-		t.Fatal("different original suffix rendered", err)
-	}
+	_, err := g.Render(b, append(slices.Clone(p.Argv), "different"))
+	requireCodexGatewayReason(t, err, agentic.CodexGatewayBindingNotCanonical)
 	g = (&System{}).CodexGatewayBasis(r, agentic.LaunchModeExec)
-	if _, err := g.Render(b, p.Argv); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-		t.Fatal("exec gateway rendered", err)
-	}
+	_, err = g.Render(b, p.Argv)
+	requireCodexGatewayReason(t, err, agentic.CodexGatewayBindingNotCanonical)
+	requireCodexGatewayReason(t, g.Admit(agentic.CodexGatewayInputs{}, p.Env), agentic.CodexGatewayInteractiveModeRequired)
 }
 
 // Valid credentials and token injection pass; malformed, aliased, duplicate, missing-token and proxy inputs refuse.
@@ -221,19 +228,24 @@ func TestGatewayEnvironmentPredicate(t *testing.T) {
 		}
 	}
 	// Every selector/name predicate has the otherwise valid token-bearing control.
-	for name, extra := range map[string][]string{
-		"malformed": {"malformed"}, "empty-name": {"=empty"},
-		"newline": {"X=line\nbreak"}, "fold-duplicate": {"X=one", "x=two"},
-		"openai-route": {"OPENAI_BASE_URL=other"}, "codex-route": {"CODEX_REMOTE_URL=other"},
+	for name, row := range map[string]struct {
+		extra []string
+		want  agentic.CodexGatewayRefusalCode
+	}{
+		"malformed":      {[]string{"malformed"}, agentic.CodexGatewayEnvironmentMalformed},
+		"empty-name":     {[]string{"=empty"}, agentic.CodexGatewayEnvironmentMalformed},
+		"newline":        {[]string{"X=line\nbreak"}, agentic.CodexGatewayEnvironmentMalformed},
+		"fold-duplicate": {[]string{"X=one", "x=two"}, agentic.CodexGatewayEnvironmentDuplicate},
+		"openai-route":   {[]string{"OPENAI_BASE_URL=other"}, agentic.CodexGatewayProviderOverride},
+		"codex-route":    {[]string{"CODEX_REMOTE_URL=other"}, agentic.CodexGatewayProviderOverride},
 	} {
 		t.Run(name, func(t *testing.T) {
 			control := []string{"DISJOINT=ok", GatewayTokenEnv + "=synthetic"}
 			if err := g.CheckEnvironment(control, true); err != nil {
 				t.Fatal(err)
 			}
-			if err := g.CheckEnvironment(append(control, extra...), true); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-				t.Fatal("predicate-specific invalid environment accepted", err)
-			}
+			err := g.CheckEnvironment(append(control, row.extra...), true)
+			requireCodexGatewayReason(t, err, row.want)
 		})
 	}
 	// Proxy refusal also applies to composed and token-injected environments, regardless of loopback bypass.
@@ -251,18 +263,23 @@ func TestGatewayEnvironmentPredicate(t *testing.T) {
 					if err := g.CheckEnvironment(control, injected); err != nil {
 						t.Fatal(err)
 					}
-					if err := g.CheckEnvironment(append(control, name+"=http://proxy.example.invalid:3128"), injected); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-						t.Fatalf("proxy accepted in composed environment (injected=%v bypass=%v): %v", injected, bypass, err)
-					}
+					err := g.CheckEnvironment(append(control, name+"=http://proxy.example.invalid:3128"), injected)
+					requireCodexGatewayReason(t, err, agentic.CodexGatewayDirectProxyPresent)
 				}
 			}
 		})
 	}
 
 	// Token rows isolate empty, aliased and missing injection from the name checks.
-	for _, env := range [][]string{{GatewayTokenEnv + "="}, {strings.ToLower(GatewayTokenEnv) + "=alias"}, {"DISJOINT=ok"}} {
-		if err := g.CheckEnvironment(env, true); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-			t.Fatal("invalid token accepted", err)
-		}
+	for _, tc := range []struct {
+		env  []string
+		want agentic.CodexGatewayRefusalCode
+	}{
+		{[]string{GatewayTokenEnv + "="}, agentic.CodexGatewayTokenOverride},
+		{[]string{strings.ToLower(GatewayTokenEnv) + "=alias"}, agentic.CodexGatewayTokenOverride},
+		{[]string{"DISJOINT=ok"}, agentic.CodexGatewayInjectedTokenMissing},
+	} {
+		err := g.CheckEnvironment(tc.env, true)
+		requireCodexGatewayReason(t, err, tc.want)
 	}
 }

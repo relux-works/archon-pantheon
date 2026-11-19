@@ -26,8 +26,14 @@ func (*System) CodexGatewayBasis(r agentic.LaunchRequest, mode agentic.LaunchMod
 }
 
 func (g gatewayPolicy) Admit(in agentic.CodexGatewayInputs, env []string) error {
-	if g.mode != agentic.LaunchModeInteractive || g.other || !slices.Equal(in.NativeArgs, g.native) || !gatewayNativeSuffix(g.native) {
-		return agentic.ErrCodexGatewayRefused
+	if g.mode != agentic.LaunchModeInteractive {
+		return agentic.RefuseCodexGateway(agentic.CodexGatewayInteractiveModeRequired)
+	}
+	if g.other {
+		return agentic.RefuseCodexGateway(agentic.CodexGatewayOtherRouteSelected)
+	}
+	if !slices.Equal(in.NativeArgs, g.native) || !gatewayNativeSuffix(g.native) {
+		return agentic.RefuseCodexGateway(agentic.CodexGatewayNativeArgumentsNotAdmitted)
 	}
 	// Lookup declarations carry names only. Exact repeats retain the existing
 	// composition deduplication; aliases and reserved selectors still refuse.
@@ -85,7 +91,7 @@ func (g gatewayPolicy) CheckEnvironment(env []string, injected bool) error {
 	}
 	for _, name := range names {
 		if err := checkGatewayEnvironment([]string{name + "="}, false); err != nil {
-			return err
+			return agentic.RefuseCodexGateway(agentic.CodexGatewayCredentialNameNotAdmitted)
 		}
 	}
 	return nil
@@ -97,19 +103,19 @@ func checkGatewayEnvironment(env []string, injected bool) error {
 	for _, entry := range env {
 		name, value, ok := strings.Cut(entry, "=")
 		if !ok || name == "" || strings.ContainsAny(entry, "\x00\r\n") {
-			return agentic.ErrCodexGatewayRefused
+			return agentic.RefuseCodexGateway(agentic.CodexGatewayEnvironmentMalformed)
 		}
 		fold := strings.ToUpper(name)
 		if seen[fold] {
-			return agentic.ErrCodexGatewayRefused
+			return agentic.RefuseCodexGateway(agentic.CodexGatewayEnvironmentDuplicate)
 		}
 		seen[fold] = true
 		if fold == "HTTP_PROXY" || fold == "HTTPS_PROXY" || fold == "ALL_PROXY" {
-			return agentic.ErrCodexGatewayRefused
+			return agentic.RefuseCodexGateway(agentic.CodexGatewayDirectProxyPresent)
 		}
 		if fold == GatewayTokenEnv {
 			if !injected || name != GatewayTokenEnv || value == "" {
-				return agentic.ErrCodexGatewayRefused
+				return agentic.RefuseCodexGateway(agentic.CodexGatewayTokenOverride)
 			}
 			count++
 			continue
@@ -121,19 +127,19 @@ func checkGatewayEnvironment(env []string, injected bool) error {
 			switch name {
 			case "OPENAI_API_KEY", "OPENAI_ORG_ID", "OPENAI_PROJECT_ID":
 			default:
-				return agentic.ErrCodexGatewayRefused
+				return agentic.RefuseCodexGateway(agentic.CodexGatewayProviderOverride)
 			}
 		}
 		if strings.HasPrefix(fold, "CODEX_") {
 			switch name {
 			case "CODEX_HOME", "CODEX_MANAGED_BY_NPM", "CODEX_MANAGED_BY_BUN":
 			default:
-				return agentic.ErrCodexGatewayRefused
+				return agentic.RefuseCodexGateway(agentic.CodexGatewayProviderOverride)
 			}
 		}
 	}
 	if injected && count != 1 {
-		return agentic.ErrCodexGatewayRefused
+		return agentic.RefuseCodexGateway(agentic.CodexGatewayInjectedTokenMissing)
 	}
 	return nil
 }

@@ -349,8 +349,16 @@ func TestGatewayActualEnvironmentEquality(t *testing.T) {
 			case "token-duplicate":
 				env = append(env, b.TokenEnv+"=synthetic")
 			}
-			if err := final.Plan.VerifyCodexGatewayProcess(b.ExecutablePath, final.Plan.Argv, env); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-				t.Fatalf("actual env mutation accepted: %v", err)
+			err := final.Plan.VerifyCodexGatewayProcess(b.ExecutablePath, final.Plan.Argv, env)
+			want := agentic.CodexGatewayEnvironmentNotAdmitted
+			if kind == "token-missing" {
+				want = agentic.CodexGatewayInjectedTokenMissing
+			} else if kind == "token-duplicate" {
+				want = agentic.CodexGatewayEnvironmentDuplicate
+			}
+			var refusal *agentic.CodexGatewayRefusalError
+			if !errors.Is(err, agentic.ErrCodexGatewayRefused) || !errors.As(err, &refusal) || refusal.ReasonCode() != want {
+				t.Fatalf("actual env mutation refusal = %v, want check class %q", err, want)
 			}
 		})
 	}

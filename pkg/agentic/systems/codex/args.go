@@ -14,10 +14,10 @@ func (g gatewayPolicy) Render(b agentic.CodexGatewayBinding, original []string) 
 	r := g.request
 	r.CodexGateway = &b
 	if args, err := Args(r, g.mode); err != nil {
-		return nil, err
+		return nil, agentic.RefuseCodexGateway(agentic.CodexGatewayBindingNotCanonical)
 	} else {
 		if len(args) < 4 || !slices.Equal(args[4:], original) {
-			return nil, agentic.ErrCodexGatewayRefused
+			return nil, agentic.RefuseCodexGateway(agentic.CodexGatewayBindingNotCanonical)
 		}
 		return args, nil
 	}

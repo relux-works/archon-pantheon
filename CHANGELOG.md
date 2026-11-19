@@ -1,5 +1,159 @@
 # Changelog
 
+## v0.5.77 — 2026-11-19
+
+- Muse launches with a Curator v2 root context in the request-selected managed
+  config home suppress foreign Claude Code and Codex personal rules and skills
+  on verified Muse 1.4.7-R6101.1. Exec uses `--no-foreign-personal-context`;
+  interactive launches use the JSON boolean `context.foreign_personal_skills=false`
+  override, covered by the sealed argv and protected from native suffix overrides.
+  Missing, invalid, symlinked, unreadable, or ambient-only root context and
+  older or unknown releases preserve the existing launch arguments.
+
+- Accept Curator `launch-env-fragment-v4` (curator-spec environments §10.2,
+  CIP-0017 and CIP-0015). Managed Muse launches now require v4: a v3 muse
+  fragment refuses with upgrade guidance. The v4 muse env is the four XDG
+  homes plus `TBH_CREDENTIAL_BACKEND=file`, written after the homes and
+  sealed, and `credential_store` must be exactly `{"selection":"file"}`. The
+  Muse-only `root_context: {"exclusive":true}` fact now decides the
+  foreign-personal-context exclusion. It replaces the `curator-root-context-v2`
+  header probe, which read the managed `AGENTS.md`: nothing under the managed
+  home is read any more. A fact on a build outside the qualified exclusion
+  set (1.4.7-R6101.1; 1.4.8 awaits Curator's P1-P4 replay) refuses with
+  `ErrForeignContextExclusionUnqualified` at plan time and at seal time,
+  instead of launching without the exclusion.
+- Add `agentic.DecodeCuratorFragment`, the strict fragment reader. It refuses
+  repeated keys at any depth, explicit null members and unknown members.
+  Non-Muse v4 fragments are accepted with an absent or native
+  `credential_store`. An agreeing Codex `file`/`keychain` store refuses with
+  `ErrCuratorContextUnsupported` until the `-c cli_auth_credentials_store`
+  consumer lands; a disagreeing one is malformed.
+
+- Add sealed Codex managed-plan inputs for exact-thread remote clients,
+  manager-tool PATH precedence, and an exact additional workspace-write root
+  list. Refuse malformed/conflicting inputs and post-plan overrides; preserve
+  ordinary plans when inputs are absent. Document the public API and add
+  behavioral negative controls and narrowing mutants for each field.
+
+- Preserve native default models for validated interactive managed Codex plans:
+  primaries carrying `ManagerToolDir` or `AdditionalWritableRoots` and exact-thread
+  `CodexRemoteClient` plans accept an empty `Model.ID` without a model flag.
+  Their existing process seals remain enforced; worker/spawn plans and
+  whitespace-only model IDs still refuse with `ErrModelMissing`. Explicit-model
+  rendering is unchanged.
+
+- Qualify the Muse foreign-personal-context exclusion per form. Curator
+  qualifies the exec spelling (`--no-foreign-personal-context`) and the TUI
+  spelling (`-c context.foreign_personal_skills=false`) separately, and on
+  1.4.10 and 1.4.11 only the exec spelling passes P1-P4. Exec and dry-run now
+  admit 1.4.7-R6101.1, 1.4.10-R6427.1 (curator 49d69b1c) and 1.4.11-R6667.1
+  (curator 142bbda9); interactive still admits only 1.4.7-R6101.1. The
+  `BuildPlan` gate and `Args` check the form the launch mode emits, an
+  undeclared mode must qualify in every form, the interactive seal checks the
+  interactive table, and `ChildEnv`, which has no mode, refuses a build that
+  no form qualifies.
+
+- Drop carried Codex local-provider settings only when the plan already seals
+  the exact key, keeping one model/effort/tier writer. Expose sorted dropped key
+  names and a names-only note in optional plan status without retaining their
+  values; unowned model keys still refuse and unaffected plans retain their bytes.
+
+- Resolve the Curator engine catalog symlinks once in the SAM loader before
+  parsing, and export that same resolved path so later directory or leaf link
+  retargets cannot redirect ensure/status consumers to another catalog.
+
+- Bind carried-settings report presence, dropped names and note to the Codex
+  seal and pre-finalization snapshot. Reject post-seal edits, removal or
+  injection, including after finalization and guard import; preserve no-drop
+  plan and guard bytes.
+
+- Add a public catalog-bound engine observation factory with immutable selected scope, explicit catalog/cache carriers and strict status-provenance/v1 identity validation; declare concrete MLX/llama-cpp observation kinds and migrate model-check to that composition. Legacy project-only observation stays compatible; absent, malformed or mismatched provenance refuses before Pi preflight.
+
+- Admit Muse 1.4.13-R6996.1 for the exec form of the foreign-personal-context
+  exclusion (curator qualification record 44bb3326, PR #183). Exec and dry-run
+  now admit 1.4.7-R6101.1, 1.4.10-R6427.1, 1.4.11-R6667.1 and 1.4.13-R6996.1;
+  the TUI still admits only 1.4.7-R6101.1, because the 1.4.13 `-c` override
+  leaves a foreign skill loaded. 1.4.12 was skipped as superseded and
+  qualifies neither form.
+
+- Qualify Codex 0.164.0 against its installed binary and admit its bounded
+  permission-grammar-v3 mapping, with exact-release, conflicting-override,
+  classification and stored-policy controls. V3 refuses unqualified policy
+  aliases and attached short forms rather than forwarding them. Preserve
+  Codex 0.153.2 and other provider rows; neighbouring unverified releases still refuse.
+
+- Move Codex 0.164.0 qualification documentation to a sanitized Curator record
+  and remove the raw transcript from the published tree; permission rows and
+  runtime behavior are unchanged.
+- Reject tracked ignored paths in CI, with clean-clone and force-added `.out/x`
+  controls proving the repository-wide guard.
+
+- Add the operator model catalog `~/.curator/catalog.toml` (schema
+  `model-catalog/1`, `runtimecatalog.LoadModelCatalog`/`ParseModelCatalog`).
+  It declares vendor > model > reasoning as plain strings, ADDITIVE to the
+  module's own rows: new models for a registered vendor (systems, aliases,
+  lifecycle, effort axis) and new effort words for a module row and its aliases
+  together, kept apart as `EffortDeclaration.OperatorAccepts` so the module's
+  `Vocabulary` and the frozen v2 snapshot never widen. `[[effort_scale]]` places a new effort word directly after a word
+  already on the scale, and every catalog effort word must be on that effective
+  scale, so a misspelt word refuses. The effective scale travels as
+  `EffortDeclaration.Scale`, and `vendorplugin.EffectiveEffortsUnderBound` ranks
+  bounds on it. Diagnostics name only validated identifiers. `ModelCatalog.Apply`/`ApplyAll` merge it
+  into a vendor's `Models()`. Admission is unchanged: an unknown id is still
+  `ErrUnknownModel`, an undeclared effort word is still refused. Malformed,
+  unsupported-version, conflicting (redefining a module row, alias collision,
+  extending a row with no effort axis) and unknown-vendor catalogs refuse with
+  typed `runtimecatalog.Refusal` kinds; a read failure never falls back.
+- `vendorplugin.Model.OperatorDeclared` marks catalog rows. `Lineup` leaves them
+  out, so a catalog never changes what an unconfigured launch picks; they are
+  admitted when named explicitly. Permission grammar, argv spellings and the
+  frozen v2 snapshot are unaffected.
+
+- Qualify Claude Code 2.1.312 against its installed binary and admit a
+  `permission-grammar-v3` yolo row mapping to `--dangerously-skip-permissions`.
+  V3 retains every V2 refusal and also refuses `--inherit-permission-mode`,
+  `--plan-mode-required`, `--permission-prompts` and `--enable-auto-mode` under
+  yolo, since their interaction with the bypass is not qualified. It also
+  refuses `--managed-settings`, `--project-config-root`, an explicit
+  `--settings` source with a top-level member outside `$schema`, `model`,
+  `permissions` and an empty `env` (for example `hooks`, whose PreToolUse
+  decision overrides the bypass per call), and one whose `permissions` object carries anything besides
+  `allow`, `deny`, `ask` and `additionalDirectories` (for example
+  `disableBypassPermissionsMode` or `defaultMode`), or a non-empty top-level
+  `env` (2.1.312 applies it before resolving the mode, and
+  `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` forces mode `default`). Native forwards them.
+  The option and eager tables, renamed `claude-options.tsv` and
+  `claude-eager.tsv`, gain the hidden required options `--fast-mode` and
+  `--runner-declares`, and describe in-window releases only. The pinned native
+  comparisons are keyed by release and run against the installed 2.1.312;
+  2.1.288 is out of the window and has no comparison row.
+- Retire the Claude 2.1.261 yolo row under the owner's harness support window
+  (releases from about the last two weeks, 2026-10-29). The Claude option
+  tables describe in-window releases only, so yolo on 2.1.261 and every other
+  unlisted release now fails closed as unverified; native forwards verbatim.
+  Stay on an older module release to run an older harness.
+
+- Qualify exact Codex 0.167.0 permission mapping under the existing bounded V3
+  grammar, using an independent disposable-binary Curator record. Preserve
+  unlisted-neighbor refusal and prior release rows; no consumer pin is changed.
+
+- Admit the v4 Muse native credential form: exactly `credential_store: {"selection":"native"}`
+  with the four XDG homes and no `TBH_CREDENTIAL_BACKEND`. Preserve the file form
+  with `TBH_CREDENTIAL_BACKEND=file`; reject mixed forms, other selections,
+  credential-store overrides and extra environment keys.
+
+- Add explicit-only unmeasured model claims with dated, attributed availability
+  evidence and no numeric rank. Add claude-fable-5-2 for claude-code with
+  low/medium/high/xhigh/max, recommended high when explicit effort is omitted.
+  Unmeasured models never affect lineup defaults, order or ties.
+- Make Model.Rank and benchdata.Model.Rank optional pointers, mutually exclusive
+  with Unmeasured. Ranked score validation and existing ranked rows are unchanged;
+  consumers reading raw model rows must guard Rank before dereferencing it.
+
+- Keep interactive Codex gateway admission independent of the CLI's reported release metadata while preserving exact per-attempt binding validation.
+
+## Unreleased
+
 ## v0.5.64 — 2026-10-13
 
 - Resolve local runtime and model rows from the Curator catalog:
@@ -151,8 +305,6 @@
   a row declaring none leaves the child environment byte-identical.
   `Launchable` carries the window and `BuildLaunch` refuses a vendor that
   rewrites it.
-
-## Unreleased
 
 ## v0.5.57 — 2026-10-07
 

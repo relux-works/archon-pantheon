@@ -17,7 +17,7 @@ func requireCodexGatewayReason(t *testing.T, err error, want agentic.CodexGatewa
 	}
 }
 
-// Gateway compatibility observes traffic after launch; release metadata never gates policy admission or binding rendering.
+// These release-metadata values must not cause admission, finalization, or rendering to refuse.
 func TestGatewayReleaseIsInformational(t *testing.T) {
 	for _, release := range []string{"0.164.0", "0.167.0", "9.999.0", "", "0.164.0+build"} {
 		t.Run(release, func(t *testing.T) {

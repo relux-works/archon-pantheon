@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"reflect"
 	"slices"
 	"strings"
 	"testing"
@@ -93,9 +94,25 @@ func TestGatewayBindingRefusals(t *testing.T) {
 				t.Fatal(err)
 			}
 			b := gatewayBinding(t, p)
+			b.AttemptID = a.AttemptID()
+			if b.AttemptID == "" {
+				t.Fatal("admission returned an empty attempt ID")
+			}
 			change(&b)
-			_, _, err = a.Finalize(b)
+			final, receipt, err := a.Finalize(b)
 			requireCodexGatewayReason(t, err, agentic.CodexGatewayBindingNotCanonical)
+			if !reflect.DeepEqual(final, agentic.PlanWithEnvironment{}) {
+				t.Fatalf("refused finalization returned a plan: %#v", final)
+			}
+			if receipt != nil {
+				t.Fatalf("refused finalization returned a receipt: %#v", receipt)
+			}
+
+			valid := gatewayBinding(t, p)
+			valid.AttemptID = a.AttemptID()
+			if _, err := gatewayFinalizeFixture(a, valid); err != nil {
+				t.Fatalf("valid binding refused after failed attempt: %v", err)
+			}
 		})
 	}
 }

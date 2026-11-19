@@ -1,0 +1,1 @@
+- Keep interactive Codex gateway admission independent of the CLI's reported release metadata while preserving exact per-attempt binding validation.

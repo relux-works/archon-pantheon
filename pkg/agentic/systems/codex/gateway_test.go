@@ -17,7 +17,7 @@ import (
 func gatewayPlan(t *testing.T, native []string) agentic.Plan {
 	t.Helper()
 	r := managedPrimaryRequest(t)
-	r.ToolRelease = "0.164.0"
+	r.ToolRelease = "0.167.0"
 	r.NativeArgs = native
 	return requireManagedPlan(t, r)
 }
@@ -28,7 +28,7 @@ func gatewayBinding(t *testing.T, p agentic.Plan) agentic.CodexGatewayBinding {
 	if err != nil {
 		t.Fatal(err)
 	}
-	return agentic.CodexGatewayBinding{ProviderID: GatewayProviderID, BaseURL: "http://127.0.0.1:45678/chatgpt/backend-api/codex", HeaderName: "X-Netproxy-Token", TokenEnv: GatewayTokenEnv, WireAPI: "responses", RequiresOpenAIAuth: true, ToolRelease: "0.164.0", ExecutablePath: p.Binary, ExecutableSHA256: fmt.Sprintf("%x", sha256.Sum256(data))}
+	return agentic.CodexGatewayBinding{ProviderID: GatewayProviderID, BaseURL: "http://127.0.0.1:45678/chatgpt/backend-api/codex", HeaderName: "X-Netproxy-Token", TokenEnv: GatewayTokenEnv, WireAPI: "responses", RequiresOpenAIAuth: true, ToolRelease: "0.167.0", ExecutablePath: p.Binary, ExecutableSHA256: fmt.Sprintf("%x", sha256.Sum256(data))}
 }
 
 // Fresh and exact resume retain every original argument and native suffix;
@@ -71,7 +71,7 @@ func TestGatewayFreshAndResume(t *testing.T) {
 }
 
 // Binding fields cannot select a different provider, route, credential channel,
-// transport, release or executable. Every row must yield the typed refusal.
+// transport or executable; release metadata is checked as plan identity elsewhere.
 func TestGatewayBindingRefusals(t *testing.T) {
 	for name, change := range map[string]func(*agentic.CodexGatewayBinding){
 		"provider":         func(b *agentic.CodexGatewayBinding) { b.ProviderID = "openai" },
@@ -84,7 +84,6 @@ func TestGatewayBindingRefusals(t *testing.T) {
 		"websocket":        func(b *agentic.CodexGatewayBinding) { b.SupportsWebSockets = true },
 		"no-auth":          func(b *agentic.CodexGatewayBinding) { b.RequiresOpenAIAuth = false },
 		"wire":             func(b *agentic.CodexGatewayBinding) { b.WireAPI = "chat" },
-		"release":          func(b *agentic.CodexGatewayBinding) { b.ToolRelease = "0.165.0" },
 		"digest":           func(b *agentic.CodexGatewayBinding) { b.ExecutableSHA256 = strings.Repeat("0", 64) },
 	} {
 		t.Run(name, func(t *testing.T) {
@@ -193,7 +192,7 @@ func gatewayFinalizeFixture(a *agentic.CodexGatewayAdmission, b agentic.CodexGat
 // the ordinary fresh case beside each refusal remains renderable.
 func TestGatewayRendererRefusesMismatch(t *testing.T) {
 	r := managedPrimaryRequest(t)
-	r.ToolRelease = "0.164.0"
+	r.ToolRelease = "0.167.0"
 	p := requireManagedPlan(t, r)
 	b := gatewayBinding(t, p)
 	g := (&System{}).CodexGatewayBasis(r, agentic.LaunchModeInteractive)

@@ -9,35 +9,30 @@ import (
 	"github.com/relux-works/skill-agents-management/pkg/agentic"
 )
 
-// Only the exact gateway release admits across zero/native/yolo permissions; supported permission rows confer no gateway qualification.
-func TestGatewayExactReleaseAdmission(t *testing.T) {
-	for _, release := range []string{"0.164.0", "", "0.153.2", "0.163.0", "0.165.0", "0.166.0", " 0.164.0", "0.164.0 "} {
-		for _, permission := range []agentic.PermissionMode{"", agentic.PermissionModeNative, agentic.PermissionModeYolo} {
-			t.Run(release+"/"+string(permission), func(t *testing.T) {
-				r := managedPrimaryRequest(t)
-				r.ToolRelease = release
-				r.PermissionMode = permission
-				g := (&System{}).CodexGatewayBasis(r, agentic.LaunchModeInteractive)
-				err := g.Admit(agentic.CodexGatewayInputs{}, r.Env)
-				if release != "0.164.0" {
-					if !errors.Is(err, agentic.ErrCodexGatewayRefused) {
-						t.Fatalf("unqualified release admitted: %v", err)
-					}
-					return
-				}
-				if err != nil {
-					t.Fatal(err)
-				}
-				p := requireManagedPlan(t, r)
-				a, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{})
-				if err != nil {
-					t.Fatal(err)
-				}
-				if _, err := gatewayFinalizeFixture(a, gatewayBinding(t, p)); err != nil {
-					t.Fatal(err)
-				}
-			})
-		}
+// Gateway compatibility observes traffic after launch; release metadata never gates policy admission or binding rendering.
+func TestGatewayReleaseIsInformational(t *testing.T) {
+	for _, release := range []string{"0.164.0", "0.167.0", "9.999.0", "", "0.164.0+build"} {
+		t.Run(release, func(t *testing.T) {
+			r := managedPrimaryRequest(t)
+			r.ToolRelease = release
+			g := (&System{}).CodexGatewayBasis(r, agentic.LaunchModeInteractive)
+			if err := g.Admit(agentic.CodexGatewayInputs{}, r.Env); err != nil {
+				t.Fatalf("release metadata gated policy admission: %v", err)
+			}
+			p := requireManagedPlan(t, r)
+			b := gatewayBinding(t, p)
+			b.ToolRelease = release
+			a, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, err := gatewayFinalizeFixture(a, b); err != nil {
+				t.Fatalf("release metadata gated gateway finalization: %v", err)
+			}
+			if _, err := g.Render(b, p.Argv); err != nil {
+				t.Fatalf("release metadata gated binding rendering: %v", err)
+			}
+		})
 	}
 }
 
@@ -57,7 +52,7 @@ func TestGatewayParentEnvironmentAndRepeatedSuffix(t *testing.T) {
 	for _, kind := range []string{"openai", "codex", "repeat"} {
 		t.Run(kind, func(t *testing.T) {
 			r := managedPrimaryRequest(t)
-			r.ToolRelease = "0.164.0"
+			r.ToolRelease = "0.167.0"
 			control := requireManagedPlan(t, r)
 			if _, err := gatewayAdmitFixture(control, agentic.CodexGatewayInputs{}); err != nil {
 				t.Fatal(err)
@@ -83,7 +78,7 @@ func TestGatewayOtherRoutes(t *testing.T) {
 	for _, kind := range []string{"local", "remote", "network", "gateway"} {
 		t.Run(kind, func(t *testing.T) {
 			r := managedPrimaryRequest(t)
-			r.ToolRelease = "0.164.0"
+			r.ToolRelease = "0.167.0"
 			p := requireManagedPlan(t, r)
 			b := gatewayBinding(t, p)
 			g := (&System{}).CodexGatewayBasis(r, agentic.LaunchModeInteractive)

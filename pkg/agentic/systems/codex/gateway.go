@@ -16,18 +16,17 @@ const GatewayTokenEnv = "CURATOR_CODEX_GATEWAY_TOKEN"
 
 type gatewayPolicy struct {
 	mode    agentic.LaunchMode
-	release string
 	native  []string
 	other   bool
 	request agentic.LaunchRequest
 }
 
 func (*System) CodexGatewayBasis(r agentic.LaunchRequest, mode agentic.LaunchMode) agentic.CodexGatewayPolicy {
-	return gatewayPolicy{mode: mode, release: r.ToolRelease, native: slices.Clone(r.NativeArgs), other: r.LocalProvider != nil || r.CodexRemoteClient != nil || r.CodexGateway != nil || !r.Network.IsZero(), request: r}
+	return gatewayPolicy{mode: mode, native: slices.Clone(r.NativeArgs), other: r.LocalProvider != nil || r.CodexRemoteClient != nil || r.CodexGateway != nil || !r.Network.IsZero(), request: r}
 }
 
 func (g gatewayPolicy) Admit(in agentic.CodexGatewayInputs, env []string) error {
-	if g.mode != agentic.LaunchModeInteractive || g.release != "0.164.0" || g.other || !slices.Equal(in.NativeArgs, g.native) || !gatewayNativeSuffix(g.native) {
+	if g.mode != agentic.LaunchModeInteractive || g.other || !slices.Equal(in.NativeArgs, g.native) || !gatewayNativeSuffix(g.native) {
 		return agentic.ErrCodexGatewayRefused
 	}
 	// Lookup declarations carry names only. Exact repeats retain the existing
@@ -140,7 +139,7 @@ func checkGatewayEnvironment(env []string, injected bool) error {
 }
 
 func validGatewayBinding(b agentic.CodexGatewayBinding) bool {
-	if b.ProviderID != GatewayProviderID || b.TokenEnv != GatewayTokenEnv || b.WireAPI != "responses" || !b.RequiresOpenAIAuth || b.SupportsWebSockets || b.ToolRelease != "0.164.0" || !filepath.IsAbs(b.ExecutablePath) || filepath.Clean(b.ExecutablePath) != b.ExecutablePath {
+	if b.ProviderID != GatewayProviderID || b.TokenEnv != GatewayTokenEnv || b.WireAPI != "responses" || !b.RequiresOpenAIAuth || b.SupportsWebSockets || !filepath.IsAbs(b.ExecutablePath) || filepath.Clean(b.ExecutablePath) != b.ExecutablePath {
 		return false
 	}
 	u, err := url.Parse(b.BaseURL)

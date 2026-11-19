@@ -101,6 +101,12 @@ func validateInteractiveArgs(args []string, permission agentic.PermissionMode) e
 	for _, index := range nativeargs.FlagIndexes(args) {
 		token := args[index]
 		name, _, _ := nativeargs.SplitFlagValue(token)
+		for _, shortName := range shortOptionNames(token) {
+			if shortName == shortYoloFlag || shortName == "-m" || shortName == "-p" {
+				name = shortName
+				break
+			}
+		}
 		shortSession := (strings.HasPrefix(token, "-S") && !strings.HasPrefix(token, "--") && token != "-S") ||
 			(strings.HasPrefix(token, "-r") && !strings.HasPrefix(token, "--") && token != "-r")
 		if shortSession {
@@ -149,6 +155,34 @@ func validateInteractiveArgs(args []string, permission agentic.PermissionMode) e
 		return resumeInvalid("cannot combine continue and explicit session selectors")
 	}
 	return nil
+}
+
+// shortOptionNames expands the source-pinned Commander short-option grammar:
+// boolean options may cluster, and the argument-taking -S, -r, -m, and -p
+// consume the remainder of a cluster as their value.
+func shortOptionNames(token string) []string {
+	if len(token) < 3 || token[0] != '-' || token[1] == '-' {
+		return nil
+	}
+	cluster, _, _ := strings.Cut(token[1:], "=")
+	options := make([]string, 0, len(cluster))
+	for i := 0; i < len(cluster); i++ {
+		option := cluster[i]
+		options = append(options, "-"+string(option))
+		if shortOptionTakesValue(option) {
+			break
+		}
+	}
+	return options
+}
+
+func shortOptionTakesValue(option byte) bool {
+	switch option {
+	case 'S', 'r', 'm', 'p':
+		return true
+	default:
+		return false
+	}
 }
 
 func optionalSessionID(args []string, index int, name string) (string, error) {

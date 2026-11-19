@@ -153,6 +153,11 @@ func TestBuildPlanRefusesInvalidInputsWithoutMutation(t *testing.T) {
 		{"unrepresented auto posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"--auto"} }, agentic.ErrPermissionModeUnsupported},
 		{"canonical yolo under native posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"--yolo"} }, agentic.ErrNativePolicyConflict},
 		{"short yolo under native posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"-y"} }, agentic.ErrNativePolicyConflict},
+		{"clustered yolo and continue short options", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"-yc"} }, agentic.ErrNativePolicyConflict},
+		{"clustered continue and yolo short options", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"-cy"} }, agentic.ErrNativePolicyConflict},
+		{"clustered yolo and hidden continue short options", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"-yC"} }, agentic.ErrNativePolicyConflict},
+		{"clustered hidden continue and yolo short options", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"-Cy"} }, agentic.ErrNativePolicyConflict},
+		{"cluster ending in a value-taking short option", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"-ym", "configured-alias"} }, agentic.ErrNativePolicyConflict},
 		{"hidden yolo alias under native posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"--yes"} }, agentic.ErrNativePolicyConflict},
 		{"hidden auto-approve alias under native posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"--auto-approve"} }, agentic.ErrNativePolicyConflict},
 		{"duplicate yolo under yolo posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) {
@@ -209,9 +214,10 @@ func TestBuildPlanRefusesInvalidInputsWithoutMutation(t *testing.T) {
 	}
 }
 
-// TestInteractiveResumeSelectorsAcceptSourcedForms checks every documented
-// session and continue spelling through BuildPlan. It proves argument
-// preservation and selector compatibility, not that any session exists.
+// TestInteractiveResumeSelectorsAcceptSourcedForms checks sourced session and
+// continue spellings through BuildPlan. It proves -c and -C remain accepted and
+// forwarded, and a y in an attached session ID remains a value, not a flag.
+// It does not prove that any session exists.
 func TestInteractiveResumeSelectorsAcceptSourcedForms(t *testing.T) {
 	binDir := buildFakeKimi(t)
 	for _, tc := range []struct {
@@ -223,6 +229,7 @@ func TestInteractiveResumeSelectorsAcceptSourcedForms(t *testing.T) {
 		{"continue hidden alias", []string{"-C"}},
 		{"session long", []string{"--session", "session-123"}},
 		{"session short", []string{"-S", "session-123"}},
+		{"session short with attached value containing y", []string{"-Ssession-y"}},
 		{"resume long alias", []string{"--resume", "session-123"}},
 		{"resume short alias", []string{"-r", "session-123"}},
 	} {

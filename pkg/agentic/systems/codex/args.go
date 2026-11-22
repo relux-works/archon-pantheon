@@ -16,11 +16,62 @@ func (g gatewayPolicy) Render(b agentic.CodexGatewayBinding, original []string) 
 	if args, err := Args(r, g.mode); err != nil {
 		return nil, agentic.RefuseCodexGateway(agentic.CodexGatewayBindingNotCanonical)
 	} else {
-		if len(args) < 4 || !slices.Equal(args[4:], original) {
+		if len(args) < gatewayOwnedArgs || !slices.Equal(args[gatewayOwnedArgs:], original) {
+			return nil, agentic.RefuseCodexGateway(agentic.CodexGatewayBindingNotCanonical)
+		}
+		// Codex lets a later override win, so the owned switch holds only
+		// while nothing after the owned prefix selects a feature.
+		if selectsFeature(args[gatewayOwnedArgs:]) {
 			return nil, agentic.RefuseCodexGateway(agentic.CodexGatewayBindingNotCanonical)
 		}
 		return args, nil
 	}
+}
+
+// gatewayAppsOff turns off the client's built-in Apps connection for a gateway
+// launch. The client adds that ChatGPT-hosted MCP server itself, beside the
+// provider route the binding selects; app tool calls and the files uploaded
+// for them would reach the vendor without passing the gateway.
+const gatewayAppsOff = "features.apps=false"
+
+// gatewayOwnedArgs counts the leading arguments a gateway launch owns: the
+// provider table, the provider selection and the Apps switch, one `-c` pair
+// each.
+const gatewayOwnedArgs = 6
+
+// selectsFeature reports an argument that switches a Codex feature: the
+// `--enable` and `--disable` flags, and a `-c`/`--config` override whose
+// top-level key is `features`, quoted or not. The gateway emits one such
+// override and admits no other. A profile flag is not one: the Curator MCP
+// channel renders `-p` in gateway launches, and the client reads features
+// from the merged configuration, not from a profile's own table.
+func selectsFeature(args []string) bool {
+	for i := 0; i < len(args); i++ {
+		arg := args[i]
+		value, config := "", false
+		switch {
+		case arg == "--enable" || arg == "--disable" || strings.HasPrefix(arg, "--enable=") || strings.HasPrefix(arg, "--disable="):
+			return true
+		case arg == "-c" || arg == "--config":
+			if i+1 < len(args) {
+				value, config = args[i+1], true
+			}
+			i++
+		case strings.HasPrefix(arg, "--config="):
+			value, config = strings.TrimPrefix(arg, "--config="), true
+		case strings.HasPrefix(arg, "-c") && !strings.HasPrefix(arg, "--"):
+			value, config = strings.TrimPrefix(arg, "-c"), true
+		}
+		if !config {
+			continue
+		}
+		key, _, _ := strings.Cut(value, "=")
+		top, _, _ := strings.Cut(strings.TrimLeft(key, " \t"), ".")
+		if strings.Trim(top, " \t\"'") == "features" {
+			return true
+		}
+	}
+	return false
 }
 
 // THIS FILE IS THE ONE PLACE CODEX CLI FLAGS ARE SPELLED.
@@ -217,7 +268,7 @@ func Args(req agentic.LaunchRequest, mode agentic.LaunchMode) ([]string, error) 
 		args := []string{}
 		if b := req.CodexGateway; b != nil {
 			encoded := fmt.Sprintf(`{name="Curator filtering gateway",base_url=%q,wire_api="responses",requires_openai_auth=true,supports_websockets=false,env_http_headers={%q=%q}}`, b.BaseURL, b.HeaderName, b.TokenEnv)
-			args = append(args, "-c", "model_providers."+b.ProviderID+"="+encoded, "-c", "model_provider="+fmt.Sprintf("%q", b.ProviderID))
+			args = append(args, "-c", "model_providers."+b.ProviderID+"="+encoded, "-c", "model_provider="+fmt.Sprintf("%q", b.ProviderID), "-c", gatewayAppsOff)
 		}
 		args = appendContextConfigOverrides(args, context)
 		args = append(args, fileServerPairs...)

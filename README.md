@@ -2339,8 +2339,13 @@ replacement keeps its normal precedence;
 case aliases in the fully composed environment refuse inside `Finalize` before
 capability consumption, so a valid retry remains possible. `Finalize` accepts
 the nonsecret runtime binding once successfully, preserving original verifiers
-and executable digests. The Codex `Args` constructor renders the provider table
-and selection.
+and executable digests. The Codex `Args` constructor renders three owned `-c`
+pairs in front of the original arguments: the provider table, the provider
+selection and `features.apps=false`. The last one turns off the client's
+built-in Apps connection, a ChatGPT-hosted MCP server (`codex_apps`) that the
+client adds by itself beside the selected provider route; app tool calls and
+the files uploaded for them would otherwise reach the vendor without passing
+the gateway. Launches without a gateway binding render no apps setting.
 
 Immediately before execution, call both `VerifyBeforeExec` and
 `VerifyCodexGatewayProcess` with the actual child binary, argv and environment.
@@ -2357,8 +2362,15 @@ loopback HTTP `/chatgpt/backend-api/codex` Responses URL, OpenAI authentication
 enabled, WebSockets disabled, and an environment-backed registration header.
 The whole URL must equal its canonical re-rendering, including no empty query
 or fragment marker. Native provider overrides and reserved environment/MCP
-aliases refuse. This API does not qualify an adapter, authenticate an account,
-or establish OS containment.
+aliases refuse. So does every native spelling of a feature selection (a
+`features` override under either option name, `--enable`, `--disable`): the
+Apps switch is refused, never overridden, because Codex lets a later override
+win. The final process verifier compares the complete argv, so
+a child without the switch does not pass it. Other direct client routes
+(sign-in, account and usage calls, telemetry, MCP servers declared in the
+home) are outside this switch, and so is a managed requirement that pins the
+feature. This API does not qualify an adapter,
+authenticate an account, or establish OS containment.
 
 #### Consumer duties
 

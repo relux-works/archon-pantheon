@@ -47,7 +47,7 @@ func TestGatewayFreshAndResume(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if !slices.Equal(final.Argv[4:], p.Argv) || final.ModelIdentity != p.ModelIdentity || final.PermissionMode != p.PermissionMode {
+		if !slices.Equal(final.Argv[gatewayOwnedArgs:], p.Argv) || final.ModelIdentity != p.ModelIdentity || final.PermissionMode != p.PermissionMode {
 			t.Fatal("original admission changed")
 		}
 		var decoded map[string]any

@@ -2341,22 +2341,39 @@ capability consumption, so a valid retry remains possible. `Finalize` accepts
 the nonsecret runtime binding once successfully, preserving original verifiers
 and executable digests. The Codex `Args` constructor renders six owned `-c`
 pairs in front of the original arguments: the provider table, the provider
-selection and four switches, in this order. Each switch turns off something
-the client sends to the vendor by itself, beside the selected provider route,
-so that it would not pass the gateway:
+selection and four settings, in this order. A gateway launch renders
+`features.apps=false`, `features.plugins=false`, `analytics.enabled=false`
+and `check_for_update_on_startup=false` after the provider table and the
+provider selection, and the final-argument verifier requires those settings
+in the rendered argv. The tests do not launch Codex and do not establish that
+a client release applies the settings or suppresses the associated traffic.
+The update-check behavior has not been witnessed. The `gh` status-line child
+remains outside these switches.
+
+Each setting is rendered for something the client's source (openai/codex
+`rust-v0.167.0`) shows it sending to the vendor by itself, beside the selected
+provider route:
 
 - `features.apps=false`: the built-in Apps connection, a ChatGPT-hosted MCP
-  server (`codex_apps`) that the client adds by itself; app tool calls and the
-  files uploaded for them would otherwise reach the vendor directly.
-- `features.plugins=false`: the client's plugins. With them on, every start
-  refreshes the remote plugin catalog and the installed plugins from the
-  vendor's backend. A gateway launch therefore runs without the plugins
-  installed in the Codex home: their MCP servers, hooks and commands are off.
-- `analytics.enabled=false`: the built-in metrics exporter, which keeps a
-  connection to the vendor and posts once a minute, and the analytics events.
-  An exporter that the home's own `otel` table names is not switched by it.
+  server (`codex_apps`) that the client adds by itself.
+- `features.plugins=false`: the refresh of the remote plugin catalog at every
+  start. The gateway argv includes this setting for the remote-catalog
+  suppression goal; the tests verify only that argv value, not the behavior
+  of installed Codex releases or of future local plugin setups. The key names
+  the plugin feature as a whole; the gateway session that was measured listed
+  no tool or MCP server provided by a plugin.
+- `analytics.enabled=false`: the built-in metrics exporter and the analytics
+  events. An exporter that the home's own `otel` table names is another one.
 - `check_for_update_on_startup=false`: the look-up of a newer client release
   at start.
+
+Observed before this change, on one gateway launch that left the three new
+settings at the client's defaults: 83 MB on one direct connection in the
+first 97 seconds, which a reading of the source attributes to the catalog
+refresh, and a connection that posted once a minute, which the same reading
+attributes to the metrics exporter. Those are observations of a
+default-configuration launch; they do not prove the effect of the four
+settings.
 
 Launches without a gateway binding render none of the four.
 
@@ -2377,15 +2394,16 @@ The whole URL must equal its canonical re-rendering, including no empty query
 or fragment marker. Native provider overrides and reserved environment/MCP
 aliases refuse. So does every native spelling of a selection of an owned
 setting (a `features`, `analytics`, `otel` or `check_for_update_on_startup`
-override under either option name, `--enable`, `--disable`): an owned switch
-is refused, never overridden, because Codex lets a later override win. The
-final process verifier compares the complete argv, so a child without the
-four switches does not pass it. Other direct client routes are outside these
-switches: sign-in, account and usage calls such as the rate-limit read, the
-announcement tip, an exporter or MCP servers declared in the home, and
-programs the client starts itself, such as `gh` for its status line. So is a
-managed requirement that pins one of the settings. This API does not qualify
-an adapter, authenticate an account, or establish OS containment.
+override under either option name, `--enable`, `--disable`): an owned setting
+is refused, never overridden, because by the client's source a later override
+wins. The final process verifier compares the complete argv, so a child whose
+arguments lack one of the four settings does not pass it. Other direct client
+routes are outside these switches: sign-in, account and usage calls such as
+the rate-limit read, the announcement tip, an exporter or MCP servers declared
+in the home, and programs the client starts itself, such as `gh` for its
+status line. So is a managed requirement that pins one of the settings. This
+API does not qualify an adapter, authenticate an account, or establish OS
+containment.
 
 #### Consumer duties
 

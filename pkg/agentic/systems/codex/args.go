@@ -28,24 +28,28 @@ func (g gatewayPolicy) Render(b agentic.CodexGatewayBinding, original []string) 
 	}
 }
 
-// The switches a gateway launch owns. Each turns off something the client
-// sends to the vendor by itself, beside the provider route the binding
-// selects, so that it would not pass the gateway.
+// The settings a gateway launch owns. They are rendered after the provider
+// table and the provider selection, and the final-argument verifier requires
+// them in the rendered argv. Each names something the client's source shows
+// it sending to the vendor by itself, beside the provider route the binding
+// selects. That a client release applies a setting, or suppresses the
+// associated traffic, is not established here: no test launches Codex, and
+// the update-check behavior has not been witnessed.
 const (
-	// gatewayAppsOff turns off the built-in Apps connection. The client adds
-	// that ChatGPT-hosted MCP server itself; app tool calls and the files
-	// uploaded for them would reach the vendor directly.
+	// gatewayAppsOff is rendered for the built-in Apps connection, the
+	// ChatGPT-hosted MCP server the client adds itself.
 	gatewayAppsOff = "features.apps=false"
-	// gatewayPluginsOff turns off the client's plugins. With them on, every
-	// start refreshes the remote plugin catalog and the installed plugins
-	// from the vendor's backend with the account's credential.
+	// gatewayPluginsOff is rendered for the remote-catalog suppression goal:
+	// by its source the client refreshes the remote plugin catalog at every
+	// start. The key names the plugin feature as a whole; only the rendered
+	// value is verified, not the behavior of installed Codex releases or of
+	// homes with local plugins.
 	gatewayPluginsOff = "features.plugins=false"
-	// gatewayAnalyticsOff turns off the client's analytics: the built-in
-	// metrics exporter, which keeps a connection to the vendor and posts
-	// once a minute, and the analytics events.
+	// gatewayAnalyticsOff is rendered for the client's built-in metrics
+	// exporter and its analytics events.
 	gatewayAnalyticsOff = "analytics.enabled=false"
-	// gatewayUpdateCheckOff turns off the look-up of a newer client release
-	// at start.
+	// gatewayUpdateCheckOff is rendered for the look-up of a newer client
+	// release at start.
 	gatewayUpdateCheckOff = "check_for_update_on_startup=false"
 )
 
@@ -58,12 +62,14 @@ const gatewayOwnedArgs = 12
 // set: the `--enable` and `--disable` flags, and a `-c`/`--config` override
 // whose top-level key is `features`, `analytics`, `otel` or
 // `check_for_update_on_startup`, quoted or not. The gateway emits one
-// override for each switch and admits no other. `otel` is among the keys
-// because the analytics switch turns off only the client's built-in metrics
-// exporter; an `otel` override names another one. A profile flag is not a
-// selector: the Curator MCP channel renders `-p` in gateway launches, and the
-// client reads these settings from the merged configuration, where a `-c`
-// override ranks above a selected profile.
+// override for each switch and admits no other. The short option is read
+// separated (`-c key=value`), joined (`-ckey=value`) and with the equals
+// sign a command-line parser strips after a short option (`-c=key=value`).
+// `otel` is among the keys because `analytics.enabled` concerns only the
+// client's built-in metrics exporter; an `otel` override names another one.
+// A profile flag is not a selector: the Curator MCP channel renders `-p` in
+// gateway launches, and the client reads these settings from the merged
+// configuration, where a `-c` override ranks above a selected profile.
 func selectsOwnedSetting(args []string) bool {
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
@@ -79,7 +85,7 @@ func selectsOwnedSetting(args []string) bool {
 		case strings.HasPrefix(arg, "--config="):
 			value, config = strings.TrimPrefix(arg, "--config="), true
 		case strings.HasPrefix(arg, "-c") && !strings.HasPrefix(arg, "--"):
-			value, config = strings.TrimPrefix(arg, "-c"), true
+			value, config = strings.TrimPrefix(strings.TrimPrefix(arg, "-c"), "="), true
 		}
 		if !config {
 			continue

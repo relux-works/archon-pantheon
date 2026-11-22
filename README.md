@@ -2339,13 +2339,26 @@ replacement keeps its normal precedence;
 case aliases in the fully composed environment refuse inside `Finalize` before
 capability consumption, so a valid retry remains possible. `Finalize` accepts
 the nonsecret runtime binding once successfully, preserving original verifiers
-and executable digests. The Codex `Args` constructor renders three owned `-c`
+and executable digests. The Codex `Args` constructor renders six owned `-c`
 pairs in front of the original arguments: the provider table, the provider
-selection and `features.apps=false`. The last one turns off the client's
-built-in Apps connection, a ChatGPT-hosted MCP server (`codex_apps`) that the
-client adds by itself beside the selected provider route; app tool calls and
-the files uploaded for them would otherwise reach the vendor without passing
-the gateway. Launches without a gateway binding render no apps setting.
+selection and four switches, in this order. Each switch turns off something
+the client sends to the vendor by itself, beside the selected provider route,
+so that it would not pass the gateway:
+
+- `features.apps=false`: the built-in Apps connection, a ChatGPT-hosted MCP
+  server (`codex_apps`) that the client adds by itself; app tool calls and the
+  files uploaded for them would otherwise reach the vendor directly.
+- `features.plugins=false`: the client's plugins. With them on, every start
+  refreshes the remote plugin catalog and the installed plugins from the
+  vendor's backend. A gateway launch therefore runs without the plugins
+  installed in the Codex home: their MCP servers, hooks and commands are off.
+- `analytics.enabled=false`: the built-in metrics exporter, which keeps a
+  connection to the vendor and posts once a minute, and the analytics events.
+  An exporter that the home's own `otel` table names is not switched by it.
+- `check_for_update_on_startup=false`: the look-up of a newer client release
+  at start.
+
+Launches without a gateway binding render none of the four.
 
 Immediately before execution, call both `VerifyBeforeExec` and
 `VerifyCodexGatewayProcess` with the actual child binary, argv and environment.
@@ -2362,15 +2375,17 @@ loopback HTTP `/chatgpt/backend-api/codex` Responses URL, OpenAI authentication
 enabled, WebSockets disabled, and an environment-backed registration header.
 The whole URL must equal its canonical re-rendering, including no empty query
 or fragment marker. Native provider overrides and reserved environment/MCP
-aliases refuse. So does every native spelling of a feature selection (a
-`features` override under either option name, `--enable`, `--disable`): the
-Apps switch is refused, never overridden, because Codex lets a later override
-win. The final process verifier compares the complete argv, so
-a child without the switch does not pass it. Other direct client routes
-(sign-in, account and usage calls, telemetry, MCP servers declared in the
-home) are outside this switch, and so is a managed requirement that pins the
-feature. This API does not qualify an adapter,
-authenticate an account, or establish OS containment.
+aliases refuse. So does every native spelling of a selection of an owned
+setting (a `features`, `analytics`, `otel` or `check_for_update_on_startup`
+override under either option name, `--enable`, `--disable`): an owned switch
+is refused, never overridden, because Codex lets a later override win. The
+final process verifier compares the complete argv, so a child without the
+four switches does not pass it. Other direct client routes are outside these
+switches: sign-in, account and usage calls such as the rate-limit read, the
+announcement tip, an exporter or MCP servers declared in the home, and
+programs the client starts itself, such as `gh` for its status line. So is a
+managed requirement that pins one of the settings. This API does not qualify
+an adapter, authenticate an account, or establish OS containment.
 
 #### Consumer duties
 

@@ -79,7 +79,8 @@ func TestGatewayPolicyBoundaryIssuesBasisAndReceipt(t *testing.T) {
 	if !ok || b.AttemptID != p.GatewayBasis.ID() {
 		t.Fatal("receipt lost original admission")
 	}
-	if !slices.Equal(final.Plan.Argv[4:6], []string{"-c", "features.apps=false"}) || !slices.Equal(final.Plan.Argv[6:], p.Plan.Argv) || final.Plan.ModelIdentity != p.Plan.ModelIdentity {
+	owned := []string{"-c", "features.apps=false", "-c", "features.plugins=false", "-c", "analytics.enabled=false", "-c", "check_for_update_on_startup=false"}
+	if !slices.Equal(final.Plan.Argv[4:12], owned) || !slices.Equal(final.Plan.Argv[12:], p.Plan.Argv) || final.Plan.ModelIdentity != p.Plan.ModelIdentity {
 		t.Fatal("admission identity changed")
 	}
 	if err := final.Plan.VerifyCodexGatewayProcess(b.ExecutablePath, final.Plan.Argv, append(slices.Clone(final.Plan.Env), b.TokenEnv+"=synthetic")); err != nil {

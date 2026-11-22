@@ -19,33 +19,52 @@ func (g gatewayPolicy) Render(b agentic.CodexGatewayBinding, original []string) 
 		if len(args) < gatewayOwnedArgs || !slices.Equal(args[gatewayOwnedArgs:], original) {
 			return nil, agentic.RefuseCodexGateway(agentic.CodexGatewayBindingNotCanonical)
 		}
-		// Codex lets a later override win, so the owned switch holds only
-		// while nothing after the owned prefix selects a feature.
-		if selectsFeature(args[gatewayOwnedArgs:]) {
+		// Codex lets a later override win, so the owned switches hold only
+		// while nothing after the owned prefix sets what they set.
+		if selectsOwnedSetting(args[gatewayOwnedArgs:]) {
 			return nil, agentic.RefuseCodexGateway(agentic.CodexGatewayBindingNotCanonical)
 		}
 		return args, nil
 	}
 }
 
-// gatewayAppsOff turns off the client's built-in Apps connection for a gateway
-// launch. The client adds that ChatGPT-hosted MCP server itself, beside the
-// provider route the binding selects; app tool calls and the files uploaded
-// for them would reach the vendor without passing the gateway.
-const gatewayAppsOff = "features.apps=false"
+// The switches a gateway launch owns. Each turns off something the client
+// sends to the vendor by itself, beside the provider route the binding
+// selects, so that it would not pass the gateway.
+const (
+	// gatewayAppsOff turns off the built-in Apps connection. The client adds
+	// that ChatGPT-hosted MCP server itself; app tool calls and the files
+	// uploaded for them would reach the vendor directly.
+	gatewayAppsOff = "features.apps=false"
+	// gatewayPluginsOff turns off the client's plugins. With them on, every
+	// start refreshes the remote plugin catalog and the installed plugins
+	// from the vendor's backend with the account's credential.
+	gatewayPluginsOff = "features.plugins=false"
+	// gatewayAnalyticsOff turns off the client's analytics: the built-in
+	// metrics exporter, which keeps a connection to the vendor and posts
+	// once a minute, and the analytics events.
+	gatewayAnalyticsOff = "analytics.enabled=false"
+	// gatewayUpdateCheckOff turns off the look-up of a newer client release
+	// at start.
+	gatewayUpdateCheckOff = "check_for_update_on_startup=false"
+)
 
 // gatewayOwnedArgs counts the leading arguments a gateway launch owns: the
-// provider table, the provider selection and the Apps switch, one `-c` pair
-// each.
-const gatewayOwnedArgs = 6
+// provider table, the provider selection and the four switches, one `-c`
+// pair each.
+const gatewayOwnedArgs = 12
 
-// selectsFeature reports an argument that switches a Codex feature: the
-// `--enable` and `--disable` flags, and a `-c`/`--config` override whose
-// top-level key is `features`, quoted or not. The gateway emits one such
-// override and admits no other. A profile flag is not one: the Curator MCP
-// channel renders `-p` in gateway launches, and the client reads features
-// from the merged configuration, not from a profile's own table.
-func selectsFeature(args []string) bool {
+// selectsOwnedSetting reports an argument that sets what the owned switches
+// set: the `--enable` and `--disable` flags, and a `-c`/`--config` override
+// whose top-level key is `features`, `analytics`, `otel` or
+// `check_for_update_on_startup`, quoted or not. The gateway emits one
+// override for each switch and admits no other. `otel` is among the keys
+// because the analytics switch turns off only the client's built-in metrics
+// exporter; an `otel` override names another one. A profile flag is not a
+// selector: the Curator MCP channel renders `-p` in gateway launches, and the
+// client reads these settings from the merged configuration, where a `-c`
+// override ranks above a selected profile.
+func selectsOwnedSetting(args []string) bool {
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
 		value, config := "", false
@@ -67,7 +86,8 @@ func selectsFeature(args []string) bool {
 		}
 		key, _, _ := strings.Cut(value, "=")
 		top, _, _ := strings.Cut(strings.TrimLeft(key, " \t"), ".")
-		if strings.Trim(top, " \t\"'") == "features" {
+		switch strings.Trim(top, " \t\"'") {
+		case "features", "analytics", "otel", "check_for_update_on_startup":
 			return true
 		}
 	}
@@ -268,7 +288,7 @@ func Args(req agentic.LaunchRequest, mode agentic.LaunchMode) ([]string, error) 
 		args := []string{}
 		if b := req.CodexGateway; b != nil {
 			encoded := fmt.Sprintf(`{name="Curator filtering gateway",base_url=%q,wire_api="responses",requires_openai_auth=true,supports_websockets=false,env_http_headers={%q=%q}}`, b.BaseURL, b.HeaderName, b.TokenEnv)
-			args = append(args, "-c", "model_providers."+b.ProviderID+"="+encoded, "-c", "model_provider="+fmt.Sprintf("%q", b.ProviderID), "-c", gatewayAppsOff)
+			args = append(args, "-c", "model_providers."+b.ProviderID+"="+encoded, "-c", "model_provider="+fmt.Sprintf("%q", b.ProviderID), "-c", gatewayAppsOff, "-c", gatewayPluginsOff, "-c", gatewayAnalyticsOff, "-c", gatewayUpdateCheckOff)
 		}
 		args = appendContextConfigOverrides(args, context)
 		args = append(args, fileServerPairs...)

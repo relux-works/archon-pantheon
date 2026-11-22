@@ -33,7 +33,7 @@ func TestGatewayTurnsTheAppsConnectionOff(t *testing.T) {
 		if len(final.Argv) < 6 || !slices.Equal(final.Argv[4:6], []string{"-c", "features.apps=false"}) {
 			t.Fatalf("gateway arguments carry no apps switch after the provider selection: %q", final.Argv[:min(len(final.Argv), 6)])
 		}
-		if !slices.Equal(final.Argv[6:], p.Argv) {
+		if !slices.Equal(final.Argv[gatewayOwnedArgs:], p.Argv) {
 			t.Fatal("original arguments changed")
 		}
 		var decoded map[string]any
@@ -46,12 +46,12 @@ func TestGatewayTurnsTheAppsConnectionOff(t *testing.T) {
 		}
 		count := 0
 		for _, arg := range final.Argv {
-			if strings.Contains(arg, "features") {
+			if strings.Contains(arg, "apps") {
 				count++
 			}
 		}
 		if count != 1 {
-			t.Fatalf("%d arguments name a feature, want the one owned switch", count)
+			t.Fatalf("%d arguments name apps, want the one owned switch", count)
 		}
 		env := append(slices.Clone(final.Env), GatewayTokenEnv+"=synthetic-child-only")
 		if err := final.VerifyCodexGatewayProcess(b.ExecutablePath, final.Argv, env); err != nil {
@@ -74,9 +74,10 @@ func requireGatewayRefusedWithoutReason(t *testing.T, name string, err error) {
 	}
 }
 
-// Claim: a launch without a gateway binding renders no apps setting and no
-// other feature selector, in every mode and with the request shapes that add
-// `-c` pairs. The gateway switch is not a default of the Codex plugin.
+// Claim: a launch without a gateway binding renders no apps setting, no other
+// feature selector and none of the other settings a gateway launch owns, in
+// every mode and with the request shapes that add `-c` pairs. The gateway
+// switches are not defaults of the Codex plugin.
 func TestNonGatewayLaunchesRenderNoAppsSetting(t *testing.T) {
 	interactive := managedPrimaryRequest(t)
 	interactive.ToolRelease = "0.167.0"
@@ -104,13 +105,21 @@ func TestNonGatewayLaunchesRenderNoAppsSetting(t *testing.T) {
 				if strings.Contains(arg, "features") || strings.Contains(arg, "apps") || arg == "--enable" || arg == "--disable" {
 					t.Fatalf("non-gateway launch renders a feature setting: %q", arg)
 				}
+				for _, owned := range []string{"plugins", "analytics", "otel", "check_for_update"} {
+					if strings.Contains(arg, owned) {
+						t.Fatalf("non-gateway launch renders a gateway-owned setting: %q", arg)
+					}
+				}
+			}
+			if selectsOwnedSetting(args) {
+				t.Fatalf("non-gateway launch sets what a gateway launch owns: %q", args)
 			}
 		})
 	}
 	// The built plan of an interactive launch is what the gateway later
 	// prefixes: it holds no apps setting either.
-	if p := requireManagedPlan(t, interactive); slices.ContainsFunc(p.Argv, func(arg string) bool { return strings.Contains(arg, "features") }) {
-		t.Fatal("interactive plan renders a feature setting before any gateway binding")
+	if p := requireManagedPlan(t, interactive); selectsOwnedSetting(p.Argv) || slices.ContainsFunc(p.Argv, func(arg string) bool { return strings.Contains(arg, "features") }) {
+		t.Fatal("interactive plan renders a gateway-owned setting before any gateway binding")
 	}
 }
 

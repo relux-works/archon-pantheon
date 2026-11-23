@@ -82,14 +82,14 @@ func RefuseCodexGateway(code CodexGatewayRefusalCode) error {
 // the module's current-policy admission boundary can issue a nonzero basis.
 type GatewayAdmissionBasisV1 = gatewaybasis.Basis
 
-// RuntimeGatewayBindingV1 contains nonsecret routing and executable identity.
+// RuntimeGatewayBindingV1 contains nonsecret routing, capability, and executable identity.
 // TokenEnv names the child-only variable; this API never takes its value.
 type RuntimeGatewayBindingV1 struct {
-	AttemptID                                     string
-	ProviderID, BaseURL, HeaderName, TokenEnv     string
-	WireAPI                                       string
-	RequiresOpenAIAuth, SupportsWebSockets        bool
-	ToolRelease, ExecutablePath, ExecutableSHA256 string
+	AttemptID                                                           string
+	ProviderID, BaseURL, HeaderName, TokenEnv                           string
+	WireAPI                                                             string
+	RequiresOpenAIAuth, SupportsWebSockets, SupportsStandaloneWebSearch bool
+	ToolRelease, ExecutablePath, ExecutableSHA256                       string
 }
 
 type CodexGatewayBinding = RuntimeGatewayBindingV1

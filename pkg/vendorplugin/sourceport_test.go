@@ -784,7 +784,7 @@ func TestThePortedLineupPinFiresOnADeclaredRowThatDisturbsIt(t *testing.T) {
 			reshape: func(rows []vendorplugin.Model) []vendorplugin.Model {
 				out := vendorplugin.CloneModels(rows)
 				for i := range out {
-					if declaredHereRows[out[i].ID] == "openai" {
+					if declaredHereRows[out[i].ID] == "openai" && out[i].Rank != nil {
 						out[i].Rank.Score = 42
 					}
 				}

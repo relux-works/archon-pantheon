@@ -155,6 +155,26 @@ const openaiCodexCatalogGPT6 = "the OpenAI Codex CLI model catalog, read with `c
 // answered on that date. codex-cli 0.155.1 did not list the row at all.
 const openaiCodexCatalogGPT61 = "the OpenAI Codex CLI model catalog, read with `codex debug models` (codex-cli 0.159.0, 2026-09-29)"
 
+// openaiCodexCatalogCurrent is the current Codex CLI model-cache read. Its
+// catalog-only rows below carry availability evidence, not benchmark claims.
+const openaiCodexCatalogCurrent = "OpenAI Codex CLI models_cache.json (codex-cli 0.167.0, read 2026-11-24)"
+
+// The cache default is recorded in the evidence and as Effort.Recommended.
+// resolveEffort applies that recommendation when an unmeasured row omits
+// effort. The cache also lists `ultra` for three rows; module policy excludes
+// it from the accepted vocabulary because it is a delegation mode.
+func openaiUnmeasuredFromCurrentCatalog(id, defaultEffort string, contextWindow int, supportedEfforts string) *UnmeasuredClaim {
+	return &UnmeasuredClaim{
+		Kind:   "unmeasured",
+		AsOf:   "2026-11-24",
+		Source: openaiCodexCatalogCurrent,
+		Observation: "models_cache.json lists " + id + " with default_reasoning_level \"" + defaultEffort +
+			"\", context_window " + strconv.Itoa(contextWindow) +
+			", max_context_window 872000, and supported_reasoning_levels [" + supportedEfforts +
+			"]; availability metadata only, no capability measurement",
+	}
+}
+
 // rank builds a capability rank for a PORTED row: a bench-anchored score, the
 // bench claim behind it, and the source registry's own PolicyRank for the row.
 //
@@ -213,10 +233,9 @@ func openaiWithCost(r *CapabilityRank, cost RankEvidence) *CapabilityRank {
 	return r
 }
 
-// effortRequired declares a model that must be given an explicit effort, with
-// the words it accepts and the one the vendor recommends. Recommended is a
-// DECLARATION and never a default: nothing substitutes it for a missing
-// effort, and it reaches an operator through the refusal text instead.
+// openaiEffortRequired declares a model's effort axis. Recommended is the
+// vendor's recommendation; resolveEffort applies it to unmeasured rows when
+// effort is omitted, while ranked rows still require caller-supplied effort.
 func openaiEffortRequired(recommended string, vocabulary []string) EffortDeclaration {
 	return EffortDeclaration{
 		Support:     EffortRequired,
@@ -408,6 +427,51 @@ var openaiModels = []Model{
 		Rank:                openaiSol61Rank("the catalog presents this row at picker priority 1 and describes it as \"Latest workhorse model for coding and everyday work.\"; the source registry contains NO row for gpt-6.1-sol and this score is therefore not a ported one"),
 		Lifecycle:           LifecycleCurrent,
 		Effort:              openaiSol61Effort(),
+		ContextWindowTokens: 272_000,
+		Systems:             []string{"codex"},
+	},
+	{
+		ID:                  "gpt-6.2-sol",
+		Description:         "Current Codex model; availability is recorded, but capability has not been measured or ranked",
+		Unmeasured:          openaiUnmeasuredFromCurrentCatalog("gpt-6.2-sol", "low", 500_000, "low, medium, high, xhigh, max, ultra"),
+		Lifecycle:           LifecycleCurrent,
+		Effort:              openaiEffortRequired("low", []string{"low", "medium", "high", "xhigh", "max"}),
+		ContextWindowTokens: 500_000,
+		Systems:             []string{"codex"},
+	},
+	{
+		ID:                  "gpt-6.2-astra",
+		Description:         "Current Codex model; availability is recorded, but capability has not been measured or ranked",
+		Unmeasured:          openaiUnmeasuredFromCurrentCatalog("gpt-6.2-astra", "low", 272_000, "low, medium, high, xhigh, max, ultra"),
+		Lifecycle:           LifecycleCurrent,
+		Effort:              openaiEffortRequired("low", []string{"low", "medium", "high", "xhigh", "max"}),
+		ContextWindowTokens: 272_000,
+		Systems:             []string{"codex"},
+	},
+	{
+		ID:                  "gpt-6.1-terra",
+		Description:         "Current Codex model; availability is recorded, but capability has not been measured or ranked",
+		Unmeasured:          openaiUnmeasuredFromCurrentCatalog("gpt-6.1-terra", "low", 500_000, "low, medium, high, xhigh, max, ultra"),
+		Lifecycle:           LifecycleCurrent,
+		Effort:              openaiEffortRequired("low", []string{"low", "medium", "high", "xhigh", "max"}),
+		ContextWindowTokens: 500_000,
+		Systems:             []string{"codex"},
+	},
+	{
+		ID:                  "gpt-reserve",
+		Description:         "Codex reserve model; availability is recorded, but capability has not been measured or ranked",
+		Unmeasured:          openaiUnmeasuredFromCurrentCatalog("gpt-reserve", "medium", 272_000, "low, medium, high, xhigh, max"),
+		Lifecycle:           LifecycleCurrent,
+		Effort:              openaiEffortRequired("medium", []string{"low", "medium", "high", "xhigh", "max"}),
+		ContextWindowTokens: 272_000,
+		Systems:             []string{"codex"},
+	},
+	{
+		ID:                  "codex-auto-review",
+		Description:         "Codex automated-review model; availability is recorded, but capability has not been measured or ranked",
+		Unmeasured:          openaiUnmeasuredFromCurrentCatalog("codex-auto-review", "medium", 272_000, "low, medium, high, xhigh, max"),
+		Lifecycle:           LifecycleCurrent,
+		Effort:              openaiEffortRequired("medium", []string{"low", "medium", "high", "xhigh", "max"}),
 		ContextWindowTokens: 272_000,
 		Systems:             []string{"codex"},
 	},

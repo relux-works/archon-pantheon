@@ -53,6 +53,8 @@ var declaredHereRows = []vendorplugin.ModelID{
 	"gemini-4-argon", "argon",
 	"gpt-6-astra", "astra",
 	"gpt-6-sol", "sol", "gpt-6.1-sol",
+	// Current Codex CLI cache rows: available in this binary, absent from the board table, and unranked.
+	"gpt-6.2-sol", "gpt-6.2-astra", "gpt-6.1-terra", "gpt-reserve", "codex-auto-review",
 	"gpt-6-luna", "luna",
 	"claude-opus-5-5", "opus",
 	"claude-sonnet-5-5", "sonnet",

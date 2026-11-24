@@ -58,7 +58,7 @@ import (
 // declaredHereRows maps a row this module declares first to the vendor that
 // declares it.
 //
-// Two entries today, and they are ONE model under two spellings.
+// The astra pair is ONE model under two spellings.
 //
 // gpt-6-astra was published by OpenAI and read off the installed Codex CLI's
 // own catalog; the board's registry has no row for it and neither capture can
@@ -88,12 +88,18 @@ var declaredHereRows = map[vendorplugin.ModelID]vendorplugin.VendorID{
 	"astra":                 "openai",
 	"gpt-6-sol":             "openai",
 	// gpt-6.1-sol, read off codex-cli 0.159.0 on 2026-09-29; `sol` moved to it.
-	"gpt-6.1-sol":     "openai",
-	"sol":             "openai",
-	"gpt-6-luna":      "openai",
-	"luna":            "openai",
-	"claude-opus-5-5": "anthropic",
-	"opus":            "anthropic",
+	"gpt-6.1-sol": "openai",
+	// Catalog-only availability rows read from codex-cli 0.167.0 on 2026-11-24.
+	"gpt-6.2-sol":       "openai",
+	"gpt-6.2-astra":     "openai",
+	"gpt-6.1-terra":     "openai",
+	"gpt-reserve":       "openai",
+	"codex-auto-review": "openai",
+	"sol":               "openai",
+	"gpt-6-luna":        "openai",
+	"luna":              "openai",
+	"claude-opus-5-5":   "anthropic",
+	"opus":              "anthropic",
 	// claude-sonnet-5-5 and its `sonnet` spelling, read off Claude Code 2.1.284
 	// on 2026-09-28.
 	"claude-sonnet-5-5": "anthropic",
@@ -171,6 +177,12 @@ var declaredHereCatalogEvidence = map[vendorplugin.VendorID]string{
 	"openai":    "codex debug models",
 	"anthropic": "claude -p --model",
 	"google":    "operator declaration",
+}
+
+// declaredHereUnmeasuredCatalogEvidence pins the source accepted for
+// availability-only rows that come from a model catalog rather than a probe.
+var declaredHereUnmeasuredCatalogEvidence = map[vendorplugin.VendorID]string{
+	"openai": "OpenAI Codex CLI models_cache.json (codex-cli 0.167.0, read 2026-11-24)",
 }
 
 // portedScoreObservation is the sentence rank() puts on a PORTED row. A
@@ -261,7 +273,10 @@ func declaredHereEvidenceProblems(id vendorplugin.ModelID, model vendorplugin.Mo
 			return []string{err.Error()}
 		}
 		if !strings.Contains(model.Unmeasured.Source, "Curator orchestrator") {
-			return []string{"unmeasured row lacks attributed probe"}
+			wantSource := declaredHereUnmeasuredCatalogEvidence[declaredHereRows[id]]
+			if wantSource == "" || model.Unmeasured.Source != wantSource {
+				return []string{fmt.Sprintf("unmeasured row lacks attributed probe or current catalog evidence %q", wantSource)}
+			}
 		}
 		return nil // Availability-only claim, with no source PolicyRank or benchmark assertion.
 	}
@@ -356,6 +371,27 @@ func TestTheDeclaredHereEvidenceRuleFiresOnABasisThatKeepsTheToken(t *testing.T)
 			t.Errorf("a rank basis edit moved the launch: %s", problem)
 		}
 	})
+}
+
+func TestUnmeasuredOpenAIRowsRequireExactCurrentCatalogEvidence(t *testing.T) {
+	const id vendorplugin.ModelID = "gpt-6.2-sol"
+	model, declared := declaredHereModel(t, id)
+	if !declared || model.Unmeasured == nil {
+		t.Fatalf("vendor %s no longer declares %q as unmeasured", declaredHereRows[id], id)
+	}
+
+	for _, source := range []string{
+		"somebody's recollection",
+		"OpenAI Codex CLI models_cache.json (codex-cli 0.166.0, read 2026-11-23)",
+	} {
+		t.Run(source, func(t *testing.T) {
+			mutant := model
+			claim := *model.Unmeasured
+			claim.Source = source
+			mutant.Unmeasured = &claim
+			requireReport(t, declaredHereEvidenceProblems(id, mutant), "lacks attributed probe or current catalog evidence")
+		})
+	}
 }
 
 // TestADeclaredRowMayNotTieAPortedOne is a gate rather than an aesthetic rule.

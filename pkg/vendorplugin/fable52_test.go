@@ -71,9 +71,10 @@ func TestUnmeasuredPreservesAllExistingRowsAndLineups(t *testing.T) {
 		}
 		old := []vendorplugin.Model{}
 		for _, m := range v.Models() {
-			if m.ID != "claude-fable-5-2" {
-				old = append(old, m)
+			if m.ID == "claude-fable-5-2" || (declaredHereRows[m.ID] == "openai" && m.Unmeasured != nil) {
+				continue // Exclude the Fable row and the new Codex cache additions from the old-row snapshot.
 			}
+			old = append(old, m)
 		}
 		rows[string(id)] = old
 		lineups[string(id)] = vendorplugin.LineupOf(v)

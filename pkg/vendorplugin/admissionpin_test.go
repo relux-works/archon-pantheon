@@ -727,8 +727,9 @@ func TestRuntimeModelsScopeToTheHarnessThatDrivesThem(t *testing.T) {
 		// row — it is admitted, ranked and displayed under its own spelling,
 		// and only the launch resolves it — so it counts here.
 		// See declaredhere_test.go. 18 since gpt-6-sol, gpt-6-luna and their
-		// `sol` / `luna` aliases were declared the same way; 19 with gpt-6.1-sol.
-		{runtime: "codex", system: "codex", count: 19, holds: "gpt-6-astra", excedes: "qwen3.7-plus-via-codex"},
+		// `sol` / `luna` aliases were declared the same way; 19 with gpt-6.1-sol,
+		// and 24 after five unmeasured rows from the current CLI model cache.
+		{runtime: "codex", system: "codex", count: 24, holds: "gpt-6-astra", excedes: "qwen3.7-plus-via-codex"},
 		// 16 with explicit-only Fable 5.2 (2026-11-10); previously 15, not the source table's 9: claude-opus-5-5 / `opus`,
 		// claude-sonnet-5-5 / `sonnet` and claude-haiku-5-5 / `haiku` are declared
 		// ahead of the board's registry.

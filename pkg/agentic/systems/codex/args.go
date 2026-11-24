@@ -5,10 +5,11 @@ import (
 	"slices"
 	"strings"
 
+	toml "github.com/pelletier/go-toml/v2"
 	"github.com/relux-works/skill-agents-management/pkg/agentic"
 )
 
-// Render is the gateway policy's fixed contribution through the canonical
+// Render is the gateway policy's canonical contribution through the canonical
 // Codex argv construction file. Caller-supplied arbitrary TOML is never input.
 func (g gatewayPolicy) Render(b agentic.CodexGatewayBinding, original []string) ([]string, error) {
 	r := g.request
@@ -16,25 +17,26 @@ func (g gatewayPolicy) Render(b agentic.CodexGatewayBinding, original []string) 
 	if args, err := Args(r, g.mode); err != nil {
 		return nil, agentic.RefuseCodexGateway(agentic.CodexGatewayBindingNotCanonical)
 	} else {
-		if len(args) < gatewayOwnedArgs || !slices.Equal(args[gatewayOwnedArgs:], original) {
+		ownedArgs := gatewayOwnedArgs
+		if b.SupportsStandaloneWebSearch {
+			ownedArgs += 2 // one additional -c key/value pair
+		}
+		if len(args) < ownedArgs || !slices.Equal(args[ownedArgs:], original) {
 			return nil, agentic.RefuseCodexGateway(agentic.CodexGatewayBindingNotCanonical)
 		}
 		// Codex lets a later override win, so the owned switches hold only
 		// while nothing after the owned prefix sets what they set.
-		if selectsOwnedSetting(args[gatewayOwnedArgs:]) {
+		if selectsOwnedSetting(args[ownedArgs:]) {
 			return nil, agentic.RefuseCodexGateway(agentic.CodexGatewayBindingNotCanonical)
 		}
 		return args, nil
 	}
 }
 
-// The settings a gateway launch owns. They are rendered after the provider
-// table and the provider selection, and the final-argument verifier requires
-// them in the rendered argv. Each names something the client's source shows
-// it sending to the vendor by itself, beside the provider route the binding
-// selects. That a client release applies a setting, or suppresses the
-// associated traffic, is not established here: no test launches Codex, and
-// the update-check behavior has not been witnessed.
+// The gateway-owned settings are rendered in the provider table and fixed
+// config prefix; the final-argument verifier requires their canonical argv.
+// Source inspection identifies these keys, but this package does not prove
+// runtime effects by launching Codex.
 const (
 	// gatewayAppsOff is rendered for the built-in Apps connection, the
 	// ChatGPT-hosted MCP server the client adds itself.
@@ -51,20 +53,23 @@ const (
 	// gatewayUpdateCheckOff is rendered for the look-up of a newer client
 	// release at start.
 	gatewayUpdateCheckOff = "check_for_update_on_startup=false"
+	// gatewayStandaloneSearchFeature enables the separate web-search tool
+	// when the finalized gateway binding explicitly opts in.
+	gatewayStandaloneSearchFeature = "features.standalone_web_search=true"
 )
 
-// gatewayOwnedArgs counts the leading arguments a gateway launch owns: the
-// provider table, the provider selection and the four switches, one `-c`
-// pair each.
+// gatewayOwnedArgs counts the leading arguments a default gateway launch owns:
+// the provider table, the provider selection and four switches, one `-c` pair
+// each. Standalone search adds one feature pair when the binding opts in.
 const gatewayOwnedArgs = 12
 
 // selectsOwnedSetting reports an argument that sets what the owned switches
 // set: the `--enable` and `--disable` flags, and a `-c`/`--config` override
 // whose top-level key is `features`, `analytics`, `otel` or
 // `check_for_update_on_startup`, quoted or not. The gateway emits one
-// override for each switch and admits no other. The short option is read
-// separated (`-c key=value`), joined (`-ckey=value`) and with the equals
-// sign a command-line parser strips after a short option (`-c=key=value`).
+// override for each switch and admits no other suffix override. The short
+// option is read separated (`-c key=value`), joined (`-ckey=value`) and with
+// the equals sign a command-line parser strips after a short option (`-c=key=value`).
 // `otel` is among the keys because `analytics.enabled` concerns only the
 // client's built-in metrics exporter; an `otel` override names another one.
 // A profile flag is not a selector: the Curator MCP channel renders `-p` in
@@ -98,6 +103,61 @@ func selectsOwnedSetting(args []string) bool {
 		}
 	}
 	return false
+}
+
+// selectsGatewayStandaloneSearchSetting refuses gateway-owned search keys in
+// caller-supplied args unless the finalized gateway binding owns their values.
+func selectsGatewayStandaloneSearchSetting(args []string) bool {
+	for i := 0; i < len(args); i++ {
+		arg := args[i]
+		value, config := "", false
+		switch {
+		case arg == "-c" || arg == "--config":
+			if i+1 < len(args) {
+				value, config = args[i+1], true
+			}
+			i++
+		case strings.HasPrefix(arg, "--config="):
+			value, config = strings.TrimPrefix(arg, "--config="), true
+		case strings.HasPrefix(arg, "-c") && !strings.HasPrefix(arg, "--"):
+			value, config = strings.TrimPrefix(strings.TrimPrefix(arg, "-c"), "="), true
+		}
+		if config && isGatewayStandaloneSearchSetting(value) {
+			return true
+		}
+	}
+	return false
+}
+
+func isGatewayStandaloneSearchSetting(value string) bool {
+	key, _, _ := strings.Cut(value, "=")
+	parts := strings.Split(key, ".")
+	for i := range parts {
+		parts[i] = strings.Trim(parts[i], " \t\"'")
+	}
+	if (len(parts) == 2 && parts[0] == "features" && parts[1] == "standalone_web_search") ||
+		(len(parts) == 3 && parts[0] == "model_providers" && parts[1] == GatewayProviderID && parts[2] == "supports_standalone_web_search") {
+		return true
+	}
+
+	var config map[string]any
+	if err := toml.Unmarshal([]byte(value), &config); err != nil {
+		return false
+	}
+	return hasTOMLPath(config, "features", "standalone_web_search") ||
+		hasTOMLPath(config, "model_providers", GatewayProviderID, "supports_standalone_web_search")
+}
+
+func hasTOMLPath(value any, path ...string) bool {
+	if len(path) == 0 {
+		return true
+	}
+	table, ok := value.(map[string]any)
+	if !ok {
+		return false
+	}
+	child, ok := table[path[0]]
+	return ok && hasTOMLPath(child, path[1:]...)
 }
 
 // THIS FILE IS THE ONE PLACE CODEX CLI FLAGS ARE SPELLED.
@@ -167,6 +227,9 @@ const yoloAliasFlag = "--yolo"
 // It is the single construction site. Every surface of this plugin that needs
 // codex flags calls it: System.Argv for all four modes, and nothing else.
 func Args(req agentic.LaunchRequest, mode agentic.LaunchMode) ([]string, error) {
+	if req.CodexGateway == nil && selectsGatewayStandaloneSearchSetting(req.NativeArgs) {
+		return nil, agentic.ErrCodexGatewayRefused
+	}
 	if b := req.CodexGateway; b != nil {
 		if mode != agentic.LaunchModeInteractive || req.LocalProvider != nil || req.CodexRemoteClient != nil || !req.Network.IsZero() || !validGatewayBinding(*b) || !gatewayNativeSuffix(req.NativeArgs) {
 			return nil, agentic.ErrCodexGatewayRefused
@@ -293,8 +356,15 @@ func Args(req agentic.LaunchRequest, mode agentic.LaunchMode) ([]string, error) 
 		}
 		args := []string{}
 		if b := req.CodexGateway; b != nil {
-			encoded := fmt.Sprintf(`{name="Curator filtering gateway",base_url=%q,wire_api="responses",requires_openai_auth=true,supports_websockets=false,env_http_headers={%q=%q}}`, b.BaseURL, b.HeaderName, b.TokenEnv)
+			standaloneSearchCapability := ""
+			if b.SupportsStandaloneWebSearch {
+				standaloneSearchCapability = ",supports_standalone_web_search=true"
+			}
+			encoded := fmt.Sprintf(`{name="Curator filtering gateway",base_url=%q,wire_api="responses",requires_openai_auth=true,supports_websockets=false%s,env_http_headers={%q=%q}}`, b.BaseURL, standaloneSearchCapability, b.HeaderName, b.TokenEnv)
 			args = append(args, "-c", "model_providers."+b.ProviderID+"="+encoded, "-c", "model_provider="+fmt.Sprintf("%q", b.ProviderID), "-c", gatewayAppsOff, "-c", gatewayPluginsOff, "-c", gatewayAnalyticsOff, "-c", gatewayUpdateCheckOff)
+			if b.SupportsStandaloneWebSearch {
+				args = append(args, "-c", gatewayStandaloneSearchFeature)
+			}
 		}
 		args = appendContextConfigOverrides(args, context)
 		args = append(args, fileServerPairs...)

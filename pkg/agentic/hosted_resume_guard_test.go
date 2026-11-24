@@ -16,7 +16,7 @@ func hostedResumeCoverageRows() []curatorRefusalCoverageRow {
 	return rows
 }
 
-func testReachesHostedEntryPoint(testName, entry string, functions map[string]*ast.FuncDecl) bool {
+func testReachesEntryPoint(testName, entry string, functions map[string]*ast.FuncDecl) bool {
 	function := functions[testName]
 	if function == nil {
 		return false
@@ -26,6 +26,9 @@ func testReachesHostedEntryPoint(testName, entry string, functions map[string]*a
 		call, ok := node.(*ast.CallExpr)
 		if !ok {
 			return true
+		}
+		if direct, ok := call.Fun.(*ast.Ident); ok && direct.Name == entry {
+			found = true
 		}
 		selector, ok := call.Fun.(*ast.SelectorExpr)
 		if ok && selector.Sel.Name == entry {

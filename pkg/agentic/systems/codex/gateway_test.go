@@ -32,6 +32,15 @@ func gatewayBinding(t *testing.T, p agentic.Plan) agentic.CodexGatewayBinding {
 	return agentic.CodexGatewayBinding{ProviderID: GatewayProviderID, BaseURL: "http://127.0.0.1:45678/chatgpt/backend-api/codex", HeaderName: "X-Netproxy-Token", TokenEnv: GatewayTokenEnv, WireAPI: "responses", RequiresOpenAIAuth: true, ToolRelease: "0.167.0", ExecutablePath: p.Binary, ExecutableSHA256: fmt.Sprintf("%x", sha256.Sum256(data))}
 }
 
+func gatewayConfigDocument(args []string, owned int) []byte {
+	values := make([]string, 0, owned/2)
+	for i := 0; i < owned; i += 2 {
+		values = append(values, args[i+1])
+	}
+	return []byte(strings.Join(values, "\n"))
+}
+
+// A zero-value binding preserves the existing gateway argv without search settings.
 // Fresh and exact resume retain every original argument and native suffix;
 // decoded TOML proves auth, transport and env-header values independently of
 // the renderer. No native runtime or actual credentials are used here.
@@ -51,13 +60,21 @@ func TestGatewayFreshAndResume(t *testing.T) {
 			t.Fatal("original admission changed")
 		}
 		var decoded map[string]any
-		if err := toml.Unmarshal([]byte(final.Argv[1]+"\n"+final.Argv[3]), &decoded); err != nil {
+		if err := toml.Unmarshal(gatewayConfigDocument(final.Argv, gatewayOwnedArgs), &decoded); err != nil {
 			t.Fatal(err)
 		}
 		providers := decoded["model_providers"].(map[string]any)
 		provider := providers[GatewayProviderID].(map[string]any)
 		if decoded["model_provider"] != GatewayProviderID || provider["base_url"] != b.BaseURL || provider["requires_openai_auth"] != true || provider["supports_websockets"] != false || provider["wire_api"] != "responses" {
 			t.Fatalf("wrong route contract: %#v", decoded)
+		}
+		if _, ok := provider["supports_standalone_web_search"]; ok {
+			t.Fatal("zero-value binding enabled provider search")
+		}
+		if features, ok := decoded["features"].(map[string]any); !ok {
+			t.Fatal("gateway feature settings are missing")
+		} else if _, ok := features["standalone_web_search"]; ok {
+			t.Fatal("zero-value binding enabled standalone search")
 		}
 		if got := provider["env_http_headers"].(map[string]any)[b.HeaderName]; got != GatewayTokenEnv {
 			t.Fatal("wrong header binding")
@@ -68,6 +85,186 @@ func TestGatewayFreshAndResume(t *testing.T) {
 		if _, err := gatewayFinalizeFixture(a, b); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
 			t.Fatal("second finalization accepted", err)
 		}
+	}
+}
+
+// An enabled binding emits both canonical search settings and preserves the suffix.
+func TestGatewayStandaloneSearchOptIn(t *testing.T) {
+	r := managedPrimaryRequest(t)
+	r.ToolRelease = "0.167.0"
+	p := requireManagedPlan(t, r)
+	b := gatewayBinding(t, p)
+	b.SupportsStandaloneWebSearch = true
+	a, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	final, err := gatewayFinalizeFixture(a, b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(final.Argv) < gatewayOwnedArgs+2 || !slices.Equal(final.Argv[gatewayOwnedArgs+2:], p.Argv) {
+		t.Fatal("enabled gateway changed or truncated the original argv suffix")
+	}
+	if !slices.Equal(final.Argv[gatewayOwnedArgs:gatewayOwnedArgs+2], []string{"-c", gatewayStandaloneSearchFeature}) {
+		t.Fatalf("search feature is not after the existing owned switches: %q", final.Argv)
+	}
+	var decoded map[string]any
+	if err := toml.Unmarshal(gatewayConfigDocument(final.Argv, gatewayOwnedArgs+2), &decoded); err != nil {
+		t.Fatal(err)
+	}
+	providers := decoded["model_providers"].(map[string]any)
+	provider := providers[GatewayProviderID].(map[string]any)
+	if provider["supports_standalone_web_search"] != true {
+		t.Fatalf("provider capability is not true: %#v", provider)
+	}
+	features := decoded["features"].(map[string]any)
+	if features["standalone_web_search"] != true {
+		t.Fatalf("standalone-search feature is not true: %#v", features)
+	}
+	if features["apps"] != false || features["plugins"] != false {
+		t.Fatalf("app/plugin switches changed: %#v", features)
+	}
+	if err := final.VerifyCodexGatewayProcess(b.ExecutablePath, final.Argv, append(slices.Clone(final.Env), GatewayTokenEnv+"=synthetic-child-only")); err != nil {
+		t.Fatal(err)
+	}
+	g := (&System{}).CodexGatewayBasis(r, agentic.LaunchModeInteractive)
+	if _, err := g.Render(b, append(slices.Clone(p.Argv), "unexpected")); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
+		t.Fatalf("opt-in renderer accepted a changed original suffix: %v", err)
+	}
+}
+
+// Final process verification accepts only the exact two-setting opt-in form.
+func TestGatewayStandaloneSearchVerifierRefusals(t *testing.T) {
+	p := gatewayPlan(t, nil)
+	b := gatewayBinding(t, p)
+	b.SupportsStandaloneWebSearch = true
+	a, err := gatewayAdmitFixture(p, agentic.CodexGatewayInputs{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	final, err := gatewayFinalizeFixture(a, b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	validEnv := append(slices.Clone(final.Env), GatewayTokenEnv+"=synthetic-child-only")
+	mutations := map[string]func([]string) []string{
+		"provider omitted": func(args []string) []string {
+			args = slices.Clone(args)
+			args[1] = strings.Replace(args[1], ",supports_standalone_web_search=true", "", 1)
+			return args
+		},
+		"feature omitted": func(args []string) []string {
+			out := slices.Clone(args[:gatewayOwnedArgs])
+			return append(out, args[gatewayOwnedArgs+2:]...)
+		},
+		"provider false": func(args []string) []string {
+			args = slices.Clone(args)
+			args[1] = strings.Replace(args[1], "supports_standalone_web_search=true", "supports_standalone_web_search=false", 1)
+			return args
+		},
+		"feature false": func(args []string) []string {
+			args = slices.Clone(args)
+			args[gatewayOwnedArgs+1] = "features.standalone_web_search=false"
+			return args
+		},
+		"provider malformed": func(args []string) []string {
+			args = slices.Clone(args)
+			args[1] = strings.Replace(args[1], "supports_standalone_web_search=true", "supports_standalone_web_search=maybe", 1)
+			return args
+		},
+		"provider duplicate": func(args []string) []string {
+			out := append(slices.Clone(args[:2]), args[:2]...)
+			return append(out, args[2:]...)
+		},
+		"feature malformed": func(args []string) []string {
+			args = slices.Clone(args)
+			args[gatewayOwnedArgs+1] = "features.standalone_web_search=maybe"
+			return args
+		},
+		"feature duplicate": func(args []string) []string {
+			out := slices.Clone(args[:gatewayOwnedArgs+2])
+			out = append(out, "-c", gatewayStandaloneSearchFeature)
+			return append(out, args[gatewayOwnedArgs+2:]...)
+		},
+		"feature misplaced": func(args []string) []string {
+			out := slices.Clone(args[:4])
+			out = append(out, args[gatewayOwnedArgs:gatewayOwnedArgs+2]...)
+			out = append(out, args[4:gatewayOwnedArgs]...)
+			return append(out, args[gatewayOwnedArgs+2:]...)
+		},
+	}
+	for name, mutate := range mutations {
+		t.Run(name, func(t *testing.T) {
+			if err := final.VerifyCodexGatewayProcess(b.ExecutablePath, mutate(final.Argv), validEnv); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
+				t.Fatalf("altered search argv was accepted: %v", err)
+			}
+		})
+	}
+}
+
+// Direct argv stays byte-identical and caller-supplied gateway search keys refuse.
+func TestGatewayStandaloneSearchDirectRefusals(t *testing.T) {
+	baseline, err := Args(managedPrimaryRequest(t), agentic.LaunchModeInteractive)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !slices.Equal(baseline, []string{"-m", "test-model"}) {
+		t.Fatalf("direct argv changed: %q", baseline)
+	}
+	disabled := managedPrimaryRequest(t)
+	disabled.NativeArgs = []string{"-c", "web_search_mode=disabled"}
+	if _, err := Args(disabled, agentic.LaunchModeInteractive); err != nil {
+		t.Fatalf("direct search-mode control was refused: %v", err)
+	}
+	settings := []string{
+		"features.standalone_web_search=true",
+		`"features"."standalone_web_search" = false`,
+		`features = { standalone_web_search = true }`,
+		"model_providers.curator-gateway.supports_standalone_web_search=true",
+		`"model_providers"."curator-gateway"."supports_standalone_web_search"=false`,
+		`model_providers = { curator-gateway = { supports_standalone_web_search = true } }`,
+	}
+	forms := []func(string) []string{
+		func(setting string) []string { return []string{"-c", setting} },
+		func(setting string) []string { return []string{"--config", setting} },
+		func(setting string) []string { return []string{"--config=" + setting} },
+		func(setting string) []string { return []string{"-c" + setting} },
+		func(setting string) []string { return []string{"-c=" + setting} },
+	}
+	for _, setting := range settings {
+		for _, form := range forms {
+			req := managedPrimaryRequest(t)
+			req.NativeArgs = form(setting)
+			if _, err := Args(req, agentic.LaunchModeInteractive); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
+				t.Fatalf("direct gateway-search override %q was accepted: %v", req.NativeArgs, err)
+			}
+		}
+	}
+	unrelatedFeature := managedPrimaryRequest(t)
+	unrelatedFeature.NativeArgs = []string{"-c", "features={apps=false}"}
+	if _, err := Args(unrelatedFeature, agentic.LaunchModeInteractive); err != nil {
+		t.Fatalf("direct unrelated feature override was refused: %v", err)
+	}
+	direct := gatewayPlan(t, nil)
+	for _, setting := range settings {
+		if err := direct.VerifyCodexGatewayProcess(direct.Binary, append(slices.Clone(direct.Argv), "-c", setting), nil); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
+			t.Fatalf("non-gateway verifier accepted %q: %v", setting, err)
+		}
+	}
+}
+
+// A disabled search mode in native args prevents an enabled gateway binding from finalizing.
+func TestGatewayStandaloneSearchRefusesDisabledMode(t *testing.T) {
+	r := managedPrimaryRequest(t)
+	r.ToolRelease = "0.167.0"
+	r.NativeArgs = []string{"-c", "web_search_mode=disabled"}
+	p := requireManagedPlan(t, r)
+	b := gatewayBinding(t, p)
+	b.SupportsStandaloneWebSearch = true
+	g := (&System{}).CodexGatewayBasis(r, agentic.LaunchModeInteractive)
+	if _, err := g.Render(b, p.Argv); !errors.Is(err, agentic.ErrCodexGatewayRefused) {
+		t.Fatalf("enabled search binding overrode disabled search mode: %v", err)
 	}
 }
 

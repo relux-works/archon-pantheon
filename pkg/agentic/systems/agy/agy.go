@@ -135,6 +135,7 @@ func (*System) Capabilities() agentic.Capabilities {
 		LaunchModes: []agentic.LaunchMode{
 			agentic.LaunchModeExec,
 			agentic.LaunchModeDryRun,
+			agentic.LaunchModeInteractive,
 		},
 		// NONE, and the package comment argues it: the effort is a suffix of
 		// the model id, buildAgyArgs never references an effort value, and
@@ -187,7 +188,10 @@ func (s *System) Argv(req agentic.LaunchRequest, mode agentic.LaunchMode) ([]str
 	if !s.Capabilities().SupportsMode(mode) {
 		return nil, fmt.Errorf("agy: launch mode %s is not declared by this system", mode)
 	}
-	if mode == agentic.LaunchModeExec && s.runtime.IsZero() {
+	if err := validateAgyCuratorContext(req); err != nil {
+		return nil, err
+	}
+	if (mode == agentic.LaunchModeExec || mode == agentic.LaunchModeInteractive) && s.runtime.IsZero() {
 		return nil, notPreflighted()
 	}
 	return Args(req, mode, s.binary())
@@ -202,10 +206,15 @@ func (s *System) binary() string {
 	return trimmedExecutable(s.runtime)
 }
 
-// ChildEnv is the environment contract, and agy's is the EMPTY one: the child
-// inherits the parent unfiltered, with only the run context written over it.
-// See env.go for what that leaks and why it is not fixed here.
+// ChildEnv returns the child environment for one Antigravity launch.
+// Curator-managed launches (req.Context != nil) apply the filtered allowlist,
+// overlay AGY_CLI_FORCE_FILE_TOKEN_STORAGE=true from the validated fragment,
+// and pin AGY_CLI_DISABLE_AUTO_UPDATE=true (CIP-0033). Legacy unmanaged
+// launches retain the unfiltered contract pinned by parity_test.go.
 func (*System) ChildEnv(parent []string, req agentic.LaunchRequest) ([]string, error) {
+	if err := validateAgyCuratorContext(req); err != nil {
+		return nil, err
+	}
 	return childEnv(parent, req), nil
 }
 

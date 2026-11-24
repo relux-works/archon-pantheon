@@ -1,59 +1,89 @@
 package agy
 
 import (
+	"strings"
+
 	"github.com/relux-works/skill-agents-management/pkg/agentic"
 )
 
-// THE AGY CHILD-ENVIRONMENT CONTRACT IS AN EMPTY FILTER, exactly as gemini's
-// and muse's are, and for the same reason it is written down rather than left
-// out.
-//
-// The source is one line: `cmd.Env = withSpawnEnv(os.Environ(), cfg)`
-// (skill-project-management, tools/board-cli/internal/spawn/spawn.go:1129,
-// buildAgyCommand). No filterEnv, no filterCodexRuntimeEnv, no PATH
-// sanitization. An agy child inherits the WHOLE parent environment, with the
-// run context written over it and nothing else changed.
-//
-// A reader arriving from qwen's env.go — twelve keys, a fixed leak, three
-// declared-open ones — has to be told here, in the same place, that agy strips
-// nothing. An empty filter expressed by omitting the file would be
-// indistinguishable from a port that forgot.
-//
-// # What an agy child therefore inherits
-//
-// Everything the goldens' pinned parent environment carries, and agy/exec
-// agrees: its env_removed is FOUR entries, all of them the run-context keys
-// withSpawnEnv replaces. So CLAUDECODE, the whole CODEX_* family, both
-// app-server and session-manager URLs, the credentials their pointer variables
-// name, TASK_BOARD_SESSION_ID, TASK_BOARD_TOKEN and
-// TASK_BOARD_BUILDER_GATEWAY_TOKEN all reach an agy child.
-//
-// That is the source's BUG-260819-3qn52o, in backlog and unfixed at the commit
-// these goldens were captured from. Its general shape is what matters: "each
-// filter names the OTHER providers it knew about at the time it was written, so
-// every new runtime silently opens a leak in both directions until someone
-// edits N filters by hand". Agy's filter names nobody at all. Closing it here
-// would diverge one plugin from the source while the source's own bug stayed
-// open, in a task whose acceptance is byte-identical launch surfaces.
-//
-// TestTheEmptyFilterIsDeliberate pins the inheritance, so the residual is
-// visible in the suite rather than only in this comment.
-//
-// # PATH in particular
-//
-// A codex parent's arg0-shim directories survive into an agy child, because
-// only the codex-family filter sanitizes PATH. For agy that leak is inert in
-// one specific way worth naming: this plugin resolves nothing FROM PATH — its
-// executable comes from the preflight (binary.go) — so a poisoned PATH cannot
-// change which binary the launch runs. It can still change what the CHILD
-// resolves for its own subprocesses, which is why this is a leak rather than a
-// non-issue.
+const agyDisableAutoUpdateEnv = "AGY_CLI_DISABLE_AUTO_UPDATE"
 
-// childEnv is the whole environment contract: the parent, plus the caller's run
-// context written over it.
+// agyCuratorParentEnvAllowlist is the exact parent-environment allowlist
+// applied for Curator-managed Antigravity launches (CIP-0033). Keeping
+// XDG_CONFIG_HOME / HOME intact preserves operator git/gh/gcloud config inside
+// child commands while excluding ambient credentials and competing auth vars
+// (GEMINI_API_KEY, GOOGLE_API_KEY, AGY_ADC_AUTH, GOOGLE_APPLICATION_CREDENTIALS,
+// AGY_CLI_FORCE_FILE_TOKEN_STORAGE, etc.).
+var agyCuratorParentEnvAllowlist = map[string]struct{}{
+	"HOME":            {},
+	"LANG":            {},
+	"LC_ALL":          {},
+	"LC_COLLATE":      {},
+	"LC_CTYPE":        {},
+	"LC_MESSAGES":     {},
+	"LC_MONETARY":     {},
+	"LC_NUMERIC":      {},
+	"LC_TIME":         {},
+	"LOGNAME":         {},
+	"PATH":            {},
+	"SHELL":           {},
+	"SSL_CERT_DIR":    {},
+	"SSL_CERT_FILE":   {},
+	"TERM":            {},
+	"TMPDIR":          {},
+	"TZ":              {},
+	"USER":            {},
+	"XDG_CACHE_HOME":  {},
+	"XDG_CONFIG_HOME": {},
+	"XDG_DATA_HOME":   {},
+	"XDG_RUNTIME_DIR": {},
+	"XDG_STATE_HOME":  {},
+}
+
+func filterAgyCuratorParentEnv(parent []string, mcpEnvNames []string) []string {
+	mcpAllowed := make(map[string]struct{}, len(mcpEnvNames))
+	for _, name := range mcpEnvNames {
+		mcpAllowed[name] = struct{}{}
+	}
+	filtered := make([]string, 0, len(parent))
+	for _, entry := range parent {
+		name, _, hasValue := strings.Cut(entry, "=")
+		if !hasValue {
+			continue
+		}
+		if _, ok := agyCuratorParentEnvAllowlist[name]; ok {
+			filtered = append(filtered, entry)
+			continue
+		}
+		if _, ok := mcpAllowed[name]; ok {
+			filtered = append(filtered, entry)
+		}
+	}
+	return filtered
+}
+
+// childEnv builds the Antigravity child environment.
 //
-// agentic.WithRunContext is the core's port of withSpawnEnv's run-context half,
-// shared by all six systems because the source had exactly one of it.
+// For legacy unmanaged launches (req.Context == nil), it retains the
+// source-parity unfiltered contract pinned by parity_test.go and
+// TestTheEmptyFilterIsDeliberate.
+//
+// For Curator-managed launches (req.Context != nil, CIP-0033), it filters the
+// parent through agyCuratorParentEnvAllowlist (plus validated MCP env_names),
+// overlays the run context, writes AGY_CLI_FORCE_FILE_TOKEN_STORAGE=true from
+// the validated v7 fragment (defeating any ambient false), and pins
+// AGY_CLI_DISABLE_AUTO_UPDATE=true as this plugin's own literal.
 func childEnv(parent []string, req agentic.LaunchRequest) []string {
-	return agentic.WithRunContext(parent, req)
+	if req.Context == nil {
+		return agentic.WithRunContext(parent, req)
+	}
+	var mcpEnvNames []string
+	if req.Context.MCP != nil {
+		mcpEnvNames = req.Context.MCP.EnvNames
+	}
+	env := agentic.WithRunContext(filterAgyCuratorParentEnv(parent, mcpEnvNames), req)
+	if forceFile, present := req.Context.Env[agentic.CuratorAntigravityForceFileTokenVariable]; present {
+		env = agentic.SetEnvValue(env, agentic.CuratorAntigravityForceFileTokenVariable, forceFile)
+	}
+	return agentic.SetEnvValue(env, agyDisableAutoUpdateEnv, "true")
 }

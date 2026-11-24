@@ -9,6 +9,7 @@ import (
 	"github.com/relux-works/skill-agents-management/internal/execfixture"
 	"github.com/relux-works/skill-agents-management/internal/paritycase"
 	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/agy"
 	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/claude"
 	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/codex"
 	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/muse"
@@ -111,6 +112,15 @@ const museYoloHelpText = "Usage: muse [options] [prompt]\n\nOptions:\n  --model 
 const museNoYoloHelpText = "Usage: muse [options] [prompt]\n\nOptions:\n  --model <id>       Model to use\n\nThis build documents no bypass flag; newer releases describe --yolo here.\n"
 
 var interactiveCases = map[string]interactiveCase{
+	"antigravity": {
+		system: agy.NewWithRuntime(agy.Runtime{Executable: "/opt/agy/bin/agy", Version: "1.5.16"}), stub: "agy",
+		yoloFlag:    "--dangerously-skip-permissions",
+		toolRelease: "1.5.16",
+		exec: func(t *testing.T, req agentic.LaunchRequest, workDir string) agentic.LaunchRequest {
+			req.PromptPath = paritycase.WritePromptFile(t, workDir, "body")
+			return req
+		},
+	},
 	"claude-code": {
 		system: claude.New(), stub: "claude",
 		yoloFlag:    "--dangerously-skip-permissions",

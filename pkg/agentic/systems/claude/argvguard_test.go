@@ -388,7 +388,7 @@ func TestTheBypassFlagIsSpelledAtExactlyTwoKnownSites(t *testing.T) {
 	}
 	want := map[string]bool{
 		claudeArgsFile + "\x00" + "bypassPermissionsFlag": false,
-		agyArgsFile + "\x00" + "Args":                     false,
+		agyArgsFile + "\x00" + "agyYoloFlag":              false,
 	}
 	for _, s := range sites {
 		key := s.File + "\x00" + s.Name

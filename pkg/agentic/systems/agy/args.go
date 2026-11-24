@@ -52,12 +52,20 @@ const (
 	// promptPlaceholder is what a dry run passes where a real launch passes the
 	// assignment. It is the source's literal (adapter.go, agyDryRunArgs).
 	promptPlaceholder = "<prompt>"
+	// agyGeminiDirFlag is the verified CLI home relocation flag on agy 1.5.16
+	// (CIP-0033: root CLI accepts underscore spelling only).
+	agyGeminiDirFlag = "--gemini_dir"
+	// agyYoloFlag is the verified Antigravity permission bypass flag.
+	agyYoloFlag = "--dangerously-skip-permissions"
+	// agyVerifiedRelease is the live-verified Antigravity CLI release for
+	// managed-home and yolo interactive launches (CIP-0033).
+	agyVerifiedRelease = "1.5.16"
 )
 
 // Args builds the agy argv for one launch mode, excluding the binary.
 //
 // It is the single construction site. Every surface of this plugin that needs
-// agy flags calls it: System.Argv for both modes, and nothing else.
+// agy flags calls it: System.Argv for all modes, and nothing else.
 //
 // binary is the executable the launch will run, and it is a parameter rather
 // than something resolved here because the budget below measures the WHOLE
@@ -67,6 +75,18 @@ const (
 //
 // The ORDER is the source's, verbatim.
 func Args(req agentic.LaunchRequest, mode agentic.LaunchMode, binary string) ([]string, error) {
+	if mode == agentic.LaunchModeInteractive {
+		return interactiveArgs(req)
+	}
+	if !req.PermissionMode.IsZero() {
+		return nil, fmt.Errorf("agy: %w: permission mode %q is valid only for interactive launches",
+			agentic.ErrPermissionModeNotInteractive, strings.TrimSpace(string(req.PermissionMode)))
+	}
+	if len(req.NativeArgs) != 0 {
+		return nil, fmt.Errorf("agy: %w: %d native argument(s) reach no verbatim suffix outside an interactive launch",
+			agentic.ErrNativeArgsNotInteractive, len(req.NativeArgs))
+	}
+
 	var prompt string
 	switch mode {
 	case agentic.LaunchModeExec:
@@ -84,6 +104,9 @@ func Args(req agentic.LaunchRequest, mode agentic.LaunchMode, binary string) ([]
 	// The composition prefix is spliced ahead of every provider flag, exactly
 	// as launchCompositionArgvPrefix does in the source.
 	args := append([]string{}, req.Composition.Prefix...)
+	if home := managedHomePath(req); home != "" {
+		args = append(args, agyGeminiDirFlag, home)
+	}
 	args = append(args,
 		"--print", prompt,
 		// The model id is passed through VERBATIM, including whatever effort
@@ -94,7 +117,7 @@ func Args(req agentic.LaunchRequest, mode agentic.LaunchMode, binary string) ([]
 		"--output-format", "json",
 		"--print-timeout", trackedPrintTimeout,
 		"--mode", "accept-edits",
-		"--dangerously-skip-permissions",
+		agyYoloFlag,
 		"--disable-slash-commands",
 	)
 	if workDir := strings.TrimSpace(req.WorkDir); workDir != "" {
@@ -110,6 +133,73 @@ func Args(req agentic.LaunchRequest, mode agentic.LaunchMode, binary string) ([]
 		}
 	}
 	return args, nil
+}
+
+// interactiveArgs builds the no-subcommand interactive Antigravity CLI argv.
+// Managed homes travel via --gemini_dir <home> (CIP-0033); PermissionModeYolo
+// maps to --dangerously-skip-permissions. Conflicting native arguments are
+// rejected before launch.
+func interactiveArgs(req agentic.LaunchRequest) ([]string, error) {
+	var effective agentic.PermissionMode
+	if value, err := req.PermissionMode.Resolve(); err != nil {
+		return nil, fmt.Errorf("agy: %w", err)
+	} else {
+		effective = value
+	}
+	home := managedHomePath(req)
+	yolo := effective == agentic.PermissionModeYolo
+	if yolo && strings.TrimSpace(req.ToolRelease) != agyVerifiedRelease {
+		return nil, fmt.Errorf("agy: %w: release %q is not verified for antigravity yolo (want %s)",
+			agentic.ErrPermissionModeUnverifiedRelease, strings.TrimSpace(req.ToolRelease), agyVerifiedRelease)
+	}
+	if err := scanAgyNativePolicy(req.NativeArgs, home != "", yolo); err != nil {
+		return nil, fmt.Errorf("agy: %w", err)
+	}
+	var args []string
+	if home != "" {
+		args = append(args, agyGeminiDirFlag, home)
+	}
+	if modelID := strings.TrimSpace(req.Model.ID); modelID != "" {
+		args = append(args, "--model", modelID)
+	}
+	if yolo {
+		args = append(args, agyYoloFlag)
+	}
+	return append(args, append([]string(nil), req.NativeArgs...)...), nil
+}
+
+func managedHomePath(req agentic.LaunchRequest) string {
+	if req.Context != nil && req.Context.Home != nil {
+		return req.Context.Home.Path
+	}
+	return strings.TrimSpace(req.Home)
+}
+
+// scanAgyNativePolicy rejects native arguments that would redirect a managed
+// home or conflict with the selected permission posture.
+func scanAgyNativePolicy(nativeArgs []string, hasManagedHome bool, yolo bool) error {
+	for _, token := range nativeArgs {
+		if token == "--" {
+			break
+		}
+		name, _, _ := strings.Cut(token, "=")
+		if hasManagedHome {
+			switch name {
+			case "--gemini_dir", "--gemini-dir", "-gemini_dir", "-gemini-dir",
+				"--app_data_dir", "--app-data-dir", "-app_data_dir", "-app-data-dir":
+				return fmt.Errorf("%w: native argument %q conflicts with Curator managed home", agentic.ErrNativePolicyConflict, name)
+			}
+		}
+		if yolo {
+			switch name {
+			case agyYoloFlag:
+				return fmt.Errorf("%w: native arguments already carry %s", agentic.ErrPermissionModeDuplicate, agyYoloFlag)
+			case "--mode", "-mode", "--sandbox", "-sandbox":
+				return fmt.Errorf("%w: native argument %q conflicts with yolo permission mode", agentic.ErrNativePolicyConflict, name)
+			}
+		}
+	}
+	return nil
 }
 
 // assignmentText reads the assignment a launch carries.

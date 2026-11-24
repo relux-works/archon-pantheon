@@ -26,6 +26,10 @@ const (
 	// root_context fact. A managed muse launch requires v4: v3 is refused
 	// with upgrade guidance and never carries the fact.
 	CuratorLaunchFragmentV4 = "launch-env-fragment-v4"
+	// CuratorLaunchFragmentV7 names the v7 revision token (CIP-0033). V7
+	// retains the v4 contracts for existing adapters and adds flag-transported
+	// managed homes (`home: {"path", "transport": "flag"}`) for Antigravity.
+	CuratorLaunchFragmentV7 = "launch-env-fragment-v7"
 
 	// CuratorMuseCredentialBackendVariable and CuratorMuseCredentialBackendFile
 	// are the registry-owned constant every v4 muse fragment env carries
@@ -33,6 +37,20 @@ const (
 	// and is not profile-controlled.
 	CuratorMuseCredentialBackendVariable = "TBH_CREDENTIAL_BACKEND"
 	CuratorMuseCredentialBackendFile     = "file"
+
+	// CuratorAntigravityForceFileTokenVariable and CuratorAntigravityForceFileTokenTrue
+	// are the registry-owned constant every v7 antigravity fragment env carries
+	// to bypass global macOS Keychain storage (CIP-0033).
+	CuratorAntigravityForceFileTokenVariable = "AGY_CLI_FORCE_FILE_TOKEN_STORAGE"
+	CuratorAntigravityForceFileTokenTrue     = "true"
+
+	// CuratorHomeTransportFlag is the closed home.transport value for
+	// flag-transported managed homes in launch-env-fragment-v7.
+	CuratorHomeTransportFlag = "flag"
+
+	// CuratorAntigravityMCPFile is the managed-home-relative MCP config path
+	// declared by the antigravity adapter (CIP-0033).
+	CuratorAntigravityMCPFile = "config/mcp_config.json"
 
 	CuratorCredentialStoreNative   CuratorCredentialSelection = "native"
 	CuratorCredentialStoreFile     CuratorCredentialSelection = "file"
@@ -298,19 +316,54 @@ func decodeCuratorClosedObject(wire []byte) (map[string]json.RawMessage, error) 
 	return members, nil
 }
 
+// CuratorHomeBinding is the v7 closed home binding for flag-transported
+// managed homes (CIP-0033): exactly {"path": "<abs>", "transport": "flag"}.
+type CuratorHomeBinding struct {
+	Path      string `json:"path"`
+	Transport string `json:"transport"`
+}
+
+// UnmarshalJSON enforces the closed home object at the wire boundary: exactly
+// path and transport, both non-null strings, with no unknown or repeated keys.
+func (h *CuratorHomeBinding) UnmarshalJSON(wire []byte) error {
+	members, err := decodeCuratorClosedObject(wire)
+	if err != nil {
+		return fmt.Errorf("%w: home must be a JSON object: %v", ErrCuratorContextMalformed, err)
+	}
+	for name, value := range members {
+		if name != "path" && name != "transport" {
+			return fmt.Errorf("%w: home carries an unknown member %q", ErrCuratorContextMalformed, name)
+		}
+		if string(value) == "null" {
+			return fmt.Errorf("%w: home %s must not be null", ErrCuratorContextMalformed, name)
+		}
+	}
+	pathRaw, pathPresent := members["path"]
+	var homePath string
+	if !pathPresent || json.Unmarshal(pathRaw, &homePath) != nil {
+		return fmt.Errorf("%w: home path is required and must be a string", ErrCuratorContextMalformed)
+	}
+	transportRaw, transportPresent := members["transport"]
+	var transport string
+	if !transportPresent || json.Unmarshal(transportRaw, &transport) != nil {
+		return fmt.Errorf("%w: home transport is required and must be a string", ErrCuratorContextMalformed)
+	}
+	*h = CuratorHomeBinding{Path: homePath, Transport: transport}
+	return nil
+}
+
 // CuratorContext is the typed projection of launch-env-fragment-v1 through
-// launch-env-fragment-v4 plus the explicit request intent and optional prior
-// plan provenance used for reuse. The profile and environment values are
-// validated here; the module never resolves a profile or reads raw fragment
-// JSON. Permissions is required on v2 through v4 and refused on v1. Env
-// carries exactly one managed-home entry, except muse, which carries the
-// four XDG variables and, on v4, the credential backend constant; see
-// CuratorMuseHomes. CredentialStore and RootContext exist only on v4.
+// launch-env-fragment-v4 and launch-env-fragment-v7 plus the explicit request
+// intent and optional prior plan provenance used for reuse. The profile and
+// environment values are validated here; the module never resolves a profile
+// or reads raw fragment JSON. Permissions is required on v2 through v4 and v7
+// and refused on v1. Home is carried only on v7 flag-transported adapters.
 type CuratorContext struct {
 	Revision           string                      `json:"fragment"`
 	Environment        string                      `json:"environment"`
 	Profile            CuratorProfilePin           `json:"profile"`
 	Precedence         CuratorPrecedence           `json:"precedence"`
+	Home               *CuratorHomeBinding         `json:"home,omitempty"`
 	Env                map[string]string           `json:"env"`
 	SystemPrompt       *CuratorSystemPromptContext `json:"system_prompt,omitempty"`
 	MCP                *CuratorMCPContext          `json:"mcp,omitempty"`
@@ -335,6 +388,7 @@ type CuratorFragmentIdentity struct {
 	Environment     string                       `json:"environment"`
 	Profile         CuratorProfilePin            `json:"profile"`
 	Precedence      CuratorPrecedence            `json:"precedence"`
+	Home            *CuratorHomeBinding          `json:"home,omitempty"`
 	Env             map[string]string            `json:"env"`
 	SystemPrompt    *CuratorSystemPromptFragment `json:"system_prompt,omitempty"`
 	MCP             *CuratorMCPContext           `json:"mcp,omitempty"`
@@ -525,13 +579,19 @@ func ValidateCuratorContext(context *CuratorContext, requestHome string) error {
 	if context.Revision == CuratorLaunchFragmentV4 && context.Permissions == nil {
 		return curatorMalformed("v4 fragments require the permissions member")
 	}
+	if context.Revision == CuratorLaunchFragmentV7 && context.Permissions == nil {
+		return curatorMalformed("v7 fragments require the permissions member")
+	}
 	// Old readers reject the v4 members under an old token, and so does this
 	// one: an addition carried under v1-v3 is invalid, never a silent upgrade.
-	if context.Revision != CuratorLaunchFragmentV4 && context.CredentialStore != nil {
+	if context.Revision != CuratorLaunchFragmentV4 && context.Revision != CuratorLaunchFragmentV7 && context.CredentialStore != nil {
 		return curatorMalformed("credential_store requires launch-env-fragment-v4")
 	}
-	if context.Revision != CuratorLaunchFragmentV4 && context.RootContext != nil {
+	if context.Revision != CuratorLaunchFragmentV4 && context.Revision != CuratorLaunchFragmentV7 && context.RootContext != nil {
 		return curatorMalformed("root_context requires launch-env-fragment-v4")
+	}
+	if context.Revision != CuratorLaunchFragmentV7 && context.Home != nil {
+		return curatorMalformed("home requires launch-env-fragment-v7")
 	}
 	if context.RootContext != nil && !context.RootContext.Exclusive {
 		return curatorMalformed("root_context must be exactly {\"exclusive\":true}")
@@ -552,15 +612,19 @@ func ValidateCuratorContext(context *CuratorContext, requestHome string) error {
 			return curatorMalformed("permissions yolo requires an unlocked profile source")
 		}
 	}
-	// XDG-home environments are admitted through the registry-held
-	// declaration, not a case spelling the environment: the muse spelling
-	// collides with the system-id vocabulary the single-source guard scans.
-	if !CuratorFragmentUsesXDGHomes(context.Environment) {
+	// XDG-home and flag-home environments are admitted through the
+	// registry-held declarations, not cases spelling the environment: those
+	// spellings collide with the system-id vocabulary the single-source guard
+	// scans.
+	if !CuratorFragmentUsesXDGHomes(context.Environment) && !CuratorFragmentUsesFlagHome(context.Environment) {
 		switch context.Environment {
 		case "claude_code", "codex_cli", "opencode", "pi":
 		default:
 			return curatorMalformed("environment is not a supported typed fragment value")
 		}
+	}
+	if context.Home != nil && !CuratorFragmentUsesFlagHome(context.Environment) {
+		return curatorMalformed("home is admitted only on flag-transported environments")
 	}
 	// The v4 policy members are judged against a known environment only.
 	if context.RootContext != nil && !CuratorFragmentUsesXDGHomes(context.Environment) {
@@ -573,7 +637,7 @@ func ValidateCuratorContext(context *CuratorContext, requestHome string) error {
 		(context.Precedence.Placement != "winner-last" && context.Precedence.Placement != "winner-first") {
 		return curatorMalformed("precedence is invalid")
 	}
-	if !CuratorFragmentUsesXDGHomes(context.Environment) {
+	if !CuratorFragmentUsesXDGHomes(context.Environment) && !CuratorFragmentUsesFlagHome(context.Environment) {
 		if len(context.Env) != 1 {
 			return curatorMalformed("exactly one managed-home environment entry is required")
 		}
@@ -606,6 +670,33 @@ func ValidateCuratorContext(context *CuratorContext, requestHome string) error {
 			return curatorMalformed("path_prepend must be an absolute path")
 		}
 		return fmt.Errorf("%w: path_prepend has no registered root-bound launch mapping", ErrCuratorContextUnsupported)
+	}
+	if CuratorFragmentUsesFlagHome(context.Environment) {
+		if context.Revision != CuratorLaunchFragmentV7 {
+			return fmt.Errorf("%w: flag-transported managed homes require %s, got %s",
+				ErrCuratorFragmentRevisionUnsupported, CuratorLaunchFragmentV7, context.Revision)
+		}
+		if context.Home == nil || context.Home.Transport != CuratorHomeTransportFlag || !validCuratorAbsolutePath(context.Home.Path) || path.Clean(context.Home.Path) != context.Home.Path || path.Base(context.Home.Path) == ".gemini" || requestHome != context.Home.Path {
+			return curatorMalformed("flag-transported home must be clean, absolute, basename != .gemini, transport flag, and match LaunchRequest.Home")
+		}
+		if len(context.Env) != 1 || context.Env[CuratorAntigravityForceFileTokenVariable] != CuratorAntigravityForceFileTokenTrue {
+			return curatorMalformed("v7 antigravity fragments require env exactly AGY_CLI_FORCE_FILE_TOKEN_STORAGE=true")
+		}
+		if context.SystemPrompt != nil {
+			return curatorMalformed("antigravity fragments cannot carry system-prompt context")
+		}
+		if context.MCP != nil {
+			if context.MCP.Path != path.Join(context.Home.Path, CuratorAntigravityMCPFile) {
+				return curatorMalformed("antigravity MCP path must equal <home>/config/mcp_config.json")
+			}
+			if !isSortedUniqueCuratorEnvNames(context.MCP.EnvNames) {
+				return curatorMalformed("MCP env_names must be sorted, unique, and non-reserved")
+			}
+			if len(context.MCP.Channels) != 1 || context.MCP.Channels[0].Kind != CuratorDescriptorFile || context.MCP.Channels[0].Filename != CuratorAntigravityMCPFile {
+				return curatorMalformed("antigravity MCP channel must be file config/mcp_config.json")
+			}
+		}
+		return nil
 	}
 	if CuratorFragmentUsesXDGHomes(context.Environment) {
 		// Positive match on the pre-v4 revisions rather than a != v4: the
@@ -685,8 +776,17 @@ func curatorMalformed(reason string) error {
 // dropped. Every other adapter admits only an absent or native policy.
 func validateCuratorCredentialStore(context *CuratorContext) error {
 	store := context.CredentialStore
+	if CuratorFragmentUsesFlagHome(context.Environment) {
+		if context.Revision != CuratorLaunchFragmentV7 {
+			return nil
+		}
+		if store == nil || store.Selection != CuratorCredentialStoreFile || store.ConfigOverrides != nil {
+			return curatorMalformed("v7 flag-home fragments require credential_store exactly {\"selection\":\"file\"}")
+		}
+		return nil
+	}
 	if CuratorFragmentUsesXDGHomes(context.Environment) {
-		if context.Revision != CuratorLaunchFragmentV4 {
+		if context.Revision != CuratorLaunchFragmentV4 && context.Revision != CuratorLaunchFragmentV7 {
 			return nil
 		}
 		if store == nil || (store.Selection != CuratorCredentialStoreFile && store.Selection != CuratorCredentialStoreNative) || store.ConfigOverrides != nil {
@@ -927,6 +1027,8 @@ func curatorContextProvenance(context *CuratorContext) CuratorContextProvenance 
 		// ValidateCuratorContext proved the four-variable shape, so the
 		// parent below is the same one the validator bound to the request.
 		home = path.Dir(context.Env["XDG_CONFIG_HOME"])
+	} else if CuratorFragmentUsesFlagHome(context.Environment) {
+		home = context.Home.Path
 	} else {
 		for key, value := range context.Env {
 			homeVariable, home = key, value
@@ -935,6 +1037,7 @@ func curatorContextProvenance(context *CuratorContext) CuratorContextProvenance 
 	fragment := CuratorFragmentIdentity{
 		Revision: context.Revision, Environment: context.Environment,
 		Profile: context.Profile, Precedence: context.Precedence,
+		Home: cloneCuratorHomeBinding(context.Home),
 		Env: cloneStringMap(context.Env), MCP: cloneCuratorMCP(context.MCP),
 		PathPrepend:     context.PathPrepend,
 		Permissions:     cloneCuratorPermissions(context.Permissions),
@@ -973,6 +1076,7 @@ func cloneCuratorProvenance(source CuratorContextProvenance) CuratorContextProve
 		homes := *source.MuseHomes
 		copy.MuseHomes = &homes
 	}
+	copy.Fragment.Home = cloneCuratorHomeBinding(source.Fragment.Home)
 	copy.Fragment.Env = cloneStringMap(source.Fragment.Env)
 	copy.Fragment.MCP = cloneCuratorMCP(source.Fragment.MCP)
 	copy.Fragment.Permissions = cloneCuratorPermissions(source.Fragment.Permissions)
@@ -992,6 +1096,7 @@ func cloneCuratorContext(source *CuratorContext) *CuratorContext {
 		return nil
 	}
 	copy := *source
+	copy.Home = cloneCuratorHomeBinding(source.Home)
 	copy.Env = cloneStringMap(source.Env)
 	copy.MCP = cloneCuratorMCP(source.MCP)
 	copy.Permissions = cloneCuratorPermissions(source.Permissions)
@@ -1008,6 +1113,14 @@ func cloneCuratorContext(source *CuratorContext) *CuratorContext {
 		provenance := cloneCuratorProvenance(*source.ExpectedProvenance)
 		copy.ExpectedProvenance = &provenance
 	}
+	return &copy
+}
+
+func cloneCuratorHomeBinding(source *CuratorHomeBinding) *CuratorHomeBinding {
+	if source == nil {
+		return nil
+	}
+	copy := *source
 	return &copy
 }
 
@@ -1072,7 +1185,7 @@ func cloneStringMap(source map[string]string) map[string]string {
 // is one the validator admits.
 func acceptedCuratorFragmentRevision(revision string) bool {
 	return revision == CuratorLaunchFragmentV1 || revision == CuratorLaunchFragmentV2 || revision == CuratorLaunchFragmentV3 ||
-		revision == CuratorLaunchFragmentV4
+		revision == CuratorLaunchFragmentV4 || revision == CuratorLaunchFragmentV7
 }
 
 // sameCuratorFragmentIdentity reports whether two fragment identities name
@@ -1082,13 +1195,11 @@ func acceptedCuratorFragmentRevision(revision string) bool {
 // over all fields except Revision. The gate covers the STORED side only: the
 // stored provenance is data, not a validated request, so an unaccepted
 // stored revision reads as stale, and a stored XDG-homes (muse) fragment
-// must be v4 — a stored v3 muse identity is stale, never reused. The current
-// side needs no gate here because buildPlan validates the current context
-// before identity ever runs: ValidateCuratorContext refuses unknown
-// revisions and pre-v4 muse fragments first, so right is already
-// validator-admitted.
+// must be v4 or v7 while a stored flag-home fragment must be v7.
 func sameCuratorFragmentIdentity(left, right CuratorFragmentIdentity) bool {
-	if !acceptedCuratorFragmentRevision(left.Revision) || (CuratorFragmentUsesXDGHomes(left.Environment) && left.Revision != CuratorLaunchFragmentV4) {
+	if !acceptedCuratorFragmentRevision(left.Revision) ||
+		(CuratorFragmentUsesXDGHomes(left.Environment) && left.Revision != CuratorLaunchFragmentV4 && left.Revision != CuratorLaunchFragmentV7) ||
+		(CuratorFragmentUsesFlagHome(left.Environment) && left.Revision != CuratorLaunchFragmentV7) {
 		return false
 	}
 	left.Revision = ""

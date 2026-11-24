@@ -43,6 +43,7 @@ import (
 var agyArgvSignature = []string{
 	"--print-timeout",
 	"--disable-slash-commands",
+	"--gemini_dir",
 }
 
 const agyArgsFile = "pkg/agentic/systems/agy/args.go"
@@ -54,7 +55,10 @@ const agyArgsFile = "pkg/agentic/systems/agy/args.go"
 // this module name their construction site Args, so a bare-name allowlist would
 // exempt every Args in the module from every plugin's guard.
 var agyArgvConstructionAllowlist = map[string]string{
+	argvguard.AllowlistKey(agyArgsFile, "agyGeminiDirFlag"):                          "named constant for the --gemini_dir flag inside args.go",
 	argvguard.AllowlistKey(agyArgsFile, "Args"):                                      "the single launch construction site",
+	argvguard.AllowlistKey(agyArgsFile, "interactiveArgs"):                           "interactive half of the single launch construction site (called only by Args)",
+	argvguard.AllowlistKey(agyArgsFile, "scanAgyNativePolicy"):                       "native-argument conflict guard inside args.go; emits no argv",
 	argvguard.AllowlistKey("pkg/agentic/systems/agy/quota.go", "QuotaPlan"):          "the separate prompt-free quota plan, pinned by TestQuotaFrozenPlanPreflightAndVersion",
 	argvguard.AllowlistKey("pkg/agentic/systems/agy/quota.go", "RequiredQuotaFlags"): "the consumer preflight flag contract; emits no argv",
 }

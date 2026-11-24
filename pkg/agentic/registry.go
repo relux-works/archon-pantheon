@@ -294,3 +294,17 @@ var curatorFragmentXDGHomesEnvironments = map[string]bool{"muse": true}
 func CuratorFragmentUsesXDGHomes(environment string) bool {
 	return curatorFragmentXDGHomesEnvironments[environment]
 }
+
+// curatorFragmentFlagHomeEnvironments names the Curator fragment environments
+// whose home directory travels in the v7 top-level `home` object with
+// `transport: "flag"` (CIP-0033) rather than an environment variable. Like
+// muse above, the spelling collides with the SystemID vocabulary scanned by
+// the single-source guard, so the binding lives here and callers query
+// CuratorFragmentUsesFlagHome.
+var curatorFragmentFlagHomeEnvironments = map[string]bool{"antigravity": true}
+
+// CuratorFragmentUsesFlagHome reports whether a fragment environment carries a
+// flag-transported managed home binding (CIP-0033, launch-env-fragment-v7).
+func CuratorFragmentUsesFlagHome(environment string) bool {
+	return curatorFragmentFlagHomeEnvironments[environment]
+}

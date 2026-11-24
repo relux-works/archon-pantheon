@@ -185,7 +185,8 @@ var declaredHereCatalogEvidence = map[vendorplugin.VendorID]string{
 
 const googleNeonCatalogEvidence = "Google Antigravity model catalog " +
 	"(https://antigravity.google/docs/models, checked 2026-11-24); " +
-	"Antigravity CLI 1.5.16 model list (checked 2026-11-24)"
+	"Google Antigravity CLI headless reference " +
+	"(https://antigravity.google/docs/cli/headless/, checked 2026-11-24)"
 
 // declaredHereUnmeasuredCatalogEvidence pins the source accepted for
 // availability-only rows that come from a model catalog rather than a probe.

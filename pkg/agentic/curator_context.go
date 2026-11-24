@@ -352,6 +352,24 @@ func (h *CuratorHomeBinding) UnmarshalJSON(wire []byte) error {
 	return nil
 }
 
+// CuratorNodeSource describes the node credential channel reservation in a v7
+// fragment (CIP-0033 / node-source-v2).
+type CuratorNodeSource struct {
+	Mode           string `json:"mode"`
+	SourceRef      string `json:"source_ref"`
+	HarnessChannel string `json:"harness_channel"`
+}
+
+// CuratorCredentialSource carries the optional v7 credential_source block.
+// On agy 1.5.16, credential-injection/1 is unqualified due to child-process
+// env inheritance (CIP-0033 P5), so a valid v7 fragment carrying this member
+// refuses operationally with ErrCredentialInjectionUnavailable.
+type CuratorCredentialSource struct {
+	Source           *CuratorNodeSource `json:"source"`
+	SourceGeneration int64              `json:"source_generation"`
+	PolicyGeneration int64              `json:"policy_generation"`
+}
+
 // CuratorContext is the typed projection of launch-env-fragment-v1 through
 // launch-env-fragment-v4 and launch-env-fragment-v7 plus the explicit request
 // intent and optional prior plan provenance used for reuse. The profile and
@@ -370,6 +388,7 @@ type CuratorContext struct {
 	PathPrepend        string                      `json:"path_prepend,omitempty"`
 	Permissions        *CuratorPermissions         `json:"permissions,omitempty"`
 	CredentialStore    *CuratorCredentialStore     `json:"credential_store,omitempty"`
+	CredentialSource   *CuratorCredentialSource    `json:"credential_source,omitempty"`
 	RootContext        *CuratorRootContext         `json:"root_context,omitempty"`
 	ExpectedProvenance *CuratorContextProvenance   `json:"-"`
 }
@@ -531,6 +550,7 @@ var (
 	ErrCuratorSystemPromptIntentInvalid    = errors.New("agentic: unsupported Curator system-prompt intent")
 	ErrCuratorSystemPromptChannelMissing   = errors.New("agentic: no Curator system-prompt channel matches the requested intent")
 	ErrCuratorSystemPromptChannelAmbiguous = errors.New("agentic: multiple Curator system-prompt channels match the requested intent")
+	ErrCredentialInjectionUnavailable      = errors.New("agentic: credential_injection_unavailable")
 )
 
 // UnknownCuratorDescriptorError reports an unrecognized descriptor kind.
@@ -630,6 +650,18 @@ func ValidateCuratorContext(context *CuratorContext, requestHome string) error {
 	if context.RootContext != nil && !CuratorFragmentUsesXDGHomes(context.Environment) {
 		return curatorMalformed("root_context is admitted only on the muse environment")
 	}
+	if context.CredentialSource != nil {
+		if context.Revision != CuratorLaunchFragmentV7 {
+			return curatorMalformed("credential_source requires launch-env-fragment-v7")
+		}
+		if CuratorFragmentUsesFlagHome(context.Environment) {
+			if context.CredentialStore == nil || context.CredentialStore.Selection != CuratorCredentialStoreNative || context.CredentialStore.ConfigOverrides != nil {
+				return curatorMalformed("antigravity credential_source requires credential_store native")
+			}
+			return fmt.Errorf("%w: antigravity credential-injection/1 is unqualified on agy 1.5.16", ErrCredentialInjectionUnavailable)
+		}
+		return fmt.Errorf("%w: credential_source is not supported by this launch plane", ErrCredentialInjectionUnavailable)
+	}
 	if err := validateCuratorCredentialStore(context); err != nil {
 		return err
 	}
@@ -691,6 +723,9 @@ func ValidateCuratorContext(context *CuratorContext, requestHome string) error {
 			}
 			if !isSortedUniqueCuratorEnvNames(context.MCP.EnvNames) {
 				return curatorMalformed("MCP env_names must be sorted, unique, and non-reserved")
+			}
+			if hasForbiddenAntigravityMCPEnv(context.MCP.EnvNames) {
+				return curatorMalformed("antigravity MCP env_names forbids ambient auth and policy variables")
 			}
 			if len(context.MCP.Channels) != 1 || context.MCP.Channels[0].Kind != CuratorDescriptorFile || context.MCP.Channels[0].Filename != CuratorAntigravityMCPFile {
 				return curatorMalformed("antigravity MCP channel must be file config/mcp_config.json")
@@ -1020,6 +1055,33 @@ func curatorReservedMCPEnv(name string) bool {
 		strings.HasPrefix(name, "PYTHON") || strings.HasPrefix(name, "NODE_") || strings.HasPrefix(name, "NPM_CONFIG_")
 }
 
+// CuratorAntigravityForbiddenMCPEnv reports whether name is an Antigravity auth
+// or managed-home policy environment variable that MUST NEVER pass through MCP
+// env_names or inherited parent env (CIP-0033).
+func CuratorAntigravityForbiddenMCPEnv(name string) bool {
+	switch strings.ToUpper(name) {
+	case "GEMINI_API_KEY",
+		"GOOGLE_API_KEY",
+		"AGY_ADC_AUTH",
+		"GOOGLE_APPLICATION_CREDENTIALS",
+		"GOOGLE_CLOUD_QUOTA_PROJECT",
+		"AGY_CLI_FORCE_FILE_TOKEN_STORAGE",
+		"AGY_CLI_DISABLE_AUTO_UPDATE":
+		return true
+	default:
+		return false
+	}
+}
+
+func hasForbiddenAntigravityMCPEnv(values []string) bool {
+	for _, value := range values {
+		if CuratorAntigravityForbiddenMCPEnv(value) {
+			return true
+		}
+	}
+	return false
+}
+
 func curatorContextProvenance(context *CuratorContext) CuratorContextProvenance {
 	var homeVariable, home string
 	if CuratorFragmentUsesXDGHomes(context.Environment) {
@@ -1038,7 +1100,7 @@ func curatorContextProvenance(context *CuratorContext) CuratorContextProvenance 
 		Revision: context.Revision, Environment: context.Environment,
 		Profile: context.Profile, Precedence: context.Precedence,
 		Home: cloneCuratorHomeBinding(context.Home),
-		Env: cloneStringMap(context.Env), MCP: cloneCuratorMCP(context.MCP),
+		Env:  cloneStringMap(context.Env), MCP: cloneCuratorMCP(context.MCP),
 		PathPrepend:     context.PathPrepend,
 		Permissions:     cloneCuratorPermissions(context.Permissions),
 		CredentialStore: cloneCuratorCredentialStore(context.CredentialStore),
@@ -1101,6 +1163,14 @@ func cloneCuratorContext(source *CuratorContext) *CuratorContext {
 	copy.MCP = cloneCuratorMCP(source.MCP)
 	copy.Permissions = cloneCuratorPermissions(source.Permissions)
 	copy.CredentialStore = cloneCuratorCredentialStore(source.CredentialStore)
+	if source.CredentialSource != nil {
+		cs := *source.CredentialSource
+		if source.CredentialSource.Source != nil {
+			ns := *source.CredentialSource.Source
+			cs.Source = &ns
+		}
+		copy.CredentialSource = &cs
+	}
 	copy.RootContext = cloneCuratorRootContext(source.RootContext)
 	if source.SystemPrompt != nil {
 		copy.SystemPrompt = &CuratorSystemPromptContext{

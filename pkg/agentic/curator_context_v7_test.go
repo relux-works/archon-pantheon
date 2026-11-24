@@ -319,10 +319,113 @@ func TestBuildPlanCuratorContextRefusesInvalidFragmentV7(t *testing.T) {
 			name: "antigravity-interactive-conflicting-gemini-dir",
 			mutate: func(req *agentic.LaunchRequest) {
 				req.Prompt = nil
+				req.ToolRelease = "1.5.16"
 				req.NativeArgs = []string{"--gemini_dir=/other"}
 			},
 			mode:    agentic.LaunchModeInteractive,
 			wantErr: agentic.ErrNativePolicyConflict,
+		},
+		{
+			name: "antigravity-interactive-conflicting-cli-dir-name",
+			mutate: func(req *agentic.LaunchRequest) {
+				req.Prompt = nil
+				req.ToolRelease = "1.5.16"
+				req.NativeArgs = []string{"--cli_dir_name=other"}
+			},
+			mode:    agentic.LaunchModeInteractive,
+			wantErr: agentic.ErrNativePolicyConflict,
+		},
+		{
+			name: "antigravity-interactive-conflicting-settings",
+			mutate: func(req *agentic.LaunchRequest) {
+				req.Prompt = nil
+				req.ToolRelease = "1.5.16"
+				req.NativeArgs = []string{"--settings", `{"modelProvider":"gemini"}`}
+			},
+			mode:    agentic.LaunchModeInteractive,
+			wantErr: agentic.ErrNativePolicyConflict,
+		},
+		{
+			name: "antigravity-interactive-managed-native-unverified-release",
+			mutate: func(req *agentic.LaunchRequest) {
+				req.Prompt = nil
+				req.PermissionMode = agentic.PermissionModeNative
+				req.ToolRelease = "1.5.17"
+			},
+			mode:    agentic.LaunchModeInteractive,
+			wantErr: agentic.ErrPermissionModeUnverifiedRelease,
+		},
+		{
+			name: "antigravity-mcp-forbidden-adc-env",
+			mutate: func(req *agentic.LaunchRequest) {
+				req.Context.MCP = &agentic.CuratorMCPContext{
+					Path:     path.Join(home, agentic.CuratorAntigravityMCPFile),
+					EnvNames: []string{"AGY_ADC_AUTH"},
+					Channels: []agentic.CuratorChannelDescriptor{{Kind: agentic.CuratorDescriptorFile, Filename: agentic.CuratorAntigravityMCPFile}},
+				}
+			},
+			mode:    agentic.LaunchModeExec,
+			wantErr: agentic.ErrCuratorContextMalformed,
+		},
+		{
+			name: "antigravity-node-credential-source-unavailable",
+			mutate: func(req *agentic.LaunchRequest) {
+				req.Context.CredentialStore = &agentic.CuratorCredentialStore{Selection: agentic.CuratorCredentialStoreNative}
+				req.Context.CredentialSource = &agentic.CuratorCredentialSource{
+					Source:           &agentic.CuratorNodeSource{Mode: "node", SourceRef: "local:0123456789abcdef0123456789abcdef", HarnessChannel: "GEMINI_API_KEY"},
+					SourceGeneration: 1,
+					PolicyGeneration: 1,
+				}
+			},
+			mode:    agentic.LaunchModeExec,
+			wantErr: agentic.ErrCredentialInjectionUnavailable,
+		},
+		{
+			name: "antigravity-node-credential-source-wrong-store",
+			mutate: func(req *agentic.LaunchRequest) {
+				req.Context.CredentialSource = &agentic.CuratorCredentialSource{
+					Source:           &agentic.CuratorNodeSource{Mode: "node", SourceRef: "local:0123456789abcdef0123456789abcdef", HarnessChannel: "GEMINI_API_KEY"},
+					SourceGeneration: 1,
+					PolicyGeneration: 1,
+				}
+			},
+			mode:    agentic.LaunchModeExec,
+			wantErr: agentic.ErrCuratorContextMalformed,
+		},
+		{
+			name: "v4-credential-source-malformed",
+			mutate: func(req *agentic.LaunchRequest) {
+				req.System = "claude-code"
+				req.Context.Revision = agentic.CuratorLaunchFragmentV4
+				req.Context.Environment = "claude_code"
+				req.Context.Home = nil
+				req.Context.Env = map[string]string{"CLAUDE_CONFIG_DIR": home}
+				req.Context.CredentialStore = &agentic.CuratorCredentialStore{Selection: agentic.CuratorCredentialStoreNative}
+				req.Context.CredentialSource = &agentic.CuratorCredentialSource{
+					Source:           &agentic.CuratorNodeSource{Mode: "node", SourceRef: "local:0123456789abcdef0123456789abcdef", HarnessChannel: "CLAUDE_CODE_OAUTH_TOKEN"},
+					SourceGeneration: 1,
+					PolicyGeneration: 1,
+				}
+			},
+			mode:    agentic.LaunchModeExec,
+			wantErr: agentic.ErrCuratorContextMalformed,
+		},
+		{
+			name: "v7-non-flag-credential-source-unavailable",
+			mutate: func(req *agentic.LaunchRequest) {
+				req.System = "claude-code"
+				req.Context.Environment = "claude_code"
+				req.Context.Home = nil
+				req.Context.Env = map[string]string{"CLAUDE_CONFIG_DIR": home}
+				req.Context.CredentialStore = &agentic.CuratorCredentialStore{Selection: agentic.CuratorCredentialStoreNative}
+				req.Context.CredentialSource = &agentic.CuratorCredentialSource{
+					Source:           &agentic.CuratorNodeSource{Mode: "node", SourceRef: "local:0123456789abcdef0123456789abcdef", HarnessChannel: "CLAUDE_CODE_OAUTH_TOKEN"},
+					SourceGeneration: 1,
+					PolicyGeneration: 1,
+				}
+			},
+			mode:    agentic.LaunchModeExec,
+			wantErr: agentic.ErrCredentialInjectionUnavailable,
 		},
 		{
 			name: "antigravity-interactive-yolo-unverified-release",

@@ -148,8 +148,8 @@ func interactiveArgs(req agentic.LaunchRequest) ([]string, error) {
 	}
 	home := managedHomePath(req)
 	yolo := effective == agentic.PermissionModeYolo
-	if yolo && strings.TrimSpace(req.ToolRelease) != agyVerifiedRelease {
-		return nil, fmt.Errorf("agy: %w: release %q is not verified for antigravity yolo (want %s)",
+	if (yolo || req.Context != nil) && strings.TrimSpace(req.ToolRelease) != agyVerifiedRelease {
+		return nil, fmt.Errorf("agy: %w: release %q is not verified for managed or yolo antigravity launches (want %s)",
 			agentic.ErrPermissionModeUnverifiedRelease, strings.TrimSpace(req.ToolRelease), agyVerifiedRelease)
 	}
 	if err := scanAgyNativePolicy(req.NativeArgs, home != "", yolo); err != nil {
@@ -186,7 +186,9 @@ func scanAgyNativePolicy(nativeArgs []string, hasManagedHome bool, yolo bool) er
 		if hasManagedHome {
 			switch name {
 			case "--gemini_dir", "--gemini-dir", "-gemini_dir", "-gemini-dir",
-				"--app_data_dir", "--app-data-dir", "-app_data_dir", "-app-data-dir":
+				"--app_data_dir", "--app-data-dir", "-app_data_dir", "-app-data-dir",
+				"--cli_dir_name", "--cli-dir-name", "-cli_dir_name", "-cli-dir-name",
+				"--settings", "-settings":
 				return fmt.Errorf("%w: native argument %q conflicts with Curator managed home", agentic.ErrNativePolicyConflict, name)
 			}
 		}

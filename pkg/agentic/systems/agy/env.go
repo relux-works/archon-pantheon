@@ -51,6 +51,9 @@ func filterAgyCuratorParentEnv(parent []string, mcpEnvNames []string) []string {
 		if !hasValue {
 			continue
 		}
+		if agentic.CuratorAntigravityForbiddenMCPEnv(name) {
+			continue
+		}
 		if _, ok := agyCuratorParentEnvAllowlist[name]; ok {
 			filtered = append(filtered, entry)
 			continue

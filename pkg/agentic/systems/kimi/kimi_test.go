@@ -149,7 +149,7 @@ func TestBuildPlanRefusesInvalidInputsWithoutMutation(t *testing.T) {
 		{"continue selector does not take a value", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"--continue=session-123"} }, agentic.ErrSessionResumeInvalid},
 		{"prompt is not an interactive channel", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.Prompt = []byte("task") }, agentic.ErrParameterNotInteractive},
 		{"unknown permission mode", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.PermissionMode = "never" }, agentic.ErrPermissionModeUnknown},
-		{"unverified yolo release", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.PermissionMode = agentic.PermissionModeYolo; r.ToolRelease = "2.6.4" }, agentic.ErrPermissionModeUnverifiedRelease},
+		{"unverified yolo release", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.PermissionMode = agentic.PermissionModeYolo; r.ToolRelease = "2.6.2" }, agentic.ErrPermissionModeUnverifiedRelease},
 		{"unrepresented auto posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"--auto"} }, agentic.ErrPermissionModeUnsupported},
 		{"canonical yolo under native posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"--yolo"} }, agentic.ErrNativePolicyConflict},
 		{"short yolo under native posture", agentic.LaunchModeInteractive, func(r *agentic.LaunchRequest) { r.NativeArgs = []string{"-y"} }, agentic.ErrNativePolicyConflict},
@@ -261,8 +261,11 @@ func TestYoloMappingIsPinnedToTheDetectedRelease(t *testing.T) {
 	}{
 		{release: "2.6.3", mode: agentic.PermissionModeNative, want: agentic.PermissionMapping{Grammar: agentic.PermissionGrammarV1}},
 		{release: "2.6.3", mode: agentic.PermissionModeYolo, want: agentic.PermissionMapping{Grammar: agentic.PermissionGrammarV1, Flag: yoloFlag}},
+		{release: "2.8.1", mode: agentic.PermissionModeNative, want: agentic.PermissionMapping{Grammar: agentic.PermissionGrammarV1}},
+		{release: "2.8.1", mode: agentic.PermissionModeYolo, want: agentic.PermissionMapping{Grammar: agentic.PermissionGrammarV1, Flag: yoloFlag}},
 		{release: "", mode: agentic.PermissionModeYolo, wantErr: agentic.ErrPermissionModeUnverifiedRelease},
-		{release: "2.6.4", mode: agentic.PermissionModeYolo, wantErr: agentic.ErrPermissionModeUnverifiedRelease},
+		{release: "2.6.2", mode: agentic.PermissionModeYolo, wantErr: agentic.ErrPermissionModeUnverifiedRelease},
+		{release: "3.0.0", mode: agentic.PermissionModeYolo, wantErr: agentic.ErrPermissionModeUnverifiedRelease},
 	} {
 		got, err := New().PermissionMapping(tc.release, tc.mode)
 		if tc.wantErr != nil {

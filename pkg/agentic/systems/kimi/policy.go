@@ -7,7 +7,7 @@ import (
 )
 
 var verifiedReleases = []agentic.ReleaseCapability{
-	{Release: "2.6.3", Grammar: agentic.PermissionGrammarV1, YoloSupported: true},
+	{MinRelease: "2.6.3", MaxReleaseExclusive: "3.0.0", Grammar: agentic.PermissionGrammarV1, YoloSupported: true},
 }
 
 // PermissionMapping returns the release-pinned interactive posture mapping.

@@ -638,7 +638,7 @@ func ValidateCuratorContext(context *CuratorContext, requestHome string) error {
 	// scans.
 	if !CuratorFragmentUsesXDGHomes(context.Environment) && !CuratorFragmentUsesFlagHome(context.Environment) {
 		switch context.Environment {
-		case "claude_code", "codex_cli", "opencode", "pi":
+		case "claude_code", "codex_cli", "kimi_code", "opencode", "pi":
 		default:
 			return curatorMalformed("environment is not a supported typed fragment value")
 		}
@@ -683,6 +683,8 @@ func ValidateCuratorContext(context *CuratorContext, requestHome string) error {
 			wantHomeVariable = "CLAUDE_CONFIG_DIR"
 		case "codex_cli":
 			wantHomeVariable = "CODEX_HOME"
+		case "kimi_code":
+			wantHomeVariable = "KIMI_CODE_HOME"
 		case "opencode":
 			wantHomeVariable = "XDG_CONFIG_HOME"
 		case "pi":

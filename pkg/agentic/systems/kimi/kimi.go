@@ -59,13 +59,43 @@ func (s *System) Argv(req agentic.LaunchRequest, mode agentic.LaunchMode) ([]str
 	if !s.Capabilities().SupportsMode(mode) {
 		return nil, fmt.Errorf("kimi: launch mode %s is not declared by this system", mode)
 	}
+	if err := validateKimiCuratorContext(req); err != nil {
+		return nil, err
+	}
 	return Args(req, mode)
 }
 
-// ChildEnv preserves the supplied environment and adds the shared run context.
-// The caller selects an alternate Kimi home through KIMI_CODE_HOME.
+// ChildEnv preserves the supplied environment, enforces KIMI_CODE_HOME from
+// Curator context when present, and adds the shared run context.
 func (*System) ChildEnv(parent []string, req agentic.LaunchRequest) ([]string, error) {
-	return agentic.WithRunContext(parent, req), nil
+	if err := validateKimiCuratorContext(req); err != nil {
+		return nil, err
+	}
+	env := agentic.WithRunContext(parent, req)
+	if req.Context != nil && req.Home != "" {
+		env = setEnvVar(env, homeEnvVar, req.Home)
+	}
+	return env, nil
+}
+
+func setEnvVar(env []string, key, value string) []string {
+	prefix := key + "="
+	out := make([]string, 0, len(env)+1)
+	replaced := false
+	for _, entry := range env {
+		if len(entry) >= len(prefix) && entry[:len(prefix)] == prefix {
+			if !replaced {
+				out = append(out, prefix+value)
+				replaced = true
+			}
+			continue
+		}
+		out = append(out, entry)
+	}
+	if !replaced {
+		out = append(out, prefix+value)
+	}
+	return out
 }
 
 // Stdin is unused: Kimi Code receives prompt mode text through --prompt.

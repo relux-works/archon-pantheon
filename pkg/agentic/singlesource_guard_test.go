@@ -237,6 +237,7 @@ var bindingHomes = map[string]string{
 	"openai models":    "pkg/vendorplugin/benchdata/openai.go",
 	"alibaba models":   "pkg/vendorplugin/benchdata/alibaba.go",
 	"google models":    "pkg/vendorplugin/benchdata/google.go",
+	"moonshot models":  "pkg/vendorplugin/vendors/moonshot/models.go",
 
 	// The muse rows, which belong to NO vendor. Their runtime's broker was
 	// looked for and never established, so there is no vendor plugin to put
@@ -265,6 +266,7 @@ var vendorBindingHomes = map[string]string{
 	"openai":    "pkg/vendorplugin/benchdata/openai.go",
 	"alibaba":   "pkg/vendorplugin/benchdata/alibaba.go",
 	"google":    "pkg/vendorplugin/benchdata/google.go",
+	"moonshot":  "pkg/vendorplugin/vendors/moonshot/models.go",
 }
 
 // singleSourceAllowlist names the sites permitted to spell a plugin id outside

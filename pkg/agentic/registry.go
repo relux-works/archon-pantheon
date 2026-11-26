@@ -6,7 +6,7 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/relux-works/skill-agents-management/pkg/plugin"
+	"github.com/relux-works/curator-runtimes/pkg/plugin"
 )
 
 // This file is the ONLY place an agentic system binding may live.

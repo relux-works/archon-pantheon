@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // tempDirVendorWitnesses are the six invalid spellings the round-2 vendor

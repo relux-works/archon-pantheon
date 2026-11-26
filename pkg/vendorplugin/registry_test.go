@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/plugin"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/plugin"
 )
 
 type staticGraphPlugin struct{ declaration plugin.Declaration }

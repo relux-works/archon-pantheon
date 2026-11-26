@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/gatewayadmission"
-	"github.com/relux-works/skill-agents-management/pkg/runtimecatalog"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/gatewayadmission"
+	"github.com/relux-works/curator-runtimes/pkg/runtimecatalog"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // The launcher's sorted-name/token-last environment and a shuffled copy pass; duplicate ordinary names refuse.

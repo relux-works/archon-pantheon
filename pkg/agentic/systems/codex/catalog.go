@@ -12,8 +12,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/internal/catalogfile"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/internal/catalogfile"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // catalogConfigKey is the top-level config.toml key carrying the catalog path.

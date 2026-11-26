@@ -9,9 +9,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // Regression for nil-carrier parity across the entire declared launch surface,

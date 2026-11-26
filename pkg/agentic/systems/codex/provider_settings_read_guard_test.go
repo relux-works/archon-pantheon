@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/gosources"
+	"github.com/relux-works/curator-runtimes/internal/gosources"
 )
 
 // TestPlannerReadsUseObservableBoundary prevents direct OS calls from silently
@@ -59,8 +59,8 @@ func unobservedPlannerReads(t *testing.T, name string, source []byte) []string {
 		"io/fs":         "ReadFile ReadDir Stat Glob WalkDir",
 		"io/ioutil":     "ReadFile ReadDir",
 		"os/exec":       "LookPath",
-		"github.com/relux-works/skill-agents-management/internal/launchenv":   "LookPath IsRegularFile",
-		"github.com/relux-works/skill-agents-management/internal/catalogfile": "ReadRegular",
+		"github.com/relux-works/curator-runtimes/internal/launchenv":   "LookPath IsRegularFile",
+		"github.com/relux-works/curator-runtimes/internal/catalogfile": "ReadRegular",
 	}
 	fset := token.NewFileSet()
 	file, err := parser.ParseFile(fset, name, source, 0)
@@ -109,7 +109,7 @@ func unobservedPlannerReads(t *testing.T, name string, source []byte) []string {
 		}
 		for _, symbol := range strings.Fields(forbidden[aliases[ident.Name]]) {
 			if sel.Sel.Name == symbol {
-				if sel == catalogDefault && aliases[ident.Name] == "github.com/relux-works/skill-agents-management/internal/catalogfile" && symbol == "ReadRegular" {
+				if sel == catalogDefault && aliases[ident.Name] == "github.com/relux-works/curator-runtimes/internal/catalogfile" && symbol == "ReadRegular" {
 					continue
 				}
 				violations = append(violations, fset.Position(sel.Pos()).String()+": unobserved planner read "+ident.Name+"."+symbol+"; use planningio.Default")
@@ -130,7 +130,7 @@ func TestPlannerReadBoundaryCatchesAliasedAndIndirectReads(t *testing.T) {
 			t.Errorf("unobserved read admitted: %s", source)
 		}
 	}
-	if got := unobservedPlannerReads(t, "probe.go", []byte(`package probe; import "github.com/relux-works/skill-agents-management/pkg/agentic/internal/planningio"; func f() { _, _ = planningio.Default.ReadFile("config") }`)); len(got) != 0 {
+	if got := unobservedPlannerReads(t, "probe.go", []byte(`package probe; import "github.com/relux-works/curator-runtimes/pkg/agentic/internal/planningio"; func f() { _, _ = planningio.Default.ReadFile("config") }`)); len(got) != 0 {
 		t.Fatalf("observable read refused: %v", got)
 	}
 }

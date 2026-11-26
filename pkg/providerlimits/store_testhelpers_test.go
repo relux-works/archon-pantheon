@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 
 	// The home rule for a harness is declared by that harness's agentic system
 	// plugin, and DefaultProviderHome resolves through agentic.Default. Each
@@ -24,13 +24,13 @@ import (
 	// They are blank imports rather than hand-written fakes, because a fake
 	// would carry its own copy of CODEX_HOME and ~/.codex and be the second
 	// table this port removed.
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/agy"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/claude"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/codex"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/gemini"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/muse"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/qwen"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/agy"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/gemini"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/muse"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/qwen"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // homeEnvVarFor reads the environment variable a runtime's harness looks in,

@@ -1,8 +1,8 @@
 package vendorplugin
 
 import (
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin/benchdata"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin/benchdata"
 )
 
 // ModelsFromBenchdata projects data-only declarations onto the existing vendor

@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 
 	// The muse HARNESS, imported here and nowhere in the vendor layer.
 	//
@@ -21,8 +21,8 @@ import (
 	// compiled in, and the refusal this file cares about (the broker was never
 	// established) would never be reached. Importing it makes the assertion
 	// about the vendor layer instead of about the test binary's import list.
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/muse"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/muse"
 )
 
 // The release gate: admitted-pair digests, reproduced from the ported model

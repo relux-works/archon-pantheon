@@ -1,7 +1,7 @@
 package qwen
 
 import (
-	"github.com/relux-works/skill-agents-management/internal/launchenv"
+	"github.com/relux-works/curator-runtimes/internal/launchenv"
 )
 
 // Qwen has ONE binary-resolution path: whatever `qwen` resolves to on PATH.

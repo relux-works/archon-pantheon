@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // THE MUSE WONDER 1.0 CONTRIBUTOR ROWS (declared 2026-10-12).

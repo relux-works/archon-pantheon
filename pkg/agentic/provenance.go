@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/relux-works/skill-agents-management/internal/ident"
-	"github.com/relux-works/skill-agents-management/pkg/plugin"
+	"github.com/relux-works/curator-runtimes/internal/ident"
+	"github.com/relux-works/curator-runtimes/pkg/plugin"
 )
 
 const (

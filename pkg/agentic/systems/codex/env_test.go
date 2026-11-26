@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/parity"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/parity"
 )
 
 // childEnvFor drives the production call site — a real registry, BuildPlan —

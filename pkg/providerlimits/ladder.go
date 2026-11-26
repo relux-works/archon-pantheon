@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // Backoff ladders, keyed by BROKER.

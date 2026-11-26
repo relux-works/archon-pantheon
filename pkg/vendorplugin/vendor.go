@@ -34,9 +34,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/internal/ident"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/plugin"
+	"github.com/relux-works/curator-runtimes/internal/ident"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/plugin"
 )
 
 // VendorID is the stable identifier of a vendor plugin, normalized to one

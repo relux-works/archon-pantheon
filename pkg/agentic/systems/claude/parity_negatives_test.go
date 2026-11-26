@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/parity"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/parity"
 )
 
 // The parity package carries two permanent negatives that exist to bite PORTS:

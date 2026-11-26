@@ -1,7 +1,7 @@
 package muse
 
 import (
-	"github.com/relux-works/skill-agents-management/internal/launchenv"
+	"github.com/relux-works/curator-runtimes/internal/launchenv"
 )
 
 // Muse has ONE binary-resolution path: whatever `muse` resolves to on PATH.

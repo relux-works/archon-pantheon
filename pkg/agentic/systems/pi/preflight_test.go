@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/localruntime"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/localruntime"
 )
 
 // admitCases is every reachable (BrokerState, BrokerSource) pair (the frozen

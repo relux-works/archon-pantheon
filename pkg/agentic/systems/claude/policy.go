@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/relux-works/skill-agents-management/internal/nativeargs"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/internal/nativeargs"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // verifiedReleases is this environment's rows of the versioned

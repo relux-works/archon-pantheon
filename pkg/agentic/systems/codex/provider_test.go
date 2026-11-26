@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 func providerRequest(t *testing.T, home, workDir, providerID string) agentic.LaunchRequest {

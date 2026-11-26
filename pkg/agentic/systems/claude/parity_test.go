@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/parity"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/parity"
 )
 
 // This file is the acceptance. Every claude golden the source's own harness

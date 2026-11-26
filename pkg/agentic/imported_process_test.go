@@ -9,10 +9,10 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/claude"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/codex"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/muse"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/muse"
 )
 
 // importedStubID names a sealed test-only system: a plugin declaring a

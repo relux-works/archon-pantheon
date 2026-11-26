@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // LaunchModeInteractive (curator-spec Decision 0013 §5) has NO golden, for the

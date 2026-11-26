@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // sealRev5EnvSystem is the real Codex plugin with only the child environment

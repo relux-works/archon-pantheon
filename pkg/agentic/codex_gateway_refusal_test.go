@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // Gateway refusal codes preserve the sentinel, expose only known check classes, and never echo caller text.

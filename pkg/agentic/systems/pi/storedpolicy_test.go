@@ -3,7 +3,7 @@ package pi
 import (
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 func TestStoredPolicyInspectorReportsUnsupported(t *testing.T) {

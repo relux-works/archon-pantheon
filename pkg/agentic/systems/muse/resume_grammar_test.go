@@ -6,7 +6,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // The pinned per-release root-option inventories, byte for byte. Both

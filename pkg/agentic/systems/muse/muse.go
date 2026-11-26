@@ -61,7 +61,7 @@ package muse
 import (
 	"fmt"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // systemID is this plugin's identity.

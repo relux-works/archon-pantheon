@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin/benchdata"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin/benchdata"
 )
 
 // UnmeasuredClaim is an explicit availability claim, never a numeric rank.

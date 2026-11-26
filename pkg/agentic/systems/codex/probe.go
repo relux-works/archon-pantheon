@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/internal/toolprobe"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/internal/toolprobe"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // ProbeToolRelease implements agentic.ToolReleaseProber: it resolves the

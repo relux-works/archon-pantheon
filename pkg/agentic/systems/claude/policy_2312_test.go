@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // The 2.1.312 row maps yolo to the bypass flag under V3, with the exact argv

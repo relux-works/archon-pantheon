@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic/internal/planningio"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/internal/planningio"
 )
 
 // Native launch-boundary adapter.

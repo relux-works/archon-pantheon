@@ -3,7 +3,7 @@ package regress
 import (
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // CLASS 8 — AvailabilityQuery.Runtime is backward compatible by

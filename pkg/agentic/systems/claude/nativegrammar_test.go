@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // pinnedClaudeRelease is one installed release the pinned comparisons run

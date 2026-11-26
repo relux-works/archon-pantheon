@@ -5,24 +5,24 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 
 	// The six Layer-1 plugins and the four Layer-2 plugins, compiled in so
 	// this package can drive the REAL registrations rather than a double. Each
 	// import runs the plugin's own init, which is the production registration
 	// path, into the package-level defaults.
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/agy"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/claude"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/codex"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/gemini"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/muse"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/qwen"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/agy"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/gemini"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/muse"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/qwen"
 
-	_ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/alibaba"
-	_ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/anthropic"
-	_ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/google"
-	_ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/openai"
+	_ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/alibaba"
+	_ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/anthropic"
+	_ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/google"
+	_ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/openai"
 )
 
 // CLASS 1 — the dependency direction, enforced at registration.

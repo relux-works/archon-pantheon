@@ -1,7 +1,7 @@
 package pinative
 
 import (
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // HomeEnvVar is the environment variable Pi reads its agent directory from

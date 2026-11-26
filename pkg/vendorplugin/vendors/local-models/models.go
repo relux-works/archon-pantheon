@@ -1,8 +1,8 @@
 package localmodels
 
 import (
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // buildModels projects a Config's rows onto vendorplugin.Model, one row per

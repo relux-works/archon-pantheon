@@ -6,14 +6,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
-	"github.com/relux-works/skill-agents-management/internal/paritycase"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/agy"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/claude"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/codex"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/muse"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/pinative"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
+	"github.com/relux-works/curator-runtimes/internal/paritycase"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/agy"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/muse"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/pinative"
 )
 
 // CLASS 6 — INTERACTIVE. An interactive plan (curator-spec Decision 0013 §5)

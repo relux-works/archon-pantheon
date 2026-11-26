@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/relux-works/skill-agents-management/pkg/localruntime"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/localruntime"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // statusSourceLabel names the evidence source recorded on every Availability

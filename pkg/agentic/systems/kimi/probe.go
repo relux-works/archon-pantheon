@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/internal/toolprobe"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/internal/toolprobe"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // ProbeToolRelease runs the resolved CLI's version flag and returns an exact

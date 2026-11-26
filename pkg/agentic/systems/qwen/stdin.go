@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // QWEN'S STDIN IS A PROTOCOL, NOT A PROMPT.

@@ -14,7 +14,7 @@ VERSION    ?= $(shell git describe --tags --always 2>/dev/null || echo dev)
 COMMIT     ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo unknown)
 BUILD_DATE ?= $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
 
-CLI_PKG := github.com/relux-works/skill-agents-management/tools/agents-management/cmd
+CLI_PKG := github.com/relux-works/curator-runtimes/tools/agents-management/cmd
 
 LDFLAGS := -X $(CLI_PKG).Version=$(VERSION) \
            -X $(CLI_PKG).Commit=$(COMMIT) \

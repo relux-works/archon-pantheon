@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 var carriedReportTamperCases = []string{"name", "append-name", "note", "delete", "inject"}

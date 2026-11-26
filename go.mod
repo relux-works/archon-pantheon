@@ -1,4 +1,4 @@
-module github.com/relux-works/skill-agents-management
+module github.com/relux-works/curator-runtimes
 
 go 1.25.5
 

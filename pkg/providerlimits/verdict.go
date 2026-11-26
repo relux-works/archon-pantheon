@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // The seam between this plane and the vendor contract.

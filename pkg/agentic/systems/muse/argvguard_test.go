@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/argvguard"
-	"github.com/relux-works/skill-agents-management/internal/gosources"
+	"github.com/relux-works/curator-runtimes/internal/argvguard"
+	"github.com/relux-works/curator-runtimes/internal/gosources"
 )
 
 // This file is the muse half of "ONE argv construction site".

@@ -8,11 +8,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/codex"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
-	_ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/openai"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	_ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/openai"
 )
 
 // spawnTempDirPtr states a present per-launch temp dir on a spawn request.

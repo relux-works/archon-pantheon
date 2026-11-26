@@ -12,7 +12,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/pkg/plugin"
+	"github.com/relux-works/curator-runtimes/pkg/plugin"
 )
 
 const ContractVersion = "observed-process/v2"

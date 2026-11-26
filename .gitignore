@@ -29,3 +29,6 @@ dist/
 *.test
 *.out
 vendor/
+
+# local axiloom workspace binding
+.axiloom.json

@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/relux-works/skill-agents-management/internal/launchenv"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/internal/launchenv"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // curatorEnginesProjectEnv carries the selected project directory to the

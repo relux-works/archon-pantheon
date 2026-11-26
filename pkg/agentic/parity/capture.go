@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // This file turns one run of the SOURCE repository's capture harness into the

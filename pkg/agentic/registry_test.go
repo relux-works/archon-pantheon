@@ -7,7 +7,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/plugin"
+	"github.com/relux-works/curator-runtimes/pkg/plugin"
 )
 
 type graphPlugin struct{ declaration plugin.Declaration }

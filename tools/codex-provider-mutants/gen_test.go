@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/relux-works/skill-agents-management/internal/refusalscan"
+	"github.com/relux-works/curator-runtimes/internal/refusalscan"
 	"path/filepath"
 	"regexp"
 	"strings"

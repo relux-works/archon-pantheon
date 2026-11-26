@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // THIS FILE IS THE ONE PLACE NATIVE PI FLAGS ARE SPELLED.

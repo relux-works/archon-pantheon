@@ -4,10 +4,10 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/inferenceengine"
-	"github.com/relux-works/skill-agents-management/pkg/plugin"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/inferenceengine"
+	"github.com/relux-works/curator-runtimes/pkg/plugin"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // fakePiSystem is the minimal agentic.System double this package's own tests

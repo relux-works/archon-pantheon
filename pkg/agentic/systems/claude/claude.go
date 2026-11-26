@@ -44,7 +44,7 @@ import (
 	"strings"
 
 	"github.com/relux-works/curator-network-profiles/pkg/binding"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // systemID is this plugin's identity.

@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/pkg/localruntime"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/localruntime"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // scriptedStatusReader is the fake StatusReader §1 of the adversarial plan

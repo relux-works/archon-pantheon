@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // THE INVARIANT, checked against bytes this repository did not produce.

@@ -7,8 +7,8 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/relux-works/skill-agents-management/internal/nativeargs"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/internal/nativeargs"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 const promptPlaceholder = "<prompt>"

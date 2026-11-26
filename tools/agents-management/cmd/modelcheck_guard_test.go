@@ -18,7 +18,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/internal/gosources"
+	"github.com/relux-works/curator-runtimes/internal/gosources"
 )
 
 // modelCheckGuardPackages is the guard's file set: ALL non-test .go files of

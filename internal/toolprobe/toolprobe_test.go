@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
 )
 
 // The release-triple grammar, pinned both ways: exact triples admit,

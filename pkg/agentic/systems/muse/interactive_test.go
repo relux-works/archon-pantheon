@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/nativeargs"
-	"github.com/relux-works/skill-agents-management/internal/paritycase"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/internal/nativeargs"
+	"github.com/relux-works/curator-runtimes/internal/paritycase"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 const verifiedMuseRelease = "1.4.1"

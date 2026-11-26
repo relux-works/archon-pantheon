@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // Claim: selectsOwnedSetting recognises every argument form that switches a

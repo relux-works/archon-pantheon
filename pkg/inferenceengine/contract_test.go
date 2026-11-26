@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/inferenceengine"
+	"github.com/relux-works/curator-runtimes/pkg/inferenceengine"
 )
 
 func goodValue(fact inferenceengine.Fact) string {

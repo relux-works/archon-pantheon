@@ -9,7 +9,7 @@ import (
 	"github.com/relux-works/curator-network-profiles/pkg/binding"
 	"github.com/relux-works/curator-network-profiles/pkg/envpatch"
 	"github.com/relux-works/curator-network-profiles/pkg/refusal"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // This file holds the network allowlist this system declares: exactly one

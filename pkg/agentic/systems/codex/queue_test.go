@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // Codex 0.167.0 `queue --help` names --thread/--message and says queued

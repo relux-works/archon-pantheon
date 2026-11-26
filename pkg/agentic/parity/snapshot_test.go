@@ -3,7 +3,7 @@ package parity
 import (
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // TestDiffEnvExcludesPathAndOnlyPath proves the exclusion's BOUND, not merely

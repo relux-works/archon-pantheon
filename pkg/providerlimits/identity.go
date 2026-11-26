@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/internal/provideridentity"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/internal/provideridentity"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // A provider home is a HARNESS configuration home, and the harness declares it.

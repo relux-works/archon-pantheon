@@ -4,13 +4,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 
 	// The muse HARNESS, for the same reason muse_effort_test.go imports it:
 	// the substitution is only worth anything if the string it produces is the
 	// one the real argv builder puts after `--model`.
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/muse"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/muse"
 )
 
 // THE MEASURED FAILURE, PINNED.

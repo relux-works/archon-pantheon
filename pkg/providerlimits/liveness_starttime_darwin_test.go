@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
 )
 
 func TestDarwinStartTimeIdentityBytesNarrowingMutantIsKilled(t *testing.T) {

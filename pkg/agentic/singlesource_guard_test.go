@@ -12,7 +12,7 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/relux-works/skill-agents-management/internal/gosources"
+	"github.com/relux-works/curator-runtimes/internal/gosources"
 )
 
 // This file is the mechanical enforcement of invariant 5 in

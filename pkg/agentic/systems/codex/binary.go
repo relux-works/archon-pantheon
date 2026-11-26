@@ -5,9 +5,9 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/internal/launchenv"
-	"github.com/relux-works/skill-agents-management/internal/runtimeenv"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/internal/planningio"
+	"github.com/relux-works/curator-runtimes/internal/launchenv"
+	"github.com/relux-works/curator-runtimes/internal/runtimeenv"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/internal/planningio"
 )
 
 // Codex has THREE binary-resolution paths and they are tried in this order:

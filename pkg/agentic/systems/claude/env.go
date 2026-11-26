@@ -3,7 +3,7 @@ package claude
 import (
 	"strconv"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // The claude child-environment contract, ported from the source's

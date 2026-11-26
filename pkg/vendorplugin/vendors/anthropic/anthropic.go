@@ -32,12 +32,12 @@ package anthropic
 import (
 	"fmt"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 
 	// The agentic system this vendor's models declare. See the package doc.
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/claude"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/pinative"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/pinative"
 )
 
 // vendorID is this plugin's identity, and it is the same spelling the frozen

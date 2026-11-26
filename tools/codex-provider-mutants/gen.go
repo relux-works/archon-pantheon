@@ -22,7 +22,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/internal/refusalscan"
+	"github.com/relux-works/curator-runtimes/internal/refusalscan"
 )
 
 type mutation struct {

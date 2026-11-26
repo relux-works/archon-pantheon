@@ -4,7 +4,7 @@ import (
 	"errors"
 	"slices"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 const RestartSchema = "urn:relux:agents-management:claude-restart"

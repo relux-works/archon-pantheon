@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/plugin"
+	"github.com/relux-works/curator-runtimes/pkg/plugin"
 )
 
 func testPrimaryPlan() Plan {

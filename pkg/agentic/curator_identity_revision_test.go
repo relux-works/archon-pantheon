@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // Revision compatibility of Curator fragment identity: a Revision-only drift

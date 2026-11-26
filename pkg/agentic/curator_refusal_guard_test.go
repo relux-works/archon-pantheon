@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/refusalscan"
+	"github.com/relux-works/curator-runtimes/internal/refusalscan"
 )
 
 type curatorRefusalCoverageRow struct {

@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 func writeProbeStub(t *testing.T, body string) string {

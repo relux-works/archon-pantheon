@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // The real-binary qualification is curator/docs/qualification/codex-0.164.0.md. These

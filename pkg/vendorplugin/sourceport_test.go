@@ -10,18 +10,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 
 	// The four vendor plugins under test, imported for their registration side
 	// effect. This is the PRODUCTION path: a binary gets its vendors by
 	// importing them, and every assertion below reads vendorplugin.Default
 	// rather than a registry the test assembled, so what is pinned is what a
 	// binary would actually launch through.
-	_ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/alibaba"
-	_ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/anthropic"
-	_ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/google"
-	_ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/openai"
+	_ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/alibaba"
+	_ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/anthropic"
+	_ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/google"
+	_ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/openai"
 )
 
 // This file is the full-set pin: every row of the extraction source's model

@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/refusalscan"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/internal/refusalscan"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 func TestPinnedHostedSchemasFrozenClosedAndLocal(t *testing.T) {

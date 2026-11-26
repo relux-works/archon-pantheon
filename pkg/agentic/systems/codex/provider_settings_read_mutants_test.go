@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/internal/gosources"
+	"github.com/relux-works/curator-runtimes/internal/gosources"
 )
 
 // Source mutants keep the validator call and all policy gates present. They

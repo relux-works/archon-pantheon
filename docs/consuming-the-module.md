@@ -9,7 +9,7 @@ whose `tools/board-cli` swapped its whole spawn plane onto this module.
 One Go module, one path, one tag:
 
 ```
-github.com/relux-works/skill-agents-management v0.5.27
+github.com/relux-works/curator-runtimes v0.5.27
 ```
 
 The current published version at the landing base is `v0.5.27`; it includes the semantic context
@@ -22,7 +22,7 @@ sibling-path `replace` is a path that exists on exactly one machine, and CI is
 not that machine.
 
 ```bash
-go get github.com/relux-works/skill-agents-management@v0.5.27
+go get github.com/relux-works/curator-runtimes@v0.5.27
 ```
 
 **Nothing else.** This repository went PUBLIC on 2026-08-23, so the fetch goes
@@ -245,20 +245,20 @@ is the whole wiring step:
 ```go
 import (
     // Agentic systems — import only the harnesses this binary can run.
-    _ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/agy"
-    _ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/claude"
-    _ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/codex"
-    _ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/gemini"
-    _ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/muse"
-    _ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/qwen"
+    _ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/agy"
+    _ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude"
+    _ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
+    _ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/gemini"
+    _ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/muse"
+    _ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/qwen"
 
     // Model vendors. Each blank-imports the systems its models
     // declare, so importing a vendor pulls in its harnesses whether you
     // named them or not.
-    _ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/alibaba"
-    _ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/anthropic"
-    _ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/google"
-    _ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/openai"
+    _ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/alibaba"
+    _ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/anthropic"
+    _ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/google"
+    _ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/openai"
 )
 ```
 
@@ -280,7 +280,7 @@ optional, but when present it must be a positive integer and is exposed through
 the registered model catalog without changing the launch contract:
 
 ```go
-// import "github.com/relux-works/skill-agents-management/pkg/inferenceengine/engines/mlx"
+// import "github.com/relux-works/curator-runtimes/pkg/inferenceengine/engines/mlx"
 switch result := localmodels.Peek(); {
 case result.Absent:
     // no local-models.toml on this machine — register nothing

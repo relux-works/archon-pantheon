@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // Muse's interactive root options own one value or none. Unknown separated

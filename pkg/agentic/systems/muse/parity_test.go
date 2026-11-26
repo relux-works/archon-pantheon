@@ -5,9 +5,9 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/paritycase"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/parity"
+	"github.com/relux-works/curator-runtimes/internal/paritycase"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/parity"
 )
 
 // This file is the acceptance. Every muse golden the source's own harness

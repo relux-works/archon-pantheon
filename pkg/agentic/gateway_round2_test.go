@@ -12,11 +12,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/gatewayadmission"
-	"github.com/relux-works/skill-agents-management/pkg/providerlimits"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
-	_ "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/alibaba"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/gatewayadmission"
+	"github.com/relux-works/curator-runtimes/pkg/providerlimits"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	_ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/alibaba"
 )
 
 // Every directory component uses its on-disk spelling, and equivalent selectors select that canonical home.

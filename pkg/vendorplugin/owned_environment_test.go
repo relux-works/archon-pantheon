@@ -8,8 +8,8 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 func TestBuildLaunchWithEnvironmentSystemsAndModes(t *testing.T) {

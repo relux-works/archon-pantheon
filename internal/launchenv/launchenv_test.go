@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
 )
 
 // Every claim in this file is one the plugins above it rest on and cannot

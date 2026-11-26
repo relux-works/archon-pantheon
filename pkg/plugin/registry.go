@@ -10,7 +10,7 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/relux-works/skill-agents-management/internal/ident"
+	"github.com/relux-works/curator-runtimes/internal/ident"
 )
 
 // ID is a plugin's stable identity. It is global within a registry; Kind is a

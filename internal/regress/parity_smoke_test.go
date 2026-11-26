@@ -5,15 +5,15 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/paritycase"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/parity"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/agy"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/claude"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/codex"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/gemini"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/muse"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/qwen"
+	"github.com/relux-works/curator-runtimes/internal/paritycase"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/parity"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/agy"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/gemini"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/muse"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/qwen"
 )
 
 // CLASS 4 — one launch-surface golden per Layer-1 system, rebuilt through the

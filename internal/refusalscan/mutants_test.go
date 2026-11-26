@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
 )
 
 // Run the behavioral tests after each weakening. Searched tokens remain in

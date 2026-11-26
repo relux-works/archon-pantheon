@@ -1,6 +1,6 @@
 package pi
 
-import "github.com/relux-works/skill-agents-management/pkg/agentic"
+import "github.com/relux-works/curator-runtimes/pkg/agentic"
 
 // verifiedReleases is this environment's rows of the versioned
 // provider-capability table (curator-spec Decision 0018 choice 6).

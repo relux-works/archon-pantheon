@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
 )
 
 // rootAddFixture reproduces both panels' root-history case: name order is

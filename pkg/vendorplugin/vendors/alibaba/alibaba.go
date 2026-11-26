@@ -31,14 +31,14 @@ package alibaba
 import (
 	"fmt"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 
 	// BOTH agentic systems this vendor's models declare. The second one is the
 	// cross-runtime case the architecture exists to make cheap. See the
 	// package doc.
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/codex"
-	_ "github.com/relux-works/skill-agents-management/pkg/agentic/systems/qwen"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
+	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/qwen"
 )
 
 // vendorID is this plugin's identity, and the spelling the frozen runtime

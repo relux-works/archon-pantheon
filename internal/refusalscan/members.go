@@ -213,7 +213,7 @@ func CheckMemberCompleteness(root string, sites []Site, got []Member) error {
 }
 
 func LocalCodexSites(root string) ([]Site, error) {
-	sites, err := DiscoverType(root, "github.com/relux-works/skill-agents-management/pkg/agentic", "LocalProviderRefusal")
+	sites, err := DiscoverType(root, "github.com/relux-works/curator-runtimes/pkg/agentic", "LocalProviderRefusal")
 	if err != nil {
 		return nil, err
 	}

@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/inferenceengine"
-	"github.com/relux-works/skill-agents-management/pkg/plugin"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/inferenceengine"
+	"github.com/relux-works/curator-runtimes/pkg/plugin"
 )
 
 var testEngineRef = plugin.Ref{ID: "test-engine", Kind: inferenceengine.Kind}

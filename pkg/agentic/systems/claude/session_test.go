@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // sessionNameValue boxes a want-name for the tables. A nil *string wants no

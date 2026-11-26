@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/gosources"
+	"github.com/relux-works/curator-runtimes/internal/gosources"
 )
 
 type processStartTimeErrorSite struct {

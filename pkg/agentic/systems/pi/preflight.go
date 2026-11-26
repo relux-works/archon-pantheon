@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/relux-works/skill-agents-management/internal/launchenv"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/localruntime"
+	"github.com/relux-works/curator-runtimes/internal/launchenv"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/localruntime"
 )
 
 // ErrPreflightRefused classifies a successful status read whose broker state

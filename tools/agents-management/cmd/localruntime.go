@@ -7,8 +7,8 @@ import (
 	"io"
 	"sort"
 
-	"github.com/relux-works/skill-agents-management/pkg/localruntime"
-	localmodels "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/local-models"
+	"github.com/relux-works/curator-runtimes/pkg/localruntime"
+	localmodels "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/local-models"
 	"github.com/spf13/cobra"
 )
 

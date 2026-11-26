@@ -1,7 +1,7 @@
 package pinative
 
 import (
-	"github.com/relux-works/skill-agents-management/internal/launchenv"
+	"github.com/relux-works/curator-runtimes/internal/launchenv"
 )
 
 // Native Pi has ONE binary-resolution path: whatever `pi` resolves to on the

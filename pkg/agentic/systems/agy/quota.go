@@ -3,7 +3,7 @@ package agy
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/relux-works/skill-agents-management/pkg/providerquota"
+	"github.com/relux-works/curator-runtimes/pkg/providerquota"
 	"path/filepath"
 	"time"
 )

@@ -6,9 +6,9 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/localruntime"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
-	localmodels "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/local-models"
+	"github.com/relux-works/curator-runtimes/pkg/localruntime"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	localmodels "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/local-models"
 )
 
 type fakeCLIStatusReader struct {

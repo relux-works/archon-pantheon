@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
 )
 
 type auxFixtureSystem struct{ *pangolinSystem }

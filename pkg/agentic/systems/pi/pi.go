@@ -12,8 +12,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/localruntime"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/localruntime"
 )
 
 // systemID is this plugin's identity, and the spelling the local-qwen

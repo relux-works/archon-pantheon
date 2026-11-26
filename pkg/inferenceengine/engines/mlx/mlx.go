@@ -5,8 +5,8 @@
 package mlx
 
 import (
-	"github.com/relux-works/skill-agents-management/pkg/inferenceengine"
-	"github.com/relux-works/skill-agents-management/pkg/plugin"
+	"github.com/relux-works/curator-runtimes/pkg/inferenceengine"
+	"github.com/relux-works/curator-runtimes/pkg/plugin"
 )
 
 // ID is the stable configured inference-engine identity.

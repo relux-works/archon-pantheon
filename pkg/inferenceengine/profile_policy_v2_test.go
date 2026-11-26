@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	ie "github.com/relux-works/skill-agents-management/pkg/inferenceengine"
+	ie "github.com/relux-works/curator-runtimes/pkg/inferenceengine"
 )
 
 var policyV2Facts = []ie.Fact{ie.FactStressPolicy, ie.FactRestartSupervisionPolicy}

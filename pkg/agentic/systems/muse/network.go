@@ -13,8 +13,8 @@ import (
 
 	"github.com/relux-works/curator-network-profiles/pkg/binding"
 	"github.com/relux-works/curator-network-profiles/pkg/envpatch"
-	"github.com/relux-works/skill-agents-management/internal/launchenv"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/internal/launchenv"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // Exact D8 tuples, integration-contract.md §2.1 at v0.2.0. The process

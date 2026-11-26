@@ -6,10 +6,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/anthropic"
-	localmodels "github.com/relux-works/skill-agents-management/pkg/vendorplugin/vendors/local-models"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/anthropic"
+	localmodels "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/local-models"
 )
 
 // fakeRegressSystem is a minimal agentic.System double, settable to any ID,

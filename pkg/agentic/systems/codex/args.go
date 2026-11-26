@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	toml "github.com/pelletier/go-toml/v2"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // Render is the gateway policy's canonical contribution through the canonical

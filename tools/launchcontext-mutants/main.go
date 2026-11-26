@@ -22,8 +22,8 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
-	"github.com/relux-works/skill-agents-management/internal/refusalscan"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
+	"github.com/relux-works/curator-runtimes/internal/refusalscan"
 )
 
 type replacement struct {

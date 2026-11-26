@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/internal/quotatest"
-	"github.com/relux-works/skill-agents-management/pkg/providerquota"
+	"github.com/relux-works/curator-runtimes/internal/quotatest"
+	"github.com/relux-works/curator-runtimes/pkg/providerquota"
 )
 
 func TestReview14AbsentUsageUnknownAuthentication(t *testing.T) {

@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/relux-works/curator-network-profiles/pkg/envpatch"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 func validMuseTestContext() *agentic.CuratorContext {

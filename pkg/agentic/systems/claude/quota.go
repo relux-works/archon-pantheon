@@ -2,8 +2,8 @@ package claude
 
 import (
 	"encoding/json"
-	"github.com/relux-works/skill-agents-management/internal/timezones"
-	"github.com/relux-works/skill-agents-management/pkg/providerquota"
+	"github.com/relux-works/curator-runtimes/internal/timezones"
+	"github.com/relux-works/curator-runtimes/pkg/providerquota"
 	"regexp"
 	"strconv"
 	"strings"

@@ -4,10 +4,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/internal/paritycase"
-	"github.com/relux-works/skill-agents-management/internal/runtimeenv"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/parity"
+	"github.com/relux-works/curator-runtimes/internal/paritycase"
+	"github.com/relux-works/curator-runtimes/internal/runtimeenv"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/parity"
 )
 
 func leakedParentEnvNames(child []string, names []string) []string {

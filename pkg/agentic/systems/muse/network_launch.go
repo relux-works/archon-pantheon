@@ -10,7 +10,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // Like Codex's launch catalogs, immutable projections live for the process's

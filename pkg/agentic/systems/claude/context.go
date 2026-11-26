@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/internal/mcpjson"
-	"github.com/relux-works/skill-agents-management/internal/nativeargs"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/internal/mcpjson"
+	"github.com/relux-works/curator-runtimes/internal/nativeargs"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 type contextValues struct {

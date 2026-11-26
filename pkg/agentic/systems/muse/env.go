@@ -3,7 +3,7 @@ package muse
 import (
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 const museNoAutoUpdateEnv = "MUSE_NO_AUTO_UPDATE"

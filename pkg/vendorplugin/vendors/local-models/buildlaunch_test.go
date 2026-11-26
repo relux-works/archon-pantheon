@@ -12,14 +12,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/internal/execfixture"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/agentic/systems/pi"
-	"github.com/relux-works/skill-agents-management/pkg/inferenceengine"
-	"github.com/relux-works/skill-agents-management/pkg/inferenceengine/engines/mlx"
-	"github.com/relux-works/skill-agents-management/pkg/localruntime"
-	"github.com/relux-works/skill-agents-management/pkg/plugin"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/internal/execfixture"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/pi"
+	"github.com/relux-works/curator-runtimes/pkg/inferenceengine"
+	"github.com/relux-works/curator-runtimes/pkg/inferenceengine/engines/mlx"
+	"github.com/relux-works/curator-runtimes/pkg/localruntime"
+	"github.com/relux-works/curator-runtimes/pkg/plugin"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // This file proves the SEAM between this vendor and the REAL pi system

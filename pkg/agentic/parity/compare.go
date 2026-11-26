@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 // Difference is one field on which a plan and its golden disagree.

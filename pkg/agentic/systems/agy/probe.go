@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/internal/launchenv"
-	"github.com/relux-works/skill-agents-management/internal/toolprobe"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/internal/launchenv"
+	"github.com/relux-works/curator-runtimes/internal/toolprobe"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 var _ agentic.ToolReleaseProber = (*System)(nil)

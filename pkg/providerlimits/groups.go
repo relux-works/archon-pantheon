@@ -60,7 +60,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
 )
 
 // Canonical provider IDs. These are runtime IDs (vendorplugin.RuntimeID), not

@@ -11,8 +11,8 @@ import (
 	"testing"
 
 	"github.com/pelletier/go-toml/v2"
-	"github.com/relux-works/skill-agents-management/internal/gatewaybasis"
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/internal/gatewaybasis"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
 )
 
 func gatewayPlan(t *testing.T, native []string) agentic.Plan {

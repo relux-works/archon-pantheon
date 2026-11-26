@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/internal/provideridentity"
+	"github.com/relux-works/curator-runtimes/internal/provideridentity"
 )
 
 const SchemaVersion = 1

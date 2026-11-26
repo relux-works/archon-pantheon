@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/skill-agents-management/internal/gosources"
+	"github.com/relux-works/curator-runtimes/internal/gosources"
 )
 
 // Reverting only catalog resolution to Abs-only must break both retarget

@@ -10,9 +10,9 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/relux-works/skill-agents-management/pkg/agentic"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin"
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin/benchdata"
+	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin/benchdata"
 )
 
 // This independent projection parses the adapters' public evidence grammar,

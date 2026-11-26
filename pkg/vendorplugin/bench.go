@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin/benchdata"
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin/benchdata"
 )
 
 // The ONE benchmark every capability score in this module is anchored on.

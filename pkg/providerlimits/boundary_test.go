@@ -13,7 +13,7 @@ import (
 // modulePath is this module's import prefix. Every intra-module import starts
 // with it, which is how the one-dependency rule below is checked without a
 // hand-maintained list of what is NOT allowed.
-const modulePath = "github.com/relux-works/skill-agents-management/"
+const modulePath = "github.com/relux-works/curator-runtimes/"
 
 // forbiddenImports is the boundary that keeps the limit plane a plane rather
 // than a layer of the CLI. It is asserted mechanically rather than by
@@ -26,7 +26,7 @@ const modulePath = "github.com/relux-works/skill-agents-management/"
 // are kept so a later import of a re-extracted board or spawner trips this
 // test rather than sliding in.
 var forbiddenImports = []string{
-	"github.com/relux-works/skill-agents-management/tools/",
+	"github.com/relux-works/curator-runtimes/tools/",
 	"github.com/relux-works/skill-project-management",
 	"github.com/aagrigore/task-board",
 	"pkg/board",
@@ -58,9 +58,9 @@ var forbiddenImports = []string{
 var allowedIntraModuleImports = map[string]bool{
 	// Identity value and hash are shared with quota without importing the limit
 	// store back through system plugins (which would create a test import cycle).
-	"github.com/relux-works/skill-agents-management/internal/provideridentity": true,
-	"github.com/relux-works/skill-agents-management/pkg/vendorplugin":          true,
-	"github.com/relux-works/skill-agents-management/pkg/agentic":               true,
+	"github.com/relux-works/curator-runtimes/internal/provideridentity": true,
+	"github.com/relux-works/curator-runtimes/pkg/vendorplugin":          true,
+	"github.com/relux-works/curator-runtimes/pkg/agentic":               true,
 }
 
 func TestModuleImportsNothingFromTheCLIOrTheExtractionSource(t *testing.T) {
@@ -141,10 +141,10 @@ func TestTheOnlyIntraModuleImportIsVendorplugin(t *testing.T) {
 	if checked == 0 {
 		t.Fatal("no Go files were checked; the assertion would pass vacuously")
 	}
-	if !seen["github.com/relux-works/skill-agents-management/pkg/vendorplugin"] {
+	if !seen["github.com/relux-works/curator-runtimes/pkg/vendorplugin"] {
 		t.Fatal("no production file imports pkg/vendorplugin; either the broker resolution stopped going through the frozen table or the verdict seam is gone, and this allowlist would then be guarding nothing")
 	}
-	if !seen["github.com/relux-works/skill-agents-management/pkg/agentic"] {
+	if !seen["github.com/relux-works/curator-runtimes/pkg/agentic"] {
 		t.Fatal("no production file imports pkg/agentic; the provider home is resolved from the harness plugin that declares it, and losing that import means a second home table came back")
 	}
 }

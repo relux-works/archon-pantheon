@@ -308,3 +308,43 @@ var curatorFragmentFlagHomeEnvironments = map[string]bool{"antigravity": true}
 func CuratorFragmentUsesFlagHome(environment string) bool {
 	return curatorFragmentFlagHomeEnvironments[environment]
 }
+
+// curatorHarnessCanonicalIDs maps the Curator CLI-only short spellings to their
+// canonical harnessregistry identifiers (manager profile §12.1). Like the
+// fragment maps above, the spellings collide with knownPluginIDs, so the
+// binding lives here in the single-source guard's binding home.
+var curatorHarnessCanonicalIDs = map[string]string{
+	"claude": "claude_code",
+	"codex":  "codex_cli",
+}
+
+// CanonicalCuratorHarnessID normalizes the existing Curator CLI aliases without
+// choosing a fallback.
+func CanonicalCuratorHarnessID(raw string) string {
+	if canonical, ok := curatorHarnessCanonicalIDs[raw]; ok {
+		return canonical
+	}
+	return raw
+}
+
+// curatorSystemAliases maps Curator harness/runtime aliases to canonical
+// agentic SystemIDs.
+var curatorSystemAliases = map[string]SystemID{
+	"claude":      "claude-code",
+	"claude_code": "claude-code",
+	"codex_cli":   "codex",
+	"agy":         "antigravity",
+	"kimi_code":   "kimi",
+	"gemini":      "gemini-cli",
+	"qwen":        "qwen-code",
+}
+
+// CanonicalSystemID resolves a raw system, runtime, or Curator harness alias
+// to its canonical agentic SystemID spelling without choosing a fallback.
+func CanonicalSystemID(raw string) string {
+	if mapped, ok := curatorSystemAliases[raw]; ok {
+		return string(mapped)
+	}
+	return raw
+}
+

@@ -60,7 +60,9 @@ const qwenArgsFile = "pkg/agentic/systems/qwen/args.go"
 // dry-run mirror substitutes nothing, so there is no second function rendering
 // a fragment the way claude's goal directive does.
 var qwenArgvConstructionAllowlist = map[string]string{
-	argvguard.AllowlistKey(qwenArgsFile, "Args"): "the single construction site",
+	argvguard.AllowlistKey(qwenArgsFile, "Args"):                                                  "the single construction site",
+	argvguard.AllowlistKey("pkg/agentic/systems/claude/sessiondriver/driver.go", "DriverName"):    "Claude session driver protocol descriptor identifier; not qwen CLI argv",
+	argvguard.AllowlistKey("pkg/agentic/systems/claude/sessiondriver/driver.go", "Descriptor"):    "returns Claude session driver protocol descriptor; emits no CLI argv",
 }
 
 // moduleGoSources reads every non-test Go file this module's build compiles,

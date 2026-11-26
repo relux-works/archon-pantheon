@@ -82,6 +82,9 @@ var claudeArgvConstructionAllowlist = map[string]string{
 	argvguard.AllowlistKey(claudeGoalFile, "goalDirective"):                                          "renders the goal branch's one positional argument and refuses a goal that carries no predicate; it spells no flag",
 	argvguard.AllowlistKey(claudeGoalFile, "goalDirectivePrefix"):                                    "the directive literal itself, declared once so the guard's signature and the construction cannot drift apart",
 	argvguard.AllowlistKey("pkg/agentic/systems/claude/context.go", "claudeSystemPromptFlagMatches"): "classifies descriptor intent and emits no argv",
+	argvguard.AllowlistKey("pkg/agentic/systems/agy/args.go", "Args"):                                "Antigravity CLI's own --effort construction site in the agy plugin",
+	argvguard.AllowlistKey("pkg/agentic/systems/agy/args.go", "interactiveArgs"):                     "Antigravity CLI's interactive --effort branch in the agy plugin",
+	argvguard.AllowlistKey("pkg/agentic/systems/agy/args.go", "scanAgyNativePolicy"):                 "Antigravity CLI's native-argument conflict guard in the agy plugin; emits no argv",
 }
 
 // moduleGoSources reads every non-test Go file this module's build compiles,

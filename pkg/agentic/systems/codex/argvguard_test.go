@@ -99,6 +99,7 @@ var codexArgvConstructionAllowlist = map[string]string{
 	argvguard.AllowlistKey(codexPolicyFile, "codexRootOptionTakesValue"): "classifies caller-owned suffix positions so the registered command classifier does not mistake an option value for the exec subcommand; emits no argv",
 	argvguard.AllowlistKey(codexPolicyFile, "codexRootOptionIsBoolean"):  "recognizes pinned root flags while classifying caller-owned suffix positions; emits no argv",
 	argvguard.AllowlistKey(codexPolicyFile, "permissionMapping"):         "returns the verified plugin-owned mapping for pre-admission reporting; reads the centralized flag constant and constructs no argv",
+	argvguard.AllowlistKey("pkg/agentic/systems/codex/sessiondriver/protocol.go", "Consume"): "constructs the Codex app-server JSON-RPC thread/start sandbox parameter under yolo policy, not CLI argv",
 }
 
 // moduleGoSources reads every non-test Go file this module's build compiles.

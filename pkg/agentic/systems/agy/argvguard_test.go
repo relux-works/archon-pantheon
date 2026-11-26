@@ -61,6 +61,7 @@ var agyArgvConstructionAllowlist = map[string]string{
 	argvguard.AllowlistKey(agyArgsFile, "scanAgyNativePolicy"):                       "native-argument conflict guard inside args.go; emits no argv",
 	argvguard.AllowlistKey("pkg/agentic/systems/agy/quota.go", "QuotaPlan"):          "the separate prompt-free quota plan, pinned by TestQuotaFrozenPlanPreflightAndVersion",
 	argvguard.AllowlistKey("pkg/agentic/systems/agy/quota.go", "RequiredQuotaFlags"): "the consumer preflight flag contract; emits no argv",
+	argvguard.AllowlistKey("pkg/agentic/systems/agy/harness.go", "ManagedHomeSpec"):  "managed-home status descriptions mention --gemini_dir; emits no argv",
 }
 
 // moduleGoSources reads every non-test Go file this module's build compiles,

@@ -33,6 +33,7 @@ import (
 
 	"github.com/relux-works/curator-network-profiles/pkg/binding"
 	"github.com/relux-works/curator-runtimes/internal/ident"
+	"github.com/relux-works/curator-runtimes/internal/releasegrammar"
 )
 
 // SystemID is the stable identifier of an agentic system plugin, normalized
@@ -481,10 +482,15 @@ const PermissionGrammarV3 PermissionGrammarVersion = "permission-grammar-v3"
 // the mapping is each plugin's by Decision 0013 D5), and
 // LookupReleaseCapability is the single reader over them.
 type ReleaseCapability struct {
-	// Release is the exact tool release this row verifies, "2.1.261" for
-	// one claude row. Matching is exact after trimming: a near-miss is
-	// not a neighbouring release, it is an unverified one.
+	// Release is an exact tool release this row verifies, "2.1.261" for
+	// one claude row. Matching is exact after trimming when MinRelease is empty.
 	Release string
+	// MinRelease is an optional inclusive semver triple lower bound ("1.5.16")
+	// for plugins verified across compatible patch/minor releases.
+	MinRelease string
+	// MaxReleaseExclusive is an optional exclusive semver triple upper bound
+	// ("2.0.0") bounding a MinRelease range below the next major version.
+	MaxReleaseExclusive string
 	// Grammar is the permission-grammar version the release was verified
 	// under. A row naming a grammar this module does not implement is
 	// refused as unverified, because its selectors cannot be classified.
@@ -497,15 +503,45 @@ type ReleaseCapability struct {
 	YoloSupported bool
 }
 
+func (row ReleaseCapability) matches(trimmed string) bool {
+	if exact := strings.TrimSpace(row.Release); exact != "" {
+		return exact == trimmed
+	}
+	minRel := strings.TrimSpace(row.MinRelease)
+	if minRel == "" {
+		return false
+	}
+	cmpMin, ok := releasegrammar.CompareReleaseTriple(trimmed, minRel)
+	if !ok || cmpMin < 0 {
+		return false
+	}
+	if maxRel := strings.TrimSpace(row.MaxReleaseExclusive); maxRel != "" {
+		cmpMax, ok := releasegrammar.CompareReleaseTriple(trimmed, maxRel)
+		if !ok || cmpMax >= 0 {
+			return false
+		}
+	}
+	return true
+}
+
+func (row ReleaseCapability) label() string {
+	if exact := strings.TrimSpace(row.Release); exact != "" {
+		return exact
+	}
+	minRel := strings.TrimSpace(row.MinRelease)
+	maxRel := strings.TrimSpace(row.MaxReleaseExclusive)
+	if maxRel != "" {
+		return ">=" + minRel + ",<" + maxRel
+	}
+	return ">=" + minRel
+}
+
 // LookupReleaseCapability finds the capability row for one tool release.
 //
 // An empty release (detection failed or never ran) and a release with no
-// row (unpinned or newer than the verification) both refuse with
-// ErrPermissionModeUnverifiedRelease: on version drift the yolo mapping
-// fails closed first. So does a row naming a grammar version this module
-// does not implement. The refusal names the grammar in force and the
-// verified releases, so the operator — and the launcher citing the
-// token — can see what would have to be re-verified.
+// matching row both refuse with ErrPermissionModeUnverifiedRelease: on version
+// drift the yolo mapping fails closed first. So does a row naming a grammar
+// version this module does not implement.
 func LookupReleaseCapability(rows []ReleaseCapability, release string) (ReleaseCapability, error) {
 	trimmed := strings.TrimSpace(release)
 	if trimmed == "" {
@@ -513,7 +549,7 @@ func LookupReleaseCapability(rows []ReleaseCapability, release string) (ReleaseC
 			ErrPermissionModeUnverifiedRelease, PermissionGrammarV1, PermissionGrammarV2, PermissionGrammarV3)
 	}
 	for _, row := range rows {
-		if strings.TrimSpace(row.Release) != trimmed {
+		if !row.matches(trimmed) {
 			continue
 		}
 		if row.Grammar != PermissionGrammarV1 && row.Grammar != PermissionGrammarV2 && row.Grammar != PermissionGrammarV3 {
@@ -524,7 +560,7 @@ func LookupReleaseCapability(rows []ReleaseCapability, release string) (ReleaseC
 	}
 	verified := make([]string, 0, len(rows))
 	for _, row := range rows {
-		verified = append(verified, strings.TrimSpace(row.Release))
+		verified = append(verified, row.label())
 	}
 	return ReleaseCapability{}, fmt.Errorf("%w: tool release %q is not verified under %s, %s or %s (verified releases: %s); yolo fails closed on drift, while native forwards verbatim",
 		ErrPermissionModeUnverifiedRelease, trimmed, PermissionGrammarV1, PermissionGrammarV2, PermissionGrammarV3, strings.Join(verified, ", "))

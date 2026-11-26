@@ -350,10 +350,22 @@ func TestBuildPlanCuratorContextRefusesInvalidFragmentV7(t *testing.T) {
 			mutate: func(req *agentic.LaunchRequest) {
 				req.Prompt = nil
 				req.PermissionMode = agentic.PermissionModeNative
-				req.ToolRelease = "1.5.17"
+				req.ToolRelease = "1.5.15"
 			},
 			mode:    agentic.LaunchModeInteractive,
 			wantErr: agentic.ErrPermissionModeUnverifiedRelease,
+		},
+		{
+			name: "antigravity-interactive-conflicting-effort",
+			mutate: func(req *agentic.LaunchRequest) {
+				req.Prompt = nil
+				req.ToolRelease = "1.5.18"
+				req.Model = agentic.Model{ID: "custom-model", Effort: agentic.EffortSupportRequired}
+				req.Effort = "xhigh"
+				req.NativeArgs = []string{"--effort", "low"}
+			},
+			mode:    agentic.LaunchModeInteractive,
+			wantErr: agentic.ErrNativePolicyConflict,
 		},
 		{
 			name: "antigravity-mcp-forbidden-adc-env",

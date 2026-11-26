@@ -9,11 +9,16 @@ import (
 var _ agentic.PermissionMappingCapability = (*System)(nil)
 
 var verifiedReleases = []agentic.ReleaseCapability{
-	{Release: agyVerifiedRelease, Grammar: agentic.PermissionGrammarV1, YoloSupported: true},
+	{
+		MinRelease:          agyMinVerifiedRelease,
+		MaxReleaseExclusive: agyMaxReleaseExclusive,
+		Grammar:             agentic.PermissionGrammarV1,
+		YoloSupported:       true,
+	},
 }
 
-// PermissionMapping returns the release-pinned interactive permission mapping
-// for Antigravity CLI (CIP-0033, verified on agy 1.5.16).
+// PermissionMapping returns the release-verified interactive permission mapping
+// for Antigravity CLI (CIP-0033, verified on agy >=1.5.16,<2.0.0).
 func (*System) PermissionMapping(toolRelease string, mode agentic.PermissionMode) (agentic.PermissionMapping, error) {
 	return permissionMapping(toolRelease, mode)
 }

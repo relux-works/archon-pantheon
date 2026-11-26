@@ -25,7 +25,8 @@ func TestRegistryPermissionMappingMatrixByEnvironmentModeAndRelease(t *testing.T
 		{"codex", "0.164.0", "0.164.1", agentic.PermissionGrammarV3, true},
 		{"codex", "0.167.0", "0.166.0", agentic.PermissionGrammarV3, true},
 		{"pi-native", "0.84.2", "0.84.3", agentic.PermissionGrammarV1, false},
-		{"antigravity", "1.5.16", "1.5.17", agentic.PermissionGrammarV1, true},
+		{"antigravity", "1.5.18", "1.5.15", agentic.PermissionGrammarV1, true},
+		{"antigravity", "1.5.16", "2.0.0", agentic.PermissionGrammarV1, true},
 	}
 	modes := []agentic.PermissionMode{agentic.PermissionModeNative, agentic.PermissionModeYolo}
 

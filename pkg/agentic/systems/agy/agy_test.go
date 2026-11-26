@@ -33,8 +33,8 @@ func TestTheDeclarationIsWhatTheSourceRegistered(t *testing.T) {
 	if caps.SupportsMode(agentic.LaunchModeManagedSession) {
 		t.Error("agy declares a managed-session surface the source has no builder for and the goldens do not cover")
 	}
-	if caps.EffortTransport != agentic.EffortTransportNone {
-		t.Errorf("effort transport is %s, want none; agy's effort is a SUFFIX of the model id and buildAgyArgs references no effort value", caps.EffortTransport)
+	if caps.EffortTransport != agentic.EffortTransportArgv {
+		t.Errorf("effort transport is %s, want argv; agy 1.5.16+ accepts --effort alongside per-effort model IDs", caps.EffortTransport)
 	}
 	if caps.SupportsGoal || caps.SupportsBudget || caps.SupportsServiceTier {
 		t.Errorf("agy's adapter row declares goal/budget/service-tier all false; got %v/%v/%v", caps.SupportsGoal, caps.SupportsBudget, caps.SupportsServiceTier)
@@ -403,38 +403,40 @@ func TestTheBudgetIsNotAppliedToADryRun(t *testing.T) {
 	}
 }
 
-// TestARequiredEffortModelIsRefused is the vendor-layer gate agy's declaration
-// makes decidable, driven through the real dispatch.
-//
-// This is what "the effort flag is rejected" means at this layer: agy has no
-// mechanism to carry an effort, so a model row registered as requiring one can
-// never launch here. Neither agy golden configures an effort, so no fixture can
-// show this and this test is its only evidence.
-func TestARequiredEffortModelIsRefused(t *testing.T) {
+// TestARequiredEffortModelCarriesEffortFlag verifies that agy carries --effort
+// via argv when a model declares a required effort axis (for example via
+// operator catalog.toml).
+func TestARequiredEffortModelCarriesEffortFlag(t *testing.T) {
 	t.Parallel()
 	system := NewWithRuntime(Runtime{Executable: "/opt/agy/bin/agy"})
 	req := launchRequest(t, "assignment")
 	req.Model.Effort = agentic.EffortSupportRequired
-	req.Effort = "high"
-	if _, err := paritycase.TryBuildPlan(system, req, agentic.LaunchModeExec); !errors.Is(err, agentic.ErrEffortNotTransportable) {
-		t.Errorf("a required-effort model under agy was admitted (err=%v)", err)
+	req.Effort = "xhigh"
+	plan, err := paritycase.TryBuildPlan(system, req, agentic.LaunchModeExec)
+	if err != nil {
+		t.Fatalf("required-effort model under agy was refused: %v", err)
+	}
+	found := false
+	for i := 1; i < len(plan.Argv); i++ {
+		if plan.Argv[i-1] == "--effort" && plan.Argv[i] == "xhigh" {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Errorf("expected --effort xhigh in argv, got %v", plan.Argv)
 	}
 }
 
-// TestAnEffortValueAloneIsRefused is the "flag is rejected" half stated
-// directly: even for a model that requires nothing, an explicit effort must not
-// be silently dropped.
-//
-// Antigravity encodes effort in the MODEL ID, so a caller passing one
-// separately has a wrong mental model of this system, and a launch that
-// swallowed the value would confirm it.
-func TestAnEffortValueAloneIsRefused(t *testing.T) {
+// TestARequiredEffortModelMissingEffortIsRefused verifies BuildPlan refuses a
+// required-effort model when no effort value is supplied.
+func TestARequiredEffortModelMissingEffortIsRefused(t *testing.T) {
 	t.Parallel()
 	system := NewWithRuntime(Runtime{Executable: "/opt/agy/bin/agy"})
 	req := launchRequest(t, "assignment")
-	req.Effort = "high"
-	if _, err := paritycase.TryBuildPlan(system, req, agentic.LaunchModeExec); !errors.Is(err, agentic.ErrEffortNotTransportable) {
-		t.Errorf("an effort value under agy was admitted (err=%v); it would have been dropped silently", err)
+	req.Model.Effort = agentic.EffortSupportRequired
+	if _, err := paritycase.TryBuildPlan(system, req, agentic.LaunchModeExec); !errors.Is(err, agentic.ErrEffortMissing) {
+		t.Errorf("required-effort model without effort returned err=%v, want ErrEffortMissing", err)
 	}
 }
 

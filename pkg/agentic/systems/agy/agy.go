@@ -137,12 +137,11 @@ func (*System) Capabilities() agentic.Capabilities {
 			agentic.LaunchModeDryRun,
 			agentic.LaunchModeInteractive,
 		},
-		// NONE, and the package comment argues it: the effort is a suffix of
-		// the model id, buildAgyArgs never references an effort value, and
-		// every agy model row is effort-none. Declaring argv here would make
-		// BuildPlan admit a required-effort model whose effort then reached the
-		// harness nowhere.
-		EffortTransport:     agentic.EffortTransportNone,
+		// Antigravity CLI (1.5.16+) accepts --effort <level> alongside
+		// per-effort model IDs (e.g. gemini-4-neon-xhigh). Models with
+		// EffortSupportNone emit no --effort flag; models declaring an effort
+		// axis pass --effort <level> via argv.
+		EffortTransport:     agentic.EffortTransportArgv,
 		SupportsGoal:        false,
 		SupportsBudget:      false,
 		SupportsServiceTier: false,

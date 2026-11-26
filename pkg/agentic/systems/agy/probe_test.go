@@ -13,18 +13,22 @@ import (
 
 func TestAgyPermissionMapping(t *testing.T) {
 	sys := New()
-	native, err := sys.PermissionMapping(agyVerifiedRelease, agentic.PermissionModeNative)
-	if err != nil || native.Grammar != agentic.PermissionGrammarV1 || native.Flag != "" {
-		t.Fatalf("native mapping = (%+v, %v), want v1 with empty flag", native, err)
+	for _, rel := range []string{agyMinVerifiedRelease, "1.5.18", "1.6.0"} {
+		native, err := sys.PermissionMapping(rel, agentic.PermissionModeNative)
+		if err != nil || native.Grammar != agentic.PermissionGrammarV1 || native.Flag != "" {
+			t.Fatalf("native mapping(%s) = (%+v, %v), want v1 with empty flag", rel, native, err)
+		}
+		yolo, err := sys.PermissionMapping(rel, agentic.PermissionModeYolo)
+		if err != nil || yolo.Grammar != agentic.PermissionGrammarV1 || yolo.Flag != agyYoloFlag {
+			t.Fatalf("yolo mapping(%s) = (%+v, %v), want v1 with %s", rel, yolo, err, agyYoloFlag)
+		}
 	}
-	yolo, err := sys.PermissionMapping(agyVerifiedRelease, agentic.PermissionModeYolo)
-	if err != nil || yolo.Grammar != agentic.PermissionGrammarV1 || yolo.Flag != agyYoloFlag {
-		t.Fatalf("yolo mapping = (%+v, %v), want v1 with %s", yolo, err, agyYoloFlag)
+	for _, bad := range []string{"1.5.15", "2.0.0", ""} {
+		if _, err := sys.PermissionMapping(bad, agentic.PermissionModeYolo); !errors.Is(err, agentic.ErrPermissionModeUnverifiedRelease) {
+			t.Fatalf("unverified release %q err = %v, want ErrPermissionModeUnverifiedRelease", bad, err)
+		}
 	}
-	if _, err := sys.PermissionMapping("1.5.17", agentic.PermissionModeYolo); !errors.Is(err, agentic.ErrPermissionModeUnverifiedRelease) {
-		t.Fatalf("unverified release err = %v, want ErrPermissionModeUnverifiedRelease", err)
-	}
-	if _, err := sys.PermissionMapping(agyVerifiedRelease, agentic.PermissionMode("auto")); !errors.Is(err, agentic.ErrPermissionModeUnknown) {
+	if _, err := sys.PermissionMapping(agyMinVerifiedRelease, agentic.PermissionMode("auto")); !errors.Is(err, agentic.ErrPermissionModeUnknown) {
 		t.Fatalf("unknown mode err = %v, want ErrPermissionModeUnknown", err)
 	}
 }

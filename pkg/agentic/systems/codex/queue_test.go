@@ -76,9 +76,9 @@ func TestQueueTextDoesNotSuppressLaunchSelectors(t *testing.T) {
 	}
 }
 
-// The root token-env option is qualified for the pinned 0.167.0 grammar only.
+// The root token-env option is qualified from 0.167.0 onward (0.165.0 and non-semver strings remain unqualified).
 func TestQueueRootRemoteAuthTokenEnvIsReleaseQualified(t *testing.T) {
-	for _, release := range []string{"0.165.0", "0.167.1"} {
+	for _, release := range []string{"0.165.0", "0.166.9"} {
 		t.Run(release, func(t *testing.T) {
 			req := interactiveRequest("/fixture")
 			req.ToolRelease = release
@@ -130,7 +130,7 @@ func TestQueueRetainsPermissionRefusals(t *testing.T) {
 		want       error
 	}{
 		{"unknown-mode", agentic.PermissionMode("invalid"), "0.167.0", agentic.ErrPermissionModeUnknown},
-		{"unqualified-yolo", agentic.PermissionModeYolo, "0.999.0", agentic.ErrPermissionModeUnverifiedRelease},
+		{"unqualified-yolo", agentic.PermissionModeYolo, "1.0.0", agentic.ErrPermissionModeUnverifiedRelease},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			req := interactiveRequest("/fixture")

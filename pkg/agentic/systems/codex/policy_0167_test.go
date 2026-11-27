@@ -48,12 +48,12 @@ func TestCodex0167StoredPolicyInspection(t *testing.T) {
 // mapping, classification nor yolo argv may escape an unverified refusal.
 func TestCodex0167NeighboursRemainUnverified(t *testing.T) {
 	t.Parallel()
-	for _, release := range []string{"0.167.0", "0.166.0", "0.167.1", "0.167.0-dev", "0.167.0+different"} {
+	for _, release := range []string{"0.167.0", "0.171.0", "0.162.9", "1.0.0", "0.167.0-dev", "0.167.0+different"} {
 		t.Run(release, func(t *testing.T) {
 			req := interactiveRequest(tempSlot(t))
 			req.ToolRelease, req.PermissionMode = release, agentic.PermissionModeYolo
 			mapping, err := New().PermissionMapping(release, req.PermissionMode)
-			if release == "0.167.0" {
+			if release == "0.167.0" || release == "0.171.0" {
 				if err != nil || mapping != (agentic.PermissionMapping{Grammar: agentic.PermissionGrammarV3, Flag: bypassApprovalsAndSandboxFlag}) {
 					t.Fatalf("mapping=%#v err=%v", mapping, err)
 				}

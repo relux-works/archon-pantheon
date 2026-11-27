@@ -18,5 +18,5 @@ import "github.com/relux-works/archon-pantheon/pkg/agentic"
 // way, and yolo without one is refused as unverified. Native never
 // reads the table either way.
 var verifiedReleases = []agentic.ReleaseCapability{
-	{Release: "0.84.2", Grammar: agentic.PermissionGrammarV1, YoloSupported: false},
+	{MinRelease: "0.84.2", MaxReleaseExclusive: "1.0.0", Grammar: agentic.PermissionGrammarV1, YoloSupported: false},
 }

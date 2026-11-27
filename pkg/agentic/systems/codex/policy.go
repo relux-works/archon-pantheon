@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/relux-works/archon-pantheon/internal/nativeargs"
+	"github.com/relux-works/archon-pantheon/internal/releasegrammar"
 	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
@@ -25,10 +26,7 @@ import (
 // curator/docs/qualification/codex-0.167.0.md. Its qualified subset matches V3.
 var verifiedReleases = []agentic.ReleaseCapability{
 	{Release: "0.153.2", Grammar: agentic.PermissionGrammarV2, YoloSupported: true},
-	{Release: "0.163.0", Grammar: agentic.PermissionGrammarV3, YoloSupported: true},
-	{Release: "0.164.0", Grammar: agentic.PermissionGrammarV3, YoloSupported: true},
-	{Release: "0.165.0", Grammar: agentic.PermissionGrammarV3, YoloSupported: true},
-	{Release: "0.167.0", Grammar: agentic.PermissionGrammarV3, YoloSupported: true},
+	{MinRelease: "0.163.0", MaxReleaseExclusive: "1.0.0", Grammar: agentic.PermissionGrammarV3, YoloSupported: true},
 }
 
 // configFlag and configFlagLong are the two spellings of the config
@@ -91,7 +89,7 @@ func (*System) ClassifyNonInteractiveArgs(toolRelease string, suffix []string) (
 	}
 	var form agentic.NonInteractiveForm
 
-	if formValue, err := classifyCodexNonInteractiveForm(suffix, capability.Release); err != nil {
+	if formValue, err := classifyCodexNonInteractiveForm(suffix, strings.TrimSpace(toolRelease)); err != nil {
 		return agentic.NativeArgsClassification{}, fmt.Errorf("codex: %w", err)
 	} else {
 		form = formValue
@@ -195,8 +193,9 @@ func codexRootOptionTakesValueForRelease(name, toolRelease string) bool {
 		// Only the historical 0.153.2 root grammar qualified the scalar form.
 		return toolRelease == "0.153.2"
 	case "--remote-auth-token-env":
-		// The environment-variable form is root-qualified at 0.167.0 only.
-		return toolRelease == "0.167.0"
+		// Qualified from 0.167.0 onward within the 0.x release family.
+		cmp, ok := releasegrammar.CompareReleaseTriple(toolRelease, "0.167.0")
+		return ok && cmp >= 0
 	default:
 		return codexRootOptionTakesValue(name)
 	}

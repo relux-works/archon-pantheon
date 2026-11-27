@@ -129,7 +129,8 @@ func TestNonInteractiveClassifierFailsClosedForUnknownOrUnverifiedInputs(t *test
 	}{
 		{"claude-code", "2.1.262", []string{"--print"}},
 		{"codex", "0.153.3", []string{"exec"}},
-		{"pi-native", "0.84.3", []string{"--print"}},
+		{"pi-native", "0.84.1", []string{"--print"}},
+		{"pi-native", "1.0.0", []string{"--print"}},
 		{"claude-code", "", []string{"--print"}},
 		{"codex", "", []string{"exec"}},
 		{"pi-native", "", []string{"--print"}},

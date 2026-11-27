@@ -26,10 +26,16 @@ func TestClaude2312RowMapsYoloUnderV3(t *testing.T) {
 	req.ToolRelease = "2.1.312"
 	req.NativeArgs = []string{"--verbose", "deploy the thing"}
 	want := []string{"--model", parityModel, "--effort", parityEffort, disallowedToolsDenial, bypassPermissionsFlag, "--verbose", "deploy the thing"}
-	if argv := argvFor(t, req, agentic.LaunchModeInteractive); !reflect.DeepEqual(argv, want) {
-		t.Fatalf("Argv = %#v, want %#v", argv, want)
+	for _, release := range []string{"2.1.312", "2.1.332"} {
+		req := interactiveRequest(workDir)
+		req.PermissionMode = agentic.PermissionModeYolo
+		req.ToolRelease = release
+		req.NativeArgs = []string{"--verbose", "deploy the thing"}
+		if argv := argvFor(t, req, agentic.LaunchModeInteractive); !reflect.DeepEqual(argv, want) {
+			t.Fatalf("release %s: Argv = %#v, want %#v", release, argv, want)
+		}
 	}
-	for _, release := range []string{"2.1.311", "2.1.313", "2.1.312.1", "2.1.3120"} {
+	for _, release := range []string{"2.1.311", "3.0.0", "2.1.312.1", "2.1.312-dev"} {
 		req := interactiveRequest(workDir)
 		req.PermissionMode = agentic.PermissionModeYolo
 		req.ToolRelease = release
@@ -152,8 +158,8 @@ func TestClaude2312ClassifiesPrint(t *testing.T) {
 	if err != nil || got.Form != agentic.NonInteractiveFormNone {
 		t.Fatalf("Classify(2.1.312, interactive) = %#v, %v; want no print form", got, err)
 	}
-	if _, err := New().ClassifyNonInteractiveArgs("2.1.313", []string{"-p", "hello"}); !errors.Is(err, agentic.ErrPermissionModeUnverifiedRelease) {
-		t.Fatalf("Classify(2.1.313) err = %v, want ErrPermissionModeUnverifiedRelease", err)
+	if _, err := New().ClassifyNonInteractiveArgs("3.0.0", []string{"-p", "hello"}); !errors.Is(err, agentic.ErrPermissionModeUnverifiedRelease) {
+		t.Fatalf("Classify(3.0.0) err = %v, want ErrPermissionModeUnverifiedRelease", err)
 	}
 }
 

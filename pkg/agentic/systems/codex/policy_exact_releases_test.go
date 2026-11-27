@@ -240,7 +240,7 @@ func checkCodexExactClassification(t *testing.T, release string) {
 // forwarding remains available independently of qualification.
 func TestCodexUnqualifiedAndDriftedReleases(t *testing.T) {
 	t.Parallel()
-	for _, release := range []string{"0.162.0", "0.163.1", "0.164.1", "0.165.1", "0.163.0-dev", "0.163.0+different", "0.165.0-dev", "0.165.0+different", "0.166.0", ""} {
+	for _, release := range []string{"0.162.0", "0.162.9", "1.0.0", "0.163.0-dev", "0.163.0+different", "0.165.0-dev", "0.165.0+different", ""} {
 		t.Run(quoteRelease(release), func(t *testing.T) {
 			for _, mode := range []agentic.PermissionMode{agentic.PermissionModeNative, agentic.PermissionModeYolo} {
 				got, err := New().PermissionMapping(release, mode)

@@ -38,7 +38,7 @@ func TestYoloAtTheVerifiedReleaseStaysUnsupported(t *testing.T) {
 // as unverified, through BuildPlan and through the plugin held
 // directly.
 func TestYoloRefusesDriftWithANamedDiagnostic(t *testing.T) {
-	for _, release := range []string{"0.85.0", "9.9.9", ""} {
+	for _, release := range []string{"0.84.1", "1.0.0", "9.9.9", ""} {
 		t.Run("release "+quoteRelease(release), func(t *testing.T) {
 			req, _ := interactiveRequest(t)
 			req.PermissionMode = agentic.PermissionModeYolo
@@ -55,12 +55,12 @@ func TestYoloRefusesDriftWithANamedDiagnostic(t *testing.T) {
 	t.Run("the diagnostic names the grammar token the launcher cites", func(t *testing.T) {
 		req, _ := interactiveRequest(t)
 		req.PermissionMode = agentic.PermissionModeYolo
-		req.ToolRelease = "0.85.0"
+		req.ToolRelease = "1.0.0"
 		err := mustPlanError(t, req)
 		if !errors.Is(err, agentic.ErrPermissionModeUnverifiedRelease) {
 			t.Fatalf("err = %v, want ErrPermissionModeUnverifiedRelease", err)
 		}
-		for _, want := range []string{string(agentic.PermissionGrammarV1), "0.85.0", "0.84.2"} {
+		for _, want := range []string{string(agentic.PermissionGrammarV1), "1.0.0", "0.84.2"} {
 			if !strings.Contains(err.Error(), want) {
 				t.Errorf("refusal %q does not name %q", err, want)
 			}

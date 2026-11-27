@@ -18,7 +18,7 @@ import (
 // release; the rows are still per-environment facts (the table keys
 // environment AND release), which is why each plugin holds its own.
 var verifiedReleases = []agentic.ReleaseCapability{
-	{Release: "0.84.2", Grammar: agentic.PermissionGrammarV1, YoloSupported: false},
+	{MinRelease: "0.84.2", MaxReleaseExclusive: "1.0.0", Grammar: agentic.PermissionGrammarV1, YoloSupported: false},
 }
 
 const (

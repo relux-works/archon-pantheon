@@ -26,7 +26,7 @@ import (
 // a row, while native forwards verbatim. Stay on an older module release to
 // run an older harness.
 var verifiedReleases = []agentic.ReleaseCapability{
-	{Release: "2.1.312", Grammar: agentic.PermissionGrammarV3, YoloSupported: true},
+	{MinRelease: "2.1.312", MaxReleaseExclusive: "3.0.0", Grammar: agentic.PermissionGrammarV3, YoloSupported: true},
 }
 
 // permissionModeFlag is the session policy selector whose VALUES are

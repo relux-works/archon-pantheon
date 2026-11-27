@@ -1,6 +1,6 @@
 package codex
 
-import "github.com/relux-works/curator-runtimes/pkg/harnessapi"
+import "github.com/relux-works/archon-pantheon/pkg/harnessapi"
 
 // CodexCLIHarnessID is the canonical Curator harness identifier for Codex CLI.
 const CodexCLIHarnessID harnessapi.ID = "codex_cli"

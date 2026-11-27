@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/paritycase"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/parity"
+	"github.com/relux-works/archon-pantheon/internal/paritycase"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/parity"
 )
 
 // QWEN IS THE FIXTURE THE BYSTANDER KEYS WERE SEEDED FOR.

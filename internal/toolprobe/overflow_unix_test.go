@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // This selected helper deliberately leaves the probe group. It makes bounded

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/refusalscan"
+	"github.com/relux-works/archon-pantheon/internal/refusalscan"
 )
 
 type curatorRefusalCoverageRow struct {

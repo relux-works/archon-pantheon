@@ -7,8 +7,8 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
 )
 
 // PluginKind is the compatibility declaration kind for model vendors. It is

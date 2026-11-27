@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"time"
 
-	pl "github.com/relux-works/curator-runtimes/pkg/providerlimits"
+	pl "github.com/relux-works/archon-pantheon/pkg/providerlimits"
 )
 
 // fixedNow is the same instant .scripts/limitstate_xrt.go anchors on. The two

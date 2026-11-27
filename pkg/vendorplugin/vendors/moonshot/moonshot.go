@@ -4,10 +4,10 @@ package moonshot
 import (
 	"fmt"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 
-	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/kimi"
+	_ "github.com/relux-works/archon-pantheon/pkg/agentic/systems/kimi"
 )
 
 // VendorID is the normalized MoonshotAI vendor identifier.

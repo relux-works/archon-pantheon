@@ -32,8 +32,8 @@ import (
 	"time"
 
 	"github.com/relux-works/curator-network-profiles/pkg/binding"
-	"github.com/relux-works/curator-runtimes/internal/ident"
-	"github.com/relux-works/curator-runtimes/internal/releasegrammar"
+	"github.com/relux-works/archon-pantheon/internal/ident"
+	"github.com/relux-works/archon-pantheon/internal/releasegrammar"
 )
 
 // SystemID is the stable identifier of an agentic system plugin, normalized

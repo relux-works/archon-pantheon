@@ -1,7 +1,7 @@
 package claude
 
 import (
-	"github.com/relux-works/curator-runtimes/internal/launchenv"
+	"github.com/relux-works/archon-pantheon/internal/launchenv"
 )
 
 // Claude has ONE binary-resolution path: whatever `claude` resolves to on PATH.

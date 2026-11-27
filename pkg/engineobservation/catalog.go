@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/inferenceengine"
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/inferenceengine"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // ErrCatalogRequired distinguishes a missing selected catalog from other

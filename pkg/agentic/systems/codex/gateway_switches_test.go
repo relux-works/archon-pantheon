@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/pelletier/go-toml/v2"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // ownedSwitchPairs is the expected text of the four owned switches, spelled

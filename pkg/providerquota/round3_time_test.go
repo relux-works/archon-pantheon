@@ -11,9 +11,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/agy"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude"
-	"github.com/relux-works/curator-runtimes/pkg/providerquota"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/agy"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/claude"
+	"github.com/relux-works/archon-pantheon/pkg/providerquota"
 )
 
 const timeHelperEnv = "W3_QUOTA_TZ_HELPER"

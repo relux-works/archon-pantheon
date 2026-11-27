@@ -7,7 +7,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/relux-works/curator-runtimes/pkg/sessiondriver/fixtureadapters"
+	"github.com/relux-works/archon-pantheon/pkg/sessiondriver/fixtureadapters"
 )
 
 func Run(protocol string, input io.Reader, output io.Writer) error {

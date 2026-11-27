@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/relux-works/curator-network-profiles/pkg/envpatch"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // testMCPPatch is a two-name patch with both halves exercised: HTTP_PROXY is

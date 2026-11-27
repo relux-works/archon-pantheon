@@ -1,7 +1,7 @@
 package pinative
 
 import (
-	"github.com/relux-works/curator-runtimes/internal/launchenv"
+	"github.com/relux-works/archon-pantheon/internal/launchenv"
 )
 
 // Native Pi has ONE binary-resolution path: whatever `pi` resolves to on the

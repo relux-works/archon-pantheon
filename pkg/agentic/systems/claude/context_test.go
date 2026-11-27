@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 func TestBuildPlanTranslatesClaudeContextChannels(t *testing.T) {

@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // settingsRequest builds a local-provider launch carrying the given settings,

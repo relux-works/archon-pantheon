@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 func probeWholePath(t *testing.T, p agentic.PlanWithEnvironment, in agentic.CodexGatewayInputs) (agentic.PlanWithEnvironment, agentic.RuntimeGatewayBindingV1, error) {

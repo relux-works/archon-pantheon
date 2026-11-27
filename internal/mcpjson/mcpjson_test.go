@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/mcpjson"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/mcpjson"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // The validator is a REFUSAL surface shared by three systems, so this file is

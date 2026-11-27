@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 func requireCodexGatewayReason(t *testing.T, err error, want agentic.CodexGatewayRefusalCode) {

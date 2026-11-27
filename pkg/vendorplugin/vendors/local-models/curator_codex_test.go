@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
-	localmodels "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/local-models"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
+	localmodels "github.com/relux-works/archon-pantheon/pkg/vendorplugin/vendors/local-models"
 )
 
 // curatorCodexRuntimes declares the codex local-codex runtime from the Curator

@@ -38,13 +38,13 @@ package google
 import (
 	"fmt"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 
 	// BOTH agentic systems this vendor's models declare. See the package doc.
-	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/agy"
-	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/gemini"
-	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/pinative"
+	_ "github.com/relux-works/archon-pantheon/pkg/agentic/systems/agy"
+	_ "github.com/relux-works/archon-pantheon/pkg/agentic/systems/gemini"
+	_ "github.com/relux-works/archon-pantheon/pkg/agentic/systems/pinative"
 )
 
 // vendorID is this plugin's identity, and the spelling the frozen runtime

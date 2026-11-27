@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/execfixture"
-	"github.com/relux-works/curator-runtimes/internal/paritycase"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/execfixture"
+	"github.com/relux-works/archon-pantheon/internal/paritycase"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 func writeMuseVersionStub(t *testing.T, body string) (string, []string) {

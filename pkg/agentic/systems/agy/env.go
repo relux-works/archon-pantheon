@@ -3,7 +3,7 @@ package agy
 import (
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 const agyDisableAutoUpdateEnv = "AGY_CLI_DISABLE_AUTO_UPDATE"

@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/internal/execfixture"
+	"github.com/relux-works/archon-pantheon/internal/execfixture"
 )
 
 // TestChangelogNarrowingMutants runs real behavioral tests in child test

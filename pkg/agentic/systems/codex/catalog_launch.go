@@ -11,8 +11,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/internal/planningio"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/internal/planningio"
 )
 
 // Each process owns a private temp directory. Content-addressed files are

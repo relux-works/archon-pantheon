@@ -1,8 +1,8 @@
 package gemini
 
 import (
-	"github.com/relux-works/curator-runtimes/pkg/harnessapi"
-	"github.com/relux-works/curator-runtimes/pkg/harnessvalue"
+	"github.com/relux-works/archon-pantheon/pkg/harnessapi"
+	"github.com/relux-works/archon-pantheon/pkg/harnessvalue"
 )
 
 // GeminiHarnessID is the canonical Curator harness identifier for Gemini CLI.

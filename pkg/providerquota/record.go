@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/internal/provideridentity"
+	"github.com/relux-works/archon-pantheon/internal/provideridentity"
 )
 
 const SchemaVersion = 1

@@ -1,8 +1,8 @@
 package vendorplugin
 
 import (
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin/benchdata"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin/benchdata"
 )
 
 // ModelsFromBenchdata projects data-only declarations onto the existing vendor

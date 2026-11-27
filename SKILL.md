@@ -118,7 +118,7 @@ links the packages; the binary is a listing surface.
 ## Wiring it into a consumer
 
 ```
-github.com/relux-works/curator-runtimes v0.4.3   # public module, no replace, no credential
+github.com/relux-works/archon-pantheon v0.4.3   # public module, no replace, no credential
 ```
 
 A binary gets the plugins it blank-imports; each registers itself from its own

@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // CLASS 2 — runtime declarations and the F2 collision policy.

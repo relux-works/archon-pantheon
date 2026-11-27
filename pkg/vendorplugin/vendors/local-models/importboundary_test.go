@@ -8,13 +8,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/gosources"
+	"github.com/relux-works/archon-pantheon/internal/gosources"
 )
 
 // moduleImportPrefix is this module's own import path. Every package this
 // module declares is reachable by stripping this prefix off an import path
 // and treating the remainder as a directory relative to the module root.
-const moduleImportPrefix = "github.com/relux-works/curator-runtimes"
+const moduleImportPrefix = "github.com/relux-works/archon-pantheon"
 
 // thisPackageDir is this test's own package directory, relative to the
 // module root, which is also the root of the import graph case 14 walks.

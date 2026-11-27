@@ -3,7 +3,7 @@ package muse
 import (
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 const museNoAutoUpdateEnv = "MUSE_NO_AUTO_UPDATE"

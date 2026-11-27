@@ -5,10 +5,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 
-	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/pinative"
+	_ "github.com/relux-works/archon-pantheon/pkg/agentic/systems/pinative"
 )
 
 // F1 of TASK-260908-ggxfte: the native-Pi runtimes are FROZEN rows so that

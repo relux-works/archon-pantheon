@@ -5,9 +5,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/execfixture"
-	"github.com/relux-works/curator-runtimes/internal/paritycase"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/execfixture"
+	"github.com/relux-works/archon-pantheon/internal/paritycase"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // This file holds the plugin's declaration and the surfaces no golden pins: the

@@ -4,8 +4,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // Model catalog, schema model-catalog/1.

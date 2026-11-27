@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/relux-works/curator-runtimes/internal/launchenv"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/localruntime"
+	"github.com/relux-works/archon-pantheon/internal/launchenv"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/localruntime"
 )
 
 // ErrPreflightRefused classifies a successful status read whose broker state

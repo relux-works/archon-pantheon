@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/runtimeenv"
+	"github.com/relux-works/archon-pantheon/internal/runtimeenv"
 )
 
 // This file holds the SHARED filter to its own bounds. The plugins that use it

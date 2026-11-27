@@ -5,13 +5,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/execfixture"
-	"github.com/relux-works/curator-runtimes/internal/quotatest"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/agy"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/muse"
-	"github.com/relux-works/curator-runtimes/pkg/providerquota"
+	"github.com/relux-works/archon-pantheon/internal/execfixture"
+	"github.com/relux-works/archon-pantheon/internal/quotatest"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/agy"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/claude"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/codex"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/muse"
+	"github.com/relux-works/archon-pantheon/pkg/providerquota"
 )
 
 func TestRound2PlansRefuseProtectedSymlink(t *testing.T) {

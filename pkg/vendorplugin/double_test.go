@@ -13,7 +13,7 @@ import (
 	"testing"
 
 	"github.com/relux-works/curator-network-profiles/pkg/binding"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // narwhalID names a vendor that exists nowhere else in this module: not in the

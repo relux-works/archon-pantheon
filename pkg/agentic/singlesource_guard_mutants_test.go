@@ -132,7 +132,7 @@ func TestSingleSourceGuardCatchesShadowTables(t *testing.T) {
 			file: "pkg/launcher/shadow.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 type builder func() []string
 
@@ -144,7 +144,7 @@ var shadow = map[agentic.SystemID]builder{}
 			file: "pkg/launcher/alias.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 type builder func() []string
 
@@ -168,7 +168,7 @@ func boot() bindings { return bindings{} }
 			file: "pkg/launcher/make.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 type builder func() []string
 
@@ -183,7 +183,7 @@ func boot() {
 			file: "pkg/launcher/field.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 type builder func() []string
 
@@ -472,7 +472,7 @@ var boot = register(func(id string) []string {
 			file: "pkg/launcher/idcall.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func argv(sys agentic.System) []string {
 	switch sys.ID() {
@@ -496,7 +496,7 @@ func argv(sys agentic.System) []string {
 			file: "pkg/launcher/localcopy.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func argv(sys agentic.System) []string {
 	id := sys.ID()
@@ -515,7 +515,7 @@ func argv(sys agentic.System) []string {
 			file: "pkg/launcher/varcopy.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func argv(sys agentic.System) []string {
 	var id = sys.ID()
@@ -532,7 +532,7 @@ func argv(sys agentic.System) []string {
 			file: "pkg/launcher/convertedcopy.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func argv(sys agentic.System) []string {
 	id := string(sys.ID())
@@ -549,7 +549,7 @@ func argv(sys agentic.System) []string {
 			file: "pkg/launcher/convertedtag.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func argv(sys agentic.System) []string {
 	switch string(sys.ID()) {
@@ -568,7 +568,7 @@ func argv(sys agentic.System) []string {
 			file: "pkg/launcher/closurecopy.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func argv(sys agentic.System) func() []string {
 	id := sys.ID()
@@ -591,7 +591,7 @@ func argv(sys agentic.System) func() []string {
 			file: "pkg/launcher/localcopyknown.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func argv(sys agentic.System) []string {
 	id := sys.ID()
@@ -611,7 +611,7 @@ func argv(sys agentic.System) []string {
 			file: "pkg/launcher/localconstcompare.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func pick(id agentic.SystemID) string {
 	const codexID = "codex"
@@ -664,7 +664,7 @@ func argv(id string) []string {
 			file: "pkg/launcher/ifchainundeclared.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func argv(sys agentic.System) []string {
 	if sys.ID() == "opencode" {
@@ -681,7 +681,7 @@ func argv(sys agentic.System) []string {
 			file: "pkg/launcher/ifchainlocal.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func argv(sys agentic.System) []string {
 	id := sys.ID()
@@ -697,7 +697,7 @@ func argv(sys agentic.System) []string {
 			file: "pkg/launcher/negatedundeclared.go",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func argv(sys agentic.System) []string {
 	id := string(sys.ID())
@@ -716,7 +716,7 @@ func argv(sys agentic.System) []string {
 import (
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 func argv(sys agentic.System) []string {
@@ -744,7 +744,7 @@ func argv(sys agentic.System) []string {
 func TestSingleSourceGuardAcceptsOrdinaryCode(t *testing.T) {
 	clean := `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 var counts = map[string]int{"launches": 0, "refusals": 0}
 
@@ -859,7 +859,7 @@ func boot(parts []string) map[string]builder {
 			why:  "idCallLocals resolves one binding never written to again; a second write drops the name rather than guessing what it holds",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func fold(id string) string { return id }
 
@@ -879,7 +879,7 @@ func argv(sys agentic.System) []string {
 			why:  "id resolution is single-hop — a name resolves when its right-hand side reaches an ID() call without passing through another name, and following assignment chains is dataflow analysis by another name",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func argv(sys agentic.System) []string {
 	raw := sys.ID()
@@ -897,7 +897,7 @@ func argv(sys agentic.System) []string {
 			why:  "the same single-hop boundary: conversions around ONE hop resolve and are in the mutant set, a conversion around a second hop is still a second hop",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func argv(sys agentic.System) []string {
 	id := sys.ID()
@@ -914,7 +914,7 @@ func argv(sys agentic.System) []string {
 			why:  "resolution covers one function body and the bodies it encloses; it does not follow a return across a function boundary",
 			src: `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func tag(sys agentic.System) string { return string(sys.ID()) }
 
@@ -971,7 +971,7 @@ func argv(sys named) []string {
 // The fifteenth, a switch on an accessor named Identifier() rather than ID(),
 // is a declared NON-goal and lives in TestSingleSourceGuardResidualGaps.
 func TestSingleSourceGuardAgainstReviewMutants(t *testing.T) {
-	const agenticImport = `import "github.com/relux-works/curator-runtimes/pkg/agentic"`
+	const agenticImport = `import "github.com/relux-works/archon-pantheon/pkg/agentic"`
 	_ = agenticImport
 
 	mutants := []struct {
@@ -984,7 +984,7 @@ func TestSingleSourceGuardAgainstReviewMutants(t *testing.T) {
 			class: bindingClassTable,
 			files: map[string]string{"pkg/launcher/r1.go": `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 type sysid = agentic.SystemID
 
@@ -998,7 +998,7 @@ var shadow = map[sysid]builder{}
 			class: bindingClassTable,
 			files: map[string]string{"pkg/launcher/r2.go": `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 type sysid agentic.SystemID
 
@@ -1043,7 +1043,7 @@ func init() {
 			class: bindingClassTable,
 			files: map[string]string{"pkg/launcher/r5.go": `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 type builder func() []string
 
@@ -1060,7 +1060,7 @@ func init() {
 			class: bindingClassIDSwitch,
 			files: map[string]string{"pkg/launcher/r6.go": `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func dispatch(sys agentic.System) string {
 	id := sys.ID()
@@ -1079,7 +1079,7 @@ func dispatch(sys agentic.System) string {
 			class: bindingClassIDSwitch,
 			files: map[string]string{"pkg/launcher/r7.go": `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func dispatch(sys agentic.System) string {
 	id := sys.ID()
@@ -1096,7 +1096,7 @@ func dispatch(sys agentic.System) string {
 			class: bindingClassIDSwitch,
 			files: map[string]string{"pkg/launcher/r8.go": `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 func pick(id agentic.SystemID) string {
 	const codexID = "codex"
@@ -1136,7 +1136,7 @@ func boot() bindings { return make(bindings) }
 			files: map[string]string{
 				"pkg/launcher/r11decl.go": `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 type builder func() []string
 
@@ -1153,7 +1153,7 @@ var shadow shadowTable
 			class: bindingClassTable,
 			files: map[string]string{"pkg/launcher/r12.go": `package launcher
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 type builder func() []string
 
@@ -1213,7 +1213,7 @@ func TestSingleSourceGuardCatchesVendorLayerBindings(t *testing.T) {
 			file: "pkg/quota/shadow.go",
 			src: `package quota
 
-import "github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+import "github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 
 type limiter func() bool
 
@@ -1225,7 +1225,7 @@ var shadow = map[vendorplugin.VendorID]limiter{}
 			file: "pkg/quota/runtimes.go",
 			src: `package quota
 
-import "github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+import "github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 
 type limiter func() bool
 
@@ -1237,7 +1237,7 @@ var shadow = map[vendorplugin.RuntimeID]limiter{}
 			file: "pkg/quota/field.go",
 			src: `package quota
 
-import "github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+import "github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 
 type limiter func() bool
 

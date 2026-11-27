@@ -6,11 +6,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/muse"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/qwen"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/claude"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/codex"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/muse"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/qwen"
 )
 
 const resumeTestUUID = "11111111-2222-3333-4444-555555555555"

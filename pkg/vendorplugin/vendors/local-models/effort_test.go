@@ -12,11 +12,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/execfixture"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
-	localmodels "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/local-models"
+	"github.com/relux-works/archon-pantheon/internal/execfixture"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/codex"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
+	localmodels "github.com/relux-works/archon-pantheon/pkg/vendorplugin/vendors/local-models"
 )
 
 const localEffortModel = "unique-local-model"

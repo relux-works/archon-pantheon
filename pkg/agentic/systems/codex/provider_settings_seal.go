@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 const carriedSettingsSealSelector = "codex_carried_settings"

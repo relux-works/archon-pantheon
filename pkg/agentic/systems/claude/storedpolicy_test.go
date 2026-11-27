@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 func TestStoredPolicyInspectorReportsEveryKnownSelectorAtEveryLocalSource(t *testing.T) {

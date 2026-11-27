@@ -1,7 +1,7 @@
 package gemini
 
 import (
-	"github.com/relux-works/curator-runtimes/internal/launchenv"
+	"github.com/relux-works/archon-pantheon/internal/launchenv"
 )
 
 // Gemini has ONE binary-resolution path: whatever `gemini` resolves to on PATH.

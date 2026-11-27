@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/execfixture"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/execfixture"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // The version grammar, pinned against the real capture first: `claude

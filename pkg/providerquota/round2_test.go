@@ -51,7 +51,7 @@ func TestRound2ImportGuardHelperEscape(t *testing.T) {
 	for _, harness := range []string{"codex", "claude", "agy", "muse"} {
 		t.Run(harness, func(t *testing.T) {
 			sources := map[string]string{
-				"pkg/agentic/systems/" + harness + "/quota.go": `package fixture; import "github.com/relux-works/curator-runtimes/internal/reviewescape"`,
+				"pkg/agentic/systems/" + harness + "/quota.go": `package fixture; import "github.com/relux-works/archon-pantheon/internal/reviewescape"`,
 				"internal/reviewescape/helper.go":              `package reviewescape; import "os/exec"`,
 			}
 			if got := forbiddenImports(sources); len(got) != 1 || got[0] != "internal/reviewescape/helper.go" {

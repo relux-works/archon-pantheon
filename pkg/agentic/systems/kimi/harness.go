@@ -1,6 +1,6 @@
 package kimi
 
-import "github.com/relux-works/curator-runtimes/pkg/harnessapi"
+import "github.com/relux-works/archon-pantheon/pkg/harnessapi"
 
 // KimiCodeHarnessID is the canonical Curator harness identifier for Kimi Code CLI.
 const KimiCodeHarnessID harnessapi.ID = "kimi_code"

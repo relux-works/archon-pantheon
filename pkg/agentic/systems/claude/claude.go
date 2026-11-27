@@ -44,7 +44,7 @@ import (
 	"strings"
 
 	"github.com/relux-works/curator-network-profiles/pkg/binding"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // systemID is this plugin's identity.

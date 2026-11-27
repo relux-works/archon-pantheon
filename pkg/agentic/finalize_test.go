@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 func sealEnvValue(t *testing.T, env []string, name string) (string, bool) {

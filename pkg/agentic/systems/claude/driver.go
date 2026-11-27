@@ -1,8 +1,8 @@
 package claude
 
 import (
-	claudedriver "github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude/sessiondriver"
-	"github.com/relux-works/curator-runtimes/pkg/sessiondriver"
+	claudedriver "github.com/relux-works/archon-pantheon/pkg/agentic/systems/claude/sessiondriver"
+	"github.com/relux-works/archon-pantheon/pkg/sessiondriver"
 )
 
 // SessionDriverDescriptor returns the wire-protocol session driver descriptor for Claude stream-json.

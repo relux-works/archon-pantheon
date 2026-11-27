@@ -5,13 +5,13 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	agySystem "github.com/relux-works/curator-runtimes/pkg/agentic/systems/agy"
-	geminiSystem "github.com/relux-works/curator-runtimes/pkg/agentic/systems/gemini"
-	pinativeSystem "github.com/relux-works/curator-runtimes/pkg/agentic/systems/pinative"
-	"github.com/relux-works/curator-runtimes/pkg/runtimecatalog"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/google"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	agySystem "github.com/relux-works/archon-pantheon/pkg/agentic/systems/agy"
+	geminiSystem "github.com/relux-works/archon-pantheon/pkg/agentic/systems/gemini"
+	pinativeSystem "github.com/relux-works/archon-pantheon/pkg/agentic/systems/pinative"
+	"github.com/relux-works/archon-pantheon/pkg/runtimecatalog"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin/vendors/google"
 )
 
 func TestCatalogTomlAntigravityCustomModelAndEffortYoloLaunch(t *testing.T) {

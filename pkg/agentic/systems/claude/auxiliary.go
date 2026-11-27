@@ -1,6 +1,6 @@
 package claude
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 // AuxiliaryArgv owns the closed preflight commands. No caller value is an
 // argument: even the goal probe is the bare capability query, never the goal.

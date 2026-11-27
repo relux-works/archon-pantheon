@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/execfixture"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/pi"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/pinative"
+	"github.com/relux-works/archon-pantheon/internal/execfixture"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/pi"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/pinative"
 )
 
 // The Layer-1 contract of the native-Pi plugin, driven through the real

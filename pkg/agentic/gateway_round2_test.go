@@ -12,11 +12,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/gatewayadmission"
-	"github.com/relux-works/curator-runtimes/pkg/providerlimits"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
-	_ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/alibaba"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/gatewayadmission"
+	"github.com/relux-works/archon-pantheon/pkg/providerlimits"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
+	_ "github.com/relux-works/archon-pantheon/pkg/vendorplugin/vendors/alibaba"
 )
 
 // Every directory component uses its on-disk spelling, and equivalent selectors select that canonical home.

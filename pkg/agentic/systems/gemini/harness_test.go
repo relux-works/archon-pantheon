@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/harnessapi"
+	"github.com/relux-works/archon-pantheon/pkg/harnessapi"
 )
 
 func contextFor(t *testing.T, scope harnessapi.Scope) harnessapi.Context {

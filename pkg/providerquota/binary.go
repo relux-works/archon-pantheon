@@ -7,7 +7,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/relux-works/curator-runtimes/internal/launchenv"
+	"github.com/relux-works/archon-pantheon/internal/launchenv"
 )
 
 // BinaryFS is instance-local filesystem evidence. Resolution never uses Stat:

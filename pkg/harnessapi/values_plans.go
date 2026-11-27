@@ -3,7 +3,7 @@ package harnessapi
 import (
 	"fmt"
 
-	"github.com/relux-works/curator-runtimes/pkg/harnessvalue"
+	"github.com/relux-works/archon-pantheon/pkg/harnessvalue"
 )
 
 // SkillDiscovery describes native discovery and projection for an explicit scope.

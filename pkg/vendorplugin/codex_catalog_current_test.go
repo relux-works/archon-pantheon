@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
-	_ "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/openai"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
+	_ "github.com/relux-works/archon-pantheon/pkg/vendorplugin/vendors/openai"
 )
 
 // This compatibility table proves the current Codex catalog's model ids are

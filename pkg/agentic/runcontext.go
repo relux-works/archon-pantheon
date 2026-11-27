@@ -3,7 +3,7 @@ package agentic
 import (
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic/internal/planningio"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/internal/planningio"
 )
 
 // This file is the port of the extraction source's withSpawnEnv and

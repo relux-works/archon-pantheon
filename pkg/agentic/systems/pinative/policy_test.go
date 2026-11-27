@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/pinative"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/pinative"
 )
 
 func TestPermissionMappingKeepsVerifiedPiNativeEmptyAndYoloUnsupported(t *testing.T) {

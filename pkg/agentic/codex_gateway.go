@@ -10,8 +10,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/internal/gatewaybasis"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/internal/planningio"
+	"github.com/relux-works/archon-pantheon/internal/gatewaybasis"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/internal/planningio"
 )
 
 // ErrCodexGatewayRefused names a refusal without rendering configuration or

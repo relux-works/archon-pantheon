@@ -8,17 +8,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	agySystem "github.com/relux-works/curator-runtimes/pkg/agentic/systems/agy"
-	claudeSystem "github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude"
-	codexSystem "github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
-	geminiSystem "github.com/relux-works/curator-runtimes/pkg/agentic/systems/gemini"
-	museSystem "github.com/relux-works/curator-runtimes/pkg/agentic/systems/muse"
-	pinativeSystem "github.com/relux-works/curator-runtimes/pkg/agentic/systems/pinative"
-	"github.com/relux-works/curator-runtimes/pkg/runtimecatalog"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/anthropic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/openai"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	agySystem "github.com/relux-works/archon-pantheon/pkg/agentic/systems/agy"
+	claudeSystem "github.com/relux-works/archon-pantheon/pkg/agentic/systems/claude"
+	codexSystem "github.com/relux-works/archon-pantheon/pkg/agentic/systems/codex"
+	geminiSystem "github.com/relux-works/archon-pantheon/pkg/agentic/systems/gemini"
+	museSystem "github.com/relux-works/archon-pantheon/pkg/agentic/systems/muse"
+	pinativeSystem "github.com/relux-works/archon-pantheon/pkg/agentic/systems/pinative"
+	"github.com/relux-works/archon-pantheon/pkg/runtimecatalog"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin/vendors/anthropic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin/vendors/openai"
 )
 
 // validCatalog adds one OpenAI model with an alias, extends a module model with

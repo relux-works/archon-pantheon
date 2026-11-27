@@ -61,7 +61,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // Grammar is the composition-grammar identifier a system declares to say it

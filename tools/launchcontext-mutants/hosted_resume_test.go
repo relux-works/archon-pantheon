@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/refusalscan"
+	"github.com/relux-works/archon-pantheon/internal/refusalscan"
 )
 
 func TestHostedResumeCensusAndNamedNarrowingMutants(t *testing.T) {

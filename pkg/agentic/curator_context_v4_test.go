@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // curatorV4CorpusDir holds the launch-env-fragment-v4 schema cases copied

@@ -5,9 +5,9 @@ import (
 
 	"github.com/pelletier/go-toml/v2"
 
-	"github.com/relux-works/curator-runtimes/internal/enginecatalogschema"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/internal/enginecatalogschema"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 func ParseRuntimeCatalog(data []byte) (Catalog, error) {

@@ -1,8 +1,8 @@
 package codex
 
 import (
-	codexdriver "github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex/sessiondriver"
-	"github.com/relux-works/curator-runtimes/pkg/sessiondriver"
+	codexdriver "github.com/relux-works/archon-pantheon/pkg/agentic/systems/codex/sessiondriver"
+	"github.com/relux-works/archon-pantheon/pkg/sessiondriver"
 )
 
 // SessionDriverDescriptor returns the wire-protocol session driver descriptor for Codex app-server.

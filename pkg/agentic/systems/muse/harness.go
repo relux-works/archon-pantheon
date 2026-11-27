@@ -1,6 +1,6 @@
 package muse
 
-import "github.com/relux-works/curator-runtimes/pkg/harnessapi"
+import "github.com/relux-works/archon-pantheon/pkg/harnessapi"
 
 // MuseHarnessID is the canonical Curator harness identifier for Muse CLI.
 const MuseHarnessID harnessapi.ID = "muse"

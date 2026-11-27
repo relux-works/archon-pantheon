@@ -3,7 +3,7 @@ package agy
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/relux-works/curator-runtimes/pkg/providerquota"
+	"github.com/relux-works/archon-pantheon/pkg/providerquota"
 	"path/filepath"
 	"time"
 )

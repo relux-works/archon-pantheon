@@ -2,8 +2,8 @@
 package cursor
 
 import (
-	"github.com/relux-works/curator-runtimes/pkg/harnessapi"
-	"github.com/relux-works/curator-runtimes/pkg/harnessvalue"
+	"github.com/relux-works/archon-pantheon/pkg/harnessapi"
+	"github.com/relux-works/archon-pantheon/pkg/harnessvalue"
 )
 
 const (

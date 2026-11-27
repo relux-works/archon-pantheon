@@ -2,7 +2,7 @@ package codex
 
 import (
 	"errors"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 	"os"
 	"path/filepath"
 	"reflect"

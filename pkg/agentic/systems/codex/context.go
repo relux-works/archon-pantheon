@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/internal/nativeargs"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/nativeargs"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 const developerInstructionsConfigKey = "developer_instructions"

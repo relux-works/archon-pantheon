@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // importedNilImporter is Codex with a silent sealed importer: it proves

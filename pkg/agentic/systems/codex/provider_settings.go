@@ -5,7 +5,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // LocalProviderSettingsStatus reports only the names discarded by the same

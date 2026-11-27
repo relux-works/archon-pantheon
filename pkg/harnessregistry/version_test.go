@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/harnessapi"
+	"github.com/relux-works/archon-pantheon/pkg/harnessapi"
 )
 
 func code(err error) string {

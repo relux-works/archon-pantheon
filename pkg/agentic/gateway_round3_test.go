@@ -9,10 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/gatewayadmission"
-	"github.com/relux-works/curator-runtimes/pkg/providerlimits"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/gatewayadmission"
+	"github.com/relux-works/archon-pantheon/pkg/providerlimits"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // An accepted initial home spelling retains its recorded suppression; the healthy launch is the control.

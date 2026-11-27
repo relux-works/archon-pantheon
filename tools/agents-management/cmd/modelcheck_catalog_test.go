@@ -8,11 +8,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/execfixture"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/inferenceengine"
-	"github.com/relux-works/curator-runtimes/pkg/localruntime"
-	localmodels "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/local-models"
+	"github.com/relux-works/archon-pantheon/internal/execfixture"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/inferenceengine"
+	"github.com/relux-works/archon-pantheon/pkg/localruntime"
+	localmodels "github.com/relux-works/archon-pantheon/pkg/vendorplugin/vendors/local-models"
 )
 
 // Production composition (without an injected binding factory) reads status

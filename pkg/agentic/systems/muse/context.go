@@ -3,7 +3,7 @@ package muse
 import (
 	"fmt"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // ValidateCuratorContext is the Muse channel-layer gate for a typed Curator

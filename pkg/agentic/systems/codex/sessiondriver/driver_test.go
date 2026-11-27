@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	ap "github.com/relux-works/curator-runtimes/pkg/sessiondriver"
+	ap "github.com/relux-works/archon-pantheon/pkg/sessiondriver"
 )
 
 func driverConfig() ap.Config {

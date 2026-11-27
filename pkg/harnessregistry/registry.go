@@ -3,16 +3,16 @@
 package harnessregistry
 
 import (
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/cursor"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/gemini"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/muse"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/opencode"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/pi"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/windsurf"
-	"github.com/relux-works/curator-runtimes/pkg/harnessapi"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/claude"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/codex"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/cursor"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/gemini"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/muse"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/opencode"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/pi"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/windsurf"
+	"github.com/relux-works/archon-pantheon/pkg/harnessapi"
 )
 
 // DefaultID retains the existing default canonical identifier.

@@ -1,6 +1,6 @@
 package pi
 
-import "github.com/relux-works/curator-runtimes/pkg/harnessapi"
+import "github.com/relux-works/archon-pantheon/pkg/harnessapi"
 
 // PiHarnessID is the canonical Curator harness identifier for Pi CLI.
 const PiHarnessID harnessapi.ID = "pi"

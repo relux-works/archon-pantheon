@@ -6,7 +6,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // The pinned per-release root-option inventories, byte for byte. Both

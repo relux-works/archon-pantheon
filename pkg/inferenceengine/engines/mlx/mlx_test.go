@@ -3,9 +3,9 @@ package mlx_test
 import (
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/inferenceengine"
-	"github.com/relux-works/curator-runtimes/pkg/inferenceengine/engines/mlx"
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/pkg/inferenceengine"
+	"github.com/relux-works/archon-pantheon/pkg/inferenceengine/engines/mlx"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
 )
 
 func TestPluginDeclaresTheStableMLXIdentity(t *testing.T) {

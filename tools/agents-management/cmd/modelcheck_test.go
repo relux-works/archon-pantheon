@@ -13,16 +13,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/internal/execfixture"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/catalogobservation"
-	"github.com/relux-works/curator-runtimes/pkg/engineobservation"
-	"github.com/relux-works/curator-runtimes/pkg/inferenceengine"
-	"github.com/relux-works/curator-runtimes/pkg/inferenceengine/engines/mlx"
-	"github.com/relux-works/curator-runtimes/pkg/localruntime"
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
-	localmodels "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/local-models"
+	"github.com/relux-works/archon-pantheon/internal/execfixture"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/catalogobservation"
+	"github.com/relux-works/archon-pantheon/pkg/engineobservation"
+	"github.com/relux-works/archon-pantheon/pkg/inferenceengine"
+	"github.com/relux-works/archon-pantheon/pkg/inferenceengine/engines/mlx"
+	"github.com/relux-works/archon-pantheon/pkg/localruntime"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
+	localmodels "github.com/relux-works/archon-pantheon/pkg/vendorplugin/vendors/local-models"
 )
 
 const (

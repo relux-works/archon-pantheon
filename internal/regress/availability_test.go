@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/pkg/providerlimits"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/providerlimits"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // CLASS 3 — an availability verdict derived from a real state file.

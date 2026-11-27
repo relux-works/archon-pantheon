@@ -10,8 +10,8 @@ import (
 	"slices"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/internal/releasegrammar"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/internal/planningio"
+	"github.com/relux-works/archon-pantheon/internal/releasegrammar"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/internal/planningio"
 )
 
 // AuxRole is closed: callers cannot introduce a command or a named process.

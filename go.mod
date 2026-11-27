@@ -1,4 +1,4 @@
-module github.com/relux-works/curator-runtimes
+module github.com/relux-works/archon-pantheon
 
 go 1.25.5
 

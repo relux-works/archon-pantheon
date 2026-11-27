@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"github.com/pelletier/go-toml/v2"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 const managedThread = "01a14c36-5f05-76d3-9452-11ce06e095ca"

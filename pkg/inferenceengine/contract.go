@@ -12,7 +12,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
 )
 
 const ContractVersion = "observed-process/v2"

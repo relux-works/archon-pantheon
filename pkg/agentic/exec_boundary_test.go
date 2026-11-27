@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/gosources"
+	"github.com/relux-works/archon-pantheon/internal/gosources"
 )
 
 // The module owns no exec: no production file under pkg/agentic may import

@@ -1,8 +1,8 @@
 package claude
 
 import (
-	"github.com/relux-works/curator-runtimes/internal/mcpjson"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/mcpjson"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // GrammarMCPConfigJSON names the launch-composition argv shape claude accepts:

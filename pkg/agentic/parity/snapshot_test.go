@@ -3,7 +3,7 @@ package parity
 import (
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // TestDiffEnvExcludesPathAndOnlyPath proves the exclusion's BOUND, not merely

@@ -12,7 +12,7 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/relux-works/curator-runtimes/internal/gosources"
+	"github.com/relux-works/archon-pantheon/internal/gosources"
 )
 
 // This file is the mechanical enforcement of invariant 5 in

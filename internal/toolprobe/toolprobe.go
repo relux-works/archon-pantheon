@@ -32,8 +32,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/internal/releasegrammar"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/releasegrammar"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // Probe argv flags. Each is a const rather than a parameter so no caller

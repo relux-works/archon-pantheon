@@ -7,7 +7,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
 )
 
 type graphPlugin struct{ declaration plugin.Declaration }

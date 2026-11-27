@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/sessiondriver"
+	"github.com/relux-works/archon-pantheon/pkg/sessiondriver"
 )
 
 func TestAcknowledgementsBindFullIntent(t *testing.T) {

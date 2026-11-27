@@ -26,9 +26,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/pkg/inferenceengine"
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/inferenceengine"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // ErrReadingsReadFailed is returned for every way a readings read can fail

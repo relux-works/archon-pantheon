@@ -1788,7 +1788,7 @@ Go test authoring follows the `go-testing-tools` skill.
 ### Build
 
 One Go module at the repository root, module path
-`github.com/relux-works/curator-runtimes`. The CLI's `main` package
+`github.com/relux-works/archon-pantheon`. The CLI's `main` package
 lives in `tools/agents-management`; shared packages will land under `pkg/`
 as the extraction moves plugin contracts across.
 

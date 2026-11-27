@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/argvguard"
-	"github.com/relux-works/curator-runtimes/internal/gosources"
+	"github.com/relux-works/archon-pantheon/internal/argvguard"
+	"github.com/relux-works/archon-pantheon/internal/gosources"
 )
 
 // This file is the agy half of "ONE argv construction site".

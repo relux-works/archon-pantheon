@@ -1,7 +1,7 @@
 package pi
 
 import (
-	"github.com/relux-works/curator-runtimes/internal/launchenv"
+	"github.com/relux-works/archon-pantheon/internal/launchenv"
 )
 
 // executableName is the retained native Pi worker binary.

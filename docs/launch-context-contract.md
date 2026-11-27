@@ -96,4 +96,4 @@ The existing task-board launch-composition path is separate legacy behavior. Its
 - [Curator `launch-env-fragment-v1` schema](https://github.com/relux-works/curator-spec/blob/main/schemas/v1/launch-env-fragment-v1.schema.json)
 - [Curator Decision 0019: fragment consumers and one construction site](https://github.com/relux-works/curator-spec/blob/main/decisions/0019-fragment-consumers-and-one-construction-site.md)
 - [Curator Decision 0021: sessions enter through `curator run`](https://github.com/relux-works/curator-spec/blob/main/decisions/0021-sessions-enter-through-curator-run.md)
-- [agents-management architecture](https://github.com/relux-works/curator-runtimes/blob/main/docs/architecture.md)
+- [agents-management architecture](https://github.com/relux-works/archon-pantheon/blob/main/docs/architecture.md)

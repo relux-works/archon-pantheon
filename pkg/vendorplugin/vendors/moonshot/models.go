@@ -1,8 +1,8 @@
 package moonshot
 
 import (
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 const moonshotCatalogSource = "MoonshotAI Kimi Code CLI 2.8.1 config.toml (managed:kimi-code) & https://www.kimi.com/code/docs/en/ (checked 2026-11-26)"

@@ -60,7 +60,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // Canonical provider IDs. These are runtime IDs (vendorplugin.RuntimeID), not

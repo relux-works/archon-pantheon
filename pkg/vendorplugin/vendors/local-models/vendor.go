@@ -1,8 +1,8 @@
 package localmodels
 
 import (
-	"github.com/relux-works/curator-runtimes/pkg/localruntime"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/localruntime"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // VendorID is this plugin's identity.

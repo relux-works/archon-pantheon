@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/pkg/providerquota"
+	"github.com/relux-works/archon-pantheon/pkg/providerquota"
 )
 
 var _ providerquota.Reader = (*System)(nil)

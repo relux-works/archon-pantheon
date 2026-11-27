@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // This file carries the tests for TASK-260817-mohnt0: moving classifier

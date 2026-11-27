@@ -8,7 +8,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // TestTheSixHistoricalRuntimesAreSeededWithTheirFrozenBindings is AC3.

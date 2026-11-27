@@ -23,12 +23,12 @@ var observerBoundaryAllowedImports = map[string]bool{
 	"errors": true, "fmt": true, "math": true, "math/rand": true,
 	"reflect": true, "regexp": true, "sort": true, "strings": true, "sync": true,
 	"testing": true, "time": true,
-	"github.com/relux-works/curator-runtimes/internal/ident":             true,
-	"github.com/relux-works/curator-runtimes/pkg/agentic":                true,
-	"github.com/relux-works/curator-runtimes/pkg/inferenceengine":        true,
-	"github.com/relux-works/curator-runtimes/pkg/plugin":                 true,
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin":           true,
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin/benchdata": true,
+	"github.com/relux-works/archon-pantheon/internal/ident":             true,
+	"github.com/relux-works/archon-pantheon/pkg/agentic":                true,
+	"github.com/relux-works/archon-pantheon/pkg/inferenceengine":        true,
+	"github.com/relux-works/archon-pantheon/pkg/plugin":                 true,
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin":           true,
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin/benchdata": true,
 }
 
 // TestObserverBoundaryHasNoLiveProbeSurface keeps this task's production and

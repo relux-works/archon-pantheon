@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/pelletier/go-toml/v2"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 func buildCodexPlanForMode(t *testing.T, req agentic.LaunchRequest, mode agentic.LaunchMode) (agentic.Plan, error) {

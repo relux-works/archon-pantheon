@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // pinnedClaudeRelease is one installed release the pinned comparisons run

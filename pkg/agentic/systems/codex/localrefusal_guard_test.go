@@ -2,7 +2,7 @@ package codex
 
 import (
 	"fmt"
-	"github.com/relux-works/curator-runtimes/internal/refusalscan"
+	"github.com/relux-works/archon-pantheon/internal/refusalscan"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/gosources"
+	"github.com/relux-works/archon-pantheon/internal/gosources"
 )
 
 // localRefusalCoverageRow maps one typed LocalProviderRefusal return site to
@@ -169,7 +169,7 @@ func discoverLocalRefusalSites(t *testing.T) []localRefusalSite {
 	if err != nil {
 		t.Fatal(err)
 	}
-	found, err := refusalscan.DiscoverType(root, "github.com/relux-works/curator-runtimes/pkg/agentic", "LocalProviderRefusal")
+	found, err := refusalscan.DiscoverType(root, "github.com/relux-works/archon-pantheon/pkg/agentic", "LocalProviderRefusal")
 	if err != nil {
 		t.Fatal(err)
 	}

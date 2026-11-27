@@ -6,8 +6,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/internal/planningio"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/internal/planningio"
 )
 
 type plannerRead struct{ operation, path string }

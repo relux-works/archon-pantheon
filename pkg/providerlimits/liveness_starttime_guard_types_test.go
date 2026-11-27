@@ -22,7 +22,7 @@ import (
 )
 
 const (
-	processStartTimePackageImportPath = "github.com/relux-works/curator-runtimes/pkg/providerlimits"
+	processStartTimePackageImportPath = "github.com/relux-works/archon-pantheon/pkg/providerlimits"
 	processStartTimeGuardMutantEnv    = "PROVIDERLIMITS_STARTTIME_GUARD_MUTANT"
 )
 

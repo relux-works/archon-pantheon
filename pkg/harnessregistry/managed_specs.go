@@ -1,9 +1,9 @@
 package harnessregistry
 
 import (
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/agy"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/systems/kimi"
-	"github.com/relux-works/curator-runtimes/pkg/harnessapi"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/agy"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/systems/kimi"
+	"github.com/relux-works/archon-pantheon/pkg/harnessapi"
 )
 
 // ManagedHomeSpecs returns the pure adapter-owned managed-home specifications

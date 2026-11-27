@@ -4,12 +4,12 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/agy"
-	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/claude"
-	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
-	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/pi"
-	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/pinative"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	_ "github.com/relux-works/archon-pantheon/pkg/agentic/systems/agy"
+	_ "github.com/relux-works/archon-pantheon/pkg/agentic/systems/claude"
+	_ "github.com/relux-works/archon-pantheon/pkg/agentic/systems/codex"
+	_ "github.com/relux-works/archon-pantheon/pkg/agentic/systems/pi"
+	_ "github.com/relux-works/archon-pantheon/pkg/agentic/systems/pinative"
 )
 
 func TestRegistryPermissionMappingMatrixByEnvironmentModeAndRelease(t *testing.T) {

@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/pkg/localruntime"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/localruntime"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // scriptedStatusReader is the fake StatusReader §1 of the adversarial plan

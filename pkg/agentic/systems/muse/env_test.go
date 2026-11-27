@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/paritycase"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/paritycase"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 func TestMuseParentEnvAllowlistIsPinnedByteForByte(t *testing.T) {

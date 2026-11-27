@@ -6,16 +6,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/paritycase"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/internal/paritycase"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 
 	// The muse HARNESS. This file is about the two halves of the effort
 	// contract meeting, so it needs the REAL plugin rather than a double: the
 	// vocabulary is the vendor layer's and the flag that carries a word out of
 	// it is the harness plugin's, and a test holding only one of them cannot
 	// see a word admitted here and dropped there.
-	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/muse"
+	_ "github.com/relux-works/archon-pantheon/pkg/agentic/systems/muse"
 )
 
 // THE END-TO-END GATE FOR muse-spark-1.3-contributor'S EFFORT AXIS.

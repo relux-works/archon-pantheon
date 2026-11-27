@@ -6,7 +6,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // runRoot drives the real root command the way main() does, and restores the

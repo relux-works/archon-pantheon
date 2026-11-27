@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/relux-works/curator-runtimes/internal/launchenv"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/internal/launchenv"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // curatorEnginesProjectEnv carries the selected project directory to the

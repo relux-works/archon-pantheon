@@ -3,7 +3,7 @@ package harnessapi
 import (
 	"time"
 
-	"github.com/relux-works/curator-runtimes/pkg/harnessvalue"
+	"github.com/relux-works/archon-pantheon/pkg/harnessvalue"
 )
 
 // The following constants define the closed contract vocabulary and bounds.

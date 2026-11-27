@@ -6,8 +6,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/internal/ident"
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/internal/ident"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
 )
 
 // PluginKind is declaration data used by the compatibility adapter from the

@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-const modulePath = "github.com/relux-works/curator-runtimes"
+const modulePath = "github.com/relux-works/archon-pantheon"
 
 // Source scanning deliberately ignores build constraints and filename platform
 // suffixes, following imports recursively in ALL production Go files. This is

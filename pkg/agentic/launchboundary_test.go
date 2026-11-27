@@ -11,9 +11,9 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/relux-works/curator-runtimes/internal/execfixture"
-	"github.com/relux-works/curator-runtimes/internal/mcpjson"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/execfixture"
+	"github.com/relux-works/archon-pantheon/internal/mcpjson"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // Frozen launcher reference for parity. This is a transcription of the

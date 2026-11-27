@@ -3,7 +3,7 @@ package claude
 import (
 	"encoding/json"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // Session selector spellings, each spelled once for the session fill to

@@ -1,6 +1,6 @@
 package vendorplugin
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 // Helpers every vendor plugin needs, declared once here rather than four
 // times across the plugins.

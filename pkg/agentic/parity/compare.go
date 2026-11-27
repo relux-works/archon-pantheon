@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // Difference is one field on which a plan and its golden disagree.

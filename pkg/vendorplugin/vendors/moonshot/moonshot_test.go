@@ -8,11 +8,11 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	kimiSystem "github.com/relux-works/curator-runtimes/pkg/agentic/systems/kimi"
-	"github.com/relux-works/curator-runtimes/pkg/runtimecatalog"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/moonshot"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	kimiSystem "github.com/relux-works/archon-pantheon/pkg/agentic/systems/kimi"
+	"github.com/relux-works/archon-pantheon/pkg/runtimecatalog"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin/vendors/moonshot"
 )
 
 func TestMoonshotKimiYoloAndCatalogLaunch(t *testing.T) {

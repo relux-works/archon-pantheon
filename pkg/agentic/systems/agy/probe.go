@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/internal/launchenv"
-	"github.com/relux-works/curator-runtimes/internal/toolprobe"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/launchenv"
+	"github.com/relux-works/archon-pantheon/internal/toolprobe"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 var _ agentic.ToolReleaseProber = (*System)(nil)

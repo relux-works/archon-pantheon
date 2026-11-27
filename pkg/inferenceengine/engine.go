@@ -7,8 +7,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
 )
 
 // Kind is declared here, as plugin data, rather than in the registry.

@@ -3,7 +3,7 @@ package agy
 import (
 	"fmt"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // ValidateCuratorContext is the Antigravity channel-layer gate for a typed

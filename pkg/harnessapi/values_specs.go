@@ -3,7 +3,7 @@ package harnessapi
 import (
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/harnessvalue"
+	"github.com/relux-works/archon-pantheon/pkg/harnessvalue"
 )
 
 // Property is approved nonsecret configuration, never a raw native file.

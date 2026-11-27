@@ -1,6 +1,6 @@
 package agy
 
-import "github.com/relux-works/curator-runtimes/pkg/harnessapi"
+import "github.com/relux-works/archon-pantheon/pkg/harnessapi"
 
 // AntigravityHarnessID is the canonical Curator harness identifier for Antigravity CLI.
 const AntigravityHarnessID harnessapi.ID = "antigravity"

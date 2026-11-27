@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/localruntime"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/localruntime"
 )
 
 // admitCases is every reachable (BrokerState, BrokerSource) pair (the frozen

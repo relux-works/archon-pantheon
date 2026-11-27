@@ -10,7 +10,7 @@ import (
 	"strings"
 	"sync"
 
-	ap "github.com/relux-works/curator-runtimes/pkg/sessiondriver"
+	ap "github.com/relux-works/archon-pantheon/pkg/sessiondriver"
 )
 
 const (

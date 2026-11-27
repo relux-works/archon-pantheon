@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // The real-binary record is curator/docs/qualification/codex-0.167.0.md.

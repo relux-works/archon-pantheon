@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/relux-works/curator-runtimes/pkg/engineobservation"
-	"github.com/relux-works/curator-runtimes/pkg/inferenceengine"
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
-	localmodels "github.com/relux-works/curator-runtimes/pkg/vendorplugin/vendors/local-models"
+	"github.com/relux-works/archon-pantheon/pkg/engineobservation"
+	"github.com/relux-works/archon-pantheon/pkg/inferenceengine"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
+	localmodels "github.com/relux-works/archon-pantheon/pkg/vendorplugin/vendors/local-models"
 )
 
 var ErrBindingInvalid = errors.New("catalogobservation: selected binding is invalid")

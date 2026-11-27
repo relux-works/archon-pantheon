@@ -58,8 +58,8 @@ package agy
 import (
 	"fmt"
 
-	"github.com/relux-works/curator-runtimes/internal/mcpjson"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/mcpjson"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // systemID is this plugin's identity.

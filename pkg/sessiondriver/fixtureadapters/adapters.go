@@ -9,7 +9,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/sessiondriver"
+	"github.com/relux-works/archon-pantheon/pkg/sessiondriver"
 )
 
 const maxFrame = 64 << 10

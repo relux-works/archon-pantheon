@@ -12,8 +12,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/internal/catalogfile"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/catalogfile"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // catalogConfigKey is the top-level config.toml key carrying the catalog path.

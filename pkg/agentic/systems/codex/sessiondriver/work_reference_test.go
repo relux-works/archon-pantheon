@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	ap "github.com/relux-works/curator-runtimes/pkg/sessiondriver"
+	ap "github.com/relux-works/archon-pantheon/pkg/sessiondriver"
 )
 
 func openNoticeMode(mode string, saved []byte) (*Driver, uint64, error) {

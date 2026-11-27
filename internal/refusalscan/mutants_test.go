@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/execfixture"
+	"github.com/relux-works/archon-pantheon/internal/execfixture"
 )
 
 // Run the behavioral tests after each weakening. Searched tokens remain in

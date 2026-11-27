@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/harnessvalue"
+	"github.com/relux-works/archon-pantheon/pkg/harnessvalue"
 )
 
 func TestImmutableProbeSpec(t *testing.T) {

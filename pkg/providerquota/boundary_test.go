@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/gosources"
+	"github.com/relux-works/archon-pantheon/internal/gosources"
 )
 
 func quotaSources(t *testing.T) map[string]string {
@@ -74,13 +74,13 @@ func forbiddenImports(sources map[string]string) []string {
 				if name == "os/exec" {
 					out = append(out, path)
 				}
-				if strings.HasPrefix(name, "github.com/relux-works/curator-runtimes/") {
-					queue = append(queue, strings.TrimPrefix(name, "github.com/relux-works/curator-runtimes/"))
+				if strings.HasPrefix(name, "github.com/relux-works/archon-pantheon/") {
+					queue = append(queue, strings.TrimPrefix(name, "github.com/relux-works/archon-pantheon/"))
 				}
 			}
 		}
 	}
-	const prefix = "github.com/relux-works/curator-runtimes/"
+	const prefix = "github.com/relux-works/archon-pantheon/"
 	for len(queue) > 0 {
 		pkg := queue[0]
 		queue = queue[1:]
@@ -112,7 +112,7 @@ func TestImportGraphPlanBoundary(t *testing.T) {
 	if got := forbiddenImports(sources); len(got) > 0 {
 		t.Fatalf("forbidden imports: %v", got)
 	}
-	for _, mutant := range []struct{ path, body string }{{"pkg/providerquota/escape.go", `package providerquota; import "os/exec"`}, {"pkg/providerquota/table.go", `package providerquota; import "github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"`}} {
+	for _, mutant := range []struct{ path, body string }{{"pkg/providerquota/escape.go", `package providerquota; import "os/exec"`}, {"pkg/providerquota/table.go", `package providerquota; import "github.com/relux-works/archon-pantheon/pkg/agentic/systems/codex"`}} {
 		if len(forbiddenImports(map[string]string{mutant.path: mutant.body})) != 1 {
 			t.Fatal("boundary guard missed planted import")
 		}

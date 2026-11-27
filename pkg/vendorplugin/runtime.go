@@ -6,10 +6,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/internal/ident"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin/benchdata"
+	"github.com/relux-works/archon-pantheon/internal/ident"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin/benchdata"
 )
 
 // RuntimeID is the stable identifier of a declared (agentic system × vendor)

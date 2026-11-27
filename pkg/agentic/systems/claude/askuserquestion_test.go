@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/internal/nativeargs"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/nativeargs"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // Denial tests drive production planning. Caller occurrences are forwarded

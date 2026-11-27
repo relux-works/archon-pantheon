@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/relux-works/curator-network-profiles/pkg/binding"
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
 )
 
 // LaunchProvenance is the resolved identity snapshot attached by the generic

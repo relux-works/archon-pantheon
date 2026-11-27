@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
 )
 
 type staticGraphPlugin struct{ declaration plugin.Declaration }

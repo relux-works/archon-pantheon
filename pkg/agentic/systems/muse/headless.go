@@ -3,8 +3,8 @@ package muse
 import (
 	"errors"
 
-	"github.com/relux-works/curator-runtimes/internal/nativeargs"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/nativeargs"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // ErrMuseHeadlessApproval refuses a headless plan without the fixed bypass

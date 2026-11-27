@@ -8,8 +8,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/execfixture"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/execfixture"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // importedMuseSealedPlan builds a sealed interactive Muse plan for the given

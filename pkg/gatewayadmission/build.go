@@ -9,10 +9,10 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/internal/gatewaybasis"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/providerlimits"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/internal/gatewaybasis"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/providerlimits"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // LimitsRefusalError retains the actual nonserviceable verdict without issuing

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // The admitted-pair digest is a FROZEN COMPATIBILITY SURFACE — invariant 3 of

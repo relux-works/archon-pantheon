@@ -7,9 +7,9 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/internal/ident"
-	"github.com/relux-works/curator-runtimes/pkg/inferenceengine"
-	"github.com/relux-works/curator-runtimes/pkg/plugin"
+	"github.com/relux-works/archon-pantheon/internal/ident"
+	"github.com/relux-works/archon-pantheon/pkg/inferenceengine"
+	"github.com/relux-works/archon-pantheon/pkg/plugin"
 )
 
 const EngineObservationAdapterContract = "agents-management.engine-observation-adapter"

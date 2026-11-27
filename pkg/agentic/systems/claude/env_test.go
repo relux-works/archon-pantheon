@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/relux-works/curator-runtimes/internal/launchenv"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/agentic/parity"
+	"github.com/relux-works/archon-pantheon/internal/launchenv"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic/parity"
 )
 
 // childEnvFor drives the production call site — a real registry, BuildPlan —

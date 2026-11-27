@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/relux-works/curator-runtimes/pkg/localruntime"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/localruntime"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 )
 
 // statusSourceLabel names the evidence source recorded on every Availability

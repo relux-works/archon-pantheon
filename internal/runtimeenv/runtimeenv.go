@@ -43,7 +43,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/internal/launchenv"
+	"github.com/relux-works/archon-pantheon/internal/launchenv"
 )
 
 // The parent-runtime keys a codex-family child must not inherit. Each is

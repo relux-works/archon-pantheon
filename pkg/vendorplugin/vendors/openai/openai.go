@@ -39,12 +39,12 @@ package openai
 import (
 	"fmt"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
-	"github.com/relux-works/curator-runtimes/pkg/vendorplugin"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/vendorplugin"
 
 	// The agentic system this vendor's models declare. See the package doc.
-	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/codex"
-	_ "github.com/relux-works/curator-runtimes/pkg/agentic/systems/pinative"
+	_ "github.com/relux-works/archon-pantheon/pkg/agentic/systems/codex"
+	_ "github.com/relux-works/archon-pantheon/pkg/agentic/systems/pinative"
 )
 
 // vendorID is this plugin's identity, and the spelling the frozen runtime

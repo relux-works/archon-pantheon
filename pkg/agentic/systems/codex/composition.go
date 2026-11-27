@@ -7,7 +7,7 @@ import (
 
 	toml "github.com/pelletier/go-toml/v2"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // GrammarTOMLConfigPairs names codex's launch-composition argv shape: a flat

@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	ap "github.com/relux-works/curator-runtimes/pkg/sessiondriver"
-	"github.com/relux-works/curator-runtimes/pkg/sessiondriver/adaptercorpus"
+	ap "github.com/relux-works/archon-pantheon/pkg/sessiondriver"
+	"github.com/relux-works/archon-pantheon/pkg/sessiondriver/adaptercorpus"
 )
 
 const offlineSentinel = "fabricated-offline-output-only-canary"

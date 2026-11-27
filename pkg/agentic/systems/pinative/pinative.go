@@ -48,7 +48,7 @@ package pinative
 import (
 	"fmt"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // systemID is this plugin's identity. The frozen runtimes that bind it are

@@ -3,7 +3,7 @@ package sessiondriver
 import (
 	"testing"
 
-	ap "github.com/relux-works/curator-runtimes/pkg/sessiondriver"
+	ap "github.com/relux-works/archon-pantheon/pkg/sessiondriver"
 )
 
 func TestClaudeStreamJSONLifecycleAndCheckpointRestore(t *testing.T) {

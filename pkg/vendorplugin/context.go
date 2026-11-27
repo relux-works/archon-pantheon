@@ -1,6 +1,6 @@
 package vendorplugin
 
-import "github.com/relux-works/curator-runtimes/pkg/agentic"
+import "github.com/relux-works/archon-pantheon/pkg/agentic"
 
 // The vendor boundary owns two independent copies: admission's reference and
 // the vendor callback's input. Preserve nil versus empty collections for fidelity.

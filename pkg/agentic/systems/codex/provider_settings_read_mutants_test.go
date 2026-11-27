@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/relux-works/curator-runtimes/internal/gosources"
+	"github.com/relux-works/archon-pantheon/internal/gosources"
 )
 
 // Source mutants keep the validator call and all policy gates present. They

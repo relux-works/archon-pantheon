@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // Admitted-pair sets and their digests, carried from the extraction source's

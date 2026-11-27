@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/internal/toolprobe"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/toolprobe"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // ProbeToolRelease runs the resolved CLI's version flag and returns an exact

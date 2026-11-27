@@ -1,7 +1,7 @@
 // Package opencode declares the staged harness surface for OpenCode CLI.
 package opencode
 
-import "github.com/relux-works/curator-runtimes/pkg/harnessapi"
+import "github.com/relux-works/archon-pantheon/pkg/harnessapi"
 
 // OpenCodeHarnessID is this module's stable canonical identifier.
 const OpenCodeHarnessID harnessapi.ID = "opencode"

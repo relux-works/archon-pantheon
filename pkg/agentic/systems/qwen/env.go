@@ -1,8 +1,8 @@
 package qwen
 
 import (
-	"github.com/relux-works/curator-runtimes/internal/runtimeenv"
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/internal/runtimeenv"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // The qwen child-environment contract, ported from the source's

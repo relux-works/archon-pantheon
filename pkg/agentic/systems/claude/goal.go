@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/relux-works/curator-runtimes/pkg/agentic"
+	"github.com/relux-works/archon-pantheon/pkg/agentic"
 )
 
 // GOAL MODE, AND THE HALF OF IT THAT IS NOT IN THE PLAN SURFACE.
